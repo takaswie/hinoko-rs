@@ -1,0 +1,84 @@
+[options]
+work_mode = "normal"
+library = "Hinoko"
+version = "0.0"
+target_path = "."
+single_version_file = true
+
+generate = [
+    "Hinoko.FwIsoCtxMode",
+    "Hinoko.FwScode",
+    "Hinoko.FwIsoCtxMatchFlag",
+    "Hinoko.FwIsoResource",
+    "Hinoko.FwIsoResourceAuto",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.Source",
+    "GLib.ByteArray",
+]
+
+[[object]]
+name = "Hinoko.CycleTimer"
+status = "generate"
+concurrency = "send"
+    [[object.function]]
+    pattern = "get_cycle_timer"
+    ignore = true
+
+[[object]]
+name = "Hinoko.FwIsoCtx"
+status = "generate"
+manual_traits = ["FwIsoCtxExtManual"]
+    [[object.function]]
+    pattern = "get_cycle_timer"
+    ignore = true
+    doc_trait_name = "FwIsoCtxExtManual"
+
+[[object]]
+name = "Hinoko.FwIsoRxSingle"
+status = "generate"
+manual_traits = ["FwIsoRxSingleExtManual"]
+    [[object.function]]
+    pattern = "start"
+    ignore = true
+    doc_trait_name = "FwIsoRxSingleExtManual"
+    [[object.function]]
+    pattern = "get_payload"
+    ignore = true
+    doc_trait_name = "FwIsoRxSingleExtManual"
+    [[object.signal]]
+    pattern = "interrupted"
+    ignore = true
+    doc_trait_name = "FwIsoRxSingleExtManual"
+
+[[object]]
+name = "Hinoko.FwIsoRxMultiple"
+status = "generate"
+manual_traits = ["FwIsoRxMultipleExtManual"]
+    [[object.property]]
+    pattern = "channels"
+    ignore = true
+    doc_trait_name = "FwIsoRxMultipleExtManual"
+    [[object.function]]
+    pattern = "start"
+    ignore = true
+    doc_trait_name = "FwIsoRxMultipleExtManual"
+    [[object.function]]
+    pattern = "get_payload"
+    ignore = true
+    doc_trait_name = "FwIsoRxMultipleExtManual"
+
+[[object]]
+name = "Hinoko.FwIsoTx"
+status = "generate"
+manual_traits = ["FwIsoTxExtManual"]
+    [[object.function]]
+    pattern = "start"
+    ignore = true
+    doc_trait_name = "FwIsoTxExtManual"
+    [[object.signal]]
+    pattern = "interrupted"
+    ignore = true
+    doc_trait_name = "FwIsoTxExtManual"
