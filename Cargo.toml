@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "hinoko-sys",
+    "hinoko",
+]
+
+default-members = [
+    "hinoko",
+]
