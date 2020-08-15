@@ -4,6 +4,10 @@ members = [
     "hinoko",
 ]
 
+exclude = [
+    "gir",
+]
+
 default-members = [
     "hinoko",
 ]
