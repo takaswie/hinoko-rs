@@ -11,6 +11,9 @@ generate = [
     "Hinoko.FwIsoCtxMatchFlag",
     "Hinoko.FwIsoResource",
     "Hinoko.FwIsoResourceAuto",
+    "Hinoko.FwIsoCtxError",
+    "Hinoko.FwIsoResourceError",
+    "Hinoko.FwIsoResourceAutoError",
 ]
 
 manual = [
