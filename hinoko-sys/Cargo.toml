@@ -1,0 +1,25 @@
+[package]
+name = "hinoko-sys"
+version = "0.0.1"
+links = "hinoko"
+build = "build.rs"
+[package.metadata.docs.rs]
+features = ["dox"]
+
+[lib]
+name = "hinoko_sys"
+
+[dependencies]
+libc = "0.2"
+glib-sys = "0.10"
+gobject-sys = "0.10"
+
+[build-dependencies]
+pkg-config = "0.3.7"
+
+[dev-dependencies]
+shell-words = "0.1.0"
+tempfile = "3"
+
+[features]
+dox = []
