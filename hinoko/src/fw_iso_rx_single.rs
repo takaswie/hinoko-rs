@@ -17,7 +17,6 @@ pub trait FwIsoRxSingleExtManual {
         cycle_match: Option<&[u16; 2]>,
         sync: u32,
         tags: FwIsoCtxMatchFlag,
-        packets_per_irq: u32,
     ) -> Result<(), glib::Error>;
 
     fn get_payload(&self, index: u32) -> Result<&[u8], glib::Error>;
@@ -33,7 +32,6 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
         cycle_match: Option<&[u16; 2]>,
         sync: u32,
         tags: FwIsoCtxMatchFlag,
-        packets_per_irq: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
             let ptr: *const [u16; 2] = match cycle_match {
@@ -47,7 +45,6 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
                 ptr,
                 sync,
                 tags.to_glib(),
-                packets_per_irq,
                 &mut error,
             );
 

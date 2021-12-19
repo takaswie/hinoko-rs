@@ -31,6 +31,8 @@ pub const NONE_FW_ISO_CTX: Option<&FwIsoCtx> = None;
 pub trait FwIsoCtxExt: 'static {
     fn create_source(&self) -> Result<glib::Source, glib::Error>;
 
+    fn flush_completions(&self) -> Result<(), glib::Error>;
+
     fn get_property_bytes_per_chunk(&self) -> u32;
 
     fn get_property_chunks_per_buffer(&self) -> u32;
@@ -53,6 +55,14 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
             let mut error = ptr::null_mut();
             let _ = hinoko_sys::hinoko_fw_iso_ctx_create_source(self.as_ref().to_glib_none().0, &mut gsrc, &mut error);
             if error.is_null() { Ok(from_glib_full(gsrc)) } else { Err(from_glib_full(error)) }
+        }
+    }
+
+    fn flush_completions(&self) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = hinoko_sys::hinoko_fw_iso_ctx_flush_completions(self.as_ref().to_glib_none().0, &mut error);
+            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }
 

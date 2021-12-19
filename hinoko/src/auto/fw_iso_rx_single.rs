@@ -39,6 +39,8 @@ pub trait FwIsoRxSingleExt: 'static {
 
     fn map_buffer(&self, maximum_bytes_per_payload: u32, payloads_per_buffer: u32) -> Result<(), glib::Error>;
 
+    fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error>;
+
     fn release(&self);
 
     fn stop(&self);
@@ -59,6 +61,14 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExt for O {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = hinoko_sys::hinoko_fw_iso_rx_single_map_buffer(self.as_ref().to_glib_none().0, maximum_bytes_per_payload, payloads_per_buffer, &mut error);
+            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+        }
+    }
+
+    fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let _ = hinoko_sys::hinoko_fw_iso_rx_single_register_packet(self.as_ref().to_glib_none().0, schedule_interrupt.to_glib(), &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }

@@ -32,7 +32,7 @@ fn find() -> Result<(), Error> {
     let package_name = "hinoko";
     let shared_libs = ["hinoko"];
     let version = {
-        "0.0"
+        "0.6"
     };
 
     if let Ok(inc_dir) = env::var("GTK_INCLUDE_DIR") {

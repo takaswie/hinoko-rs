@@ -9,7 +9,6 @@ use hinoko_sys;
 use std::fmt;
 use std::ptr;
 use FwIsoCtx;
-use FwIsoCtxMatchFlag;
 use FwScode;
 
 glib_wrapper! {
@@ -41,8 +40,6 @@ pub trait FwIsoTxExt: 'static {
 
     fn map_buffer(&self, maximum_bytes_per_payload: u32, payloads_per_buffer: u32) -> Result<(), glib::Error>;
 
-    fn register_packet(&self, tags: FwIsoCtxMatchFlag, sy: u32, header: &[u8], payload: &[u8]) -> Result<(), glib::Error>;
-
     fn release(&self);
 
     fn stop(&self);
@@ -63,16 +60,6 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExt for O {
         unsafe {
             let mut error = ptr::null_mut();
             let _ = hinoko_sys::hinoko_fw_iso_tx_map_buffer(self.as_ref().to_glib_none().0, maximum_bytes_per_payload, payloads_per_buffer, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
-        }
-    }
-
-    fn register_packet(&self, tags: FwIsoCtxMatchFlag, sy: u32, header: &[u8], payload: &[u8]) -> Result<(), glib::Error> {
-        let header_length = header.len() as u32;
-        let payload_length = payload.len() as u32;
-        unsafe {
-            let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_tx_register_packet(self.as_ref().to_glib_none().0, tags.to_glib(), sy, header.to_glib_none().0, header_length, payload.to_glib_none().0, payload_length, &mut error);
             if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
         }
     }

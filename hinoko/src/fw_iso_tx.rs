@@ -8,14 +8,19 @@ use glib_sys;
 use hinoko_sys;
 use libc::*;
 
-use FwIsoTx;
+use crate::{FwIsoCtxMatchFlag, FwIsoTx};
 
 pub trait FwIsoTxExtManual {
-    fn start(
+    fn register_packet(
         &self,
-        cycle_match: Option<&[u16; 2]>,
-        packets_per_irq: u32,
+        tags: FwIsoCtxMatchFlag,
+        sy: u32,
+        header: Option<&[u8]>,
+        payload: Option<&[u8]>,
+        schedule_interrupt: bool
     ) -> Result<(), glib::Error>;
+
+    fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), glib::Error>;
 
     fn connect_interrupted<F>(&self, f: F) -> SignalHandlerId
     where
@@ -23,11 +28,46 @@ pub trait FwIsoTxExtManual {
 }
 
 impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
-    fn start(
+    fn register_packet(
         &self,
-        cycle_match: Option<&[u16; 2]>,
-        packets_per_irq: u32,
+        tags: FwIsoCtxMatchFlag,
+        sy: u32,
+        header: Option<&[u8]>,
+        payload: Option<&[u8]>,
+        schedule_interrupt: bool
     ) -> Result<(), glib::Error> {
+        let (header_ptr, header_length) = match header {
+            Some(h) => (h.as_ptr(), h.len() as u32),
+            None => (std::ptr::null(), 0),
+        };
+        let (payload_ptr, payload_length) = match payload {
+            Some(p) => (p.as_ptr(), p.len() as u32),
+            None => (std::ptr::null(), 0),
+        };
+
+        unsafe {
+            let mut error = std::ptr::null_mut();
+            let _ = hinoko_sys::hinoko_fw_iso_tx_register_packet(
+                self.as_ref().to_glib_none().0,
+                tags.to_glib(),
+                sy,
+                header_ptr,
+                header_length,
+                payload_ptr,
+                payload_length,
+                schedule_interrupt.to_glib(),
+                &mut error
+            );
+
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
+    fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), glib::Error> {
         unsafe {
             let ptr: *const [u16; 2] = match cycle_match {
                 Some(data) => data,
@@ -38,7 +78,6 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
             hinoko_sys::hinoko_fw_iso_tx_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
-                packets_per_irq,
                 &mut error,
             );
 

@@ -343,6 +343,7 @@ extern "C" {
     //=========================================================================
     pub fn hinoko_fw_iso_ctx_get_type() -> GType;
     pub fn hinoko_fw_iso_ctx_create_source(self_: *mut HinokoFwIsoCtx, gsrc: *mut *mut glib::GSource, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_ctx_flush_completions(self_: *mut HinokoFwIsoCtx, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_ctx_get_cycle_timer(self_: *mut HinokoFwIsoCtx, clock_id: c_int, cycle_timer: *const *mut HinokoCycleTimer, error: *mut *mut glib::GError);
 
     //=========================================================================
@@ -389,8 +390,9 @@ extern "C" {
     pub fn hinoko_fw_iso_rx_single_allocate(self_: *mut HinokoFwIsoRxSingle, path: *const c_char, channel: c_uint, header_size: c_uint, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_rx_single_get_payload(self_: *mut HinokoFwIsoRxSingle, index: c_uint, payload: *mut *const u8, length: *mut c_uint, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_rx_single_map_buffer(self_: *mut HinokoFwIsoRxSingle, maximum_bytes_per_payload: c_uint, payloads_per_buffer: c_uint, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_rx_single_register_packet(self_: *mut HinokoFwIsoRxSingle, schedule_interrupt: gboolean, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_rx_single_release(self_: *mut HinokoFwIsoRxSingle);
-    pub fn hinoko_fw_iso_rx_single_start(self_: *mut HinokoFwIsoRxSingle, cycle_match: *const [u16; 2], sync: u32, tags: HinokoFwIsoCtxMatchFlag, packets_per_irq: c_uint, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_rx_single_start(self_: *mut HinokoFwIsoRxSingle, cycle_match: *const [u16; 2], sync: u32, tags: HinokoFwIsoCtxMatchFlag, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_rx_single_stop(self_: *mut HinokoFwIsoRxSingle);
     pub fn hinoko_fw_iso_rx_single_unmap_buffer(self_: *mut HinokoFwIsoRxSingle);
 
@@ -401,9 +403,9 @@ extern "C" {
     pub fn hinoko_fw_iso_tx_new() -> *mut HinokoFwIsoTx;
     pub fn hinoko_fw_iso_tx_allocate(self_: *mut HinokoFwIsoTx, path: *const c_char, scode: HinokoFwScode, channel: c_uint, header_size: c_uint, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_tx_map_buffer(self_: *mut HinokoFwIsoTx, maximum_bytes_per_payload: c_uint, payloads_per_buffer: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_tx_register_packet(self_: *mut HinokoFwIsoTx, tags: HinokoFwIsoCtxMatchFlag, sy: c_uint, header: *const u8, header_length: c_uint, payload: *const u8, payload_length: c_uint, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_tx_register_packet(self_: *mut HinokoFwIsoTx, tags: HinokoFwIsoCtxMatchFlag, sy: c_uint, header: *const u8, header_length: c_uint, payload: *const u8, payload_length: c_uint, schedule_interrupt: gboolean, error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_tx_release(self_: *mut HinokoFwIsoTx);
-    pub fn hinoko_fw_iso_tx_start(self_: *mut HinokoFwIsoTx, cycle_match: *const [u16; 2], packets_per_irq: c_uint, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_tx_start(self_: *mut HinokoFwIsoTx, cycle_match: *const [u16; 2], error: *mut *mut glib::GError);
     pub fn hinoko_fw_iso_tx_stop(self_: *mut HinokoFwIsoTx);
     pub fn hinoko_fw_iso_tx_unmap_buffer(self_: *mut HinokoFwIsoTx);
 

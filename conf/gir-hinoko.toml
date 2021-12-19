@@ -2,7 +2,7 @@
 work_mode = "normal"
 library = "Hinoko"
 version = "0.0"
-target_path = "."
+min_cfg_version = "0.6"
 single_version_file = true
 
 generate = [
@@ -77,6 +77,10 @@ manual_traits = ["FwIsoRxMultipleExtManual"]
 name = "Hinoko.FwIsoTx"
 status = "generate"
 manual_traits = ["FwIsoTxExtManual"]
+    [[object.function]]
+    name = "register_packet"
+    ignore = true
+    doc_trait_name = "FwIsoTxExtManual"
     [[object.function]]
     pattern = "start"
     ignore = true
