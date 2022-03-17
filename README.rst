@@ -35,6 +35,11 @@ Dependencies
   * ``glib`` >= 0.15
   * FFI crate (``hinoko-sys``)
 
+Examples
+========
+
+See ``hinoko/examples`` directory
+
 How to generate FFI and API crates
 ==================================
 
