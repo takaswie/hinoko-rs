@@ -7,6 +7,23 @@
 #include <stdio.h>
 
 int main() {
-    printf("%zu\n%zu", sizeof(ABI_TYPE_NAME), alignof(ABI_TYPE_NAME));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoCtx", sizeof(HinokoFwIsoCtx), alignof(HinokoFwIsoCtx));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoCtxClass", sizeof(HinokoFwIsoCtxClass), alignof(HinokoFwIsoCtxClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoCtxError", sizeof(HinokoFwIsoCtxError), alignof(HinokoFwIsoCtxError));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoCtxMatchFlag", sizeof(HinokoFwIsoCtxMatchFlag), alignof(HinokoFwIsoCtxMatchFlag));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoCtxMode", sizeof(HinokoFwIsoCtxMode), alignof(HinokoFwIsoCtxMode));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoResource", sizeof(HinokoFwIsoResource), alignof(HinokoFwIsoResource));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoResourceAuto", sizeof(HinokoFwIsoResourceAuto), alignof(HinokoFwIsoResourceAuto));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoResourceAutoClass", sizeof(HinokoFwIsoResourceAutoClass), alignof(HinokoFwIsoResourceAutoClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoResourceAutoError", sizeof(HinokoFwIsoResourceAutoError), alignof(HinokoFwIsoResourceAutoError));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoResourceClass", sizeof(HinokoFwIsoResourceClass), alignof(HinokoFwIsoResourceClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoResourceError", sizeof(HinokoFwIsoResourceError), alignof(HinokoFwIsoResourceError));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoRxMultiple", sizeof(HinokoFwIsoRxMultiple), alignof(HinokoFwIsoRxMultiple));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoRxMultipleClass", sizeof(HinokoFwIsoRxMultipleClass), alignof(HinokoFwIsoRxMultipleClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoRxSingle", sizeof(HinokoFwIsoRxSingle), alignof(HinokoFwIsoRxSingle));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoRxSingleClass", sizeof(HinokoFwIsoRxSingleClass), alignof(HinokoFwIsoRxSingleClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoTx", sizeof(HinokoFwIsoTx), alignof(HinokoFwIsoTx));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoTxClass", sizeof(HinokoFwIsoTxClass), alignof(HinokoFwIsoTxClass));
+    printf("%s;%zu;%zu\n", "HinokoFwScode", sizeof(HinokoFwScode), alignof(HinokoFwScode));
     return 0;
 }
