@@ -3,16 +3,19 @@
 // DO NOT EDIT
 
 #![allow(non_camel_case_types, non_upper_case_globals, non_snake_case)]
-#![allow(clippy::approx_constant, clippy::type_complexity, clippy::unreadable_literal)]
-
-extern crate libc;
-extern crate glib_sys as glib;
-extern crate gobject_sys as gobject;
+#![allow(
+    clippy::approx_constant,
+    clippy::type_complexity,
+    clippy::unreadable_literal,
+    clippy::upper_case_acronyms
+)]
+#![cfg_attr(feature = "dox", feature(doc_cfg))]
 
 #[allow(unused_imports)]
-use libc::{c_int, c_char, c_uchar, c_float, c_uint, c_double,
-    c_short, c_ushort, c_long, c_ulong,
-    c_void, size_t, ssize_t, intptr_t, uintptr_t, time_t, FILE};
+use libc::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+    intptr_t, size_t, ssize_t, uintptr_t, FILE,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -62,17 +65,20 @@ pub const HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3: HinokoFwIsoCtxMatchFlag = 8;
 
 // Records
 #[repr(C)]
-pub struct HinokoCycleTimer(c_void);
+pub struct HinokoCycleTimer {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 impl ::std::fmt::Debug for HinokoCycleTimer {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoCycleTimer @ {:?}", self as *const _))
-         .finish()
+        f.debug_struct(&format!("HinokoCycleTimer @ {:p}", self))
+            .finish()
     }
 }
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoCtxClass {
     pub parent_class: gobject::GObjectClass,
     pub stopped: Option<unsafe extern "C" fn(*mut HinokoFwIsoCtx, *mut glib::GError)>,
@@ -80,62 +86,73 @@ pub struct HinokoFwIsoCtxClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoCtxClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoCtxClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("stopped", &self.stopped)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoCtxClass @ {:p}", self))
+            .field("parent_class", &self.parent_class)
+            .field("stopped", &self.stopped)
+            .finish()
     }
 }
 
 #[repr(C)]
-pub struct _HinokoFwIsoCtxPrivate(c_void);
+pub struct _HinokoFwIsoCtxPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 pub type HinokoFwIsoCtxPrivate = *mut _HinokoFwIsoCtxPrivate;
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoResourceAutoClass {
     pub parent_class: HinokoFwIsoResourceClass,
 }
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceAutoClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceAutoClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoResourceAutoClass @ {:p}", self))
+            .field("parent_class", &self.parent_class)
+            .finish()
     }
 }
 
 #[repr(C)]
-pub struct _HinokoFwIsoResourceAutoPrivate(c_void);
+pub struct _HinokoFwIsoResourceAutoPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 pub type HinokoFwIsoResourceAutoPrivate = *mut _HinokoFwIsoResourceAutoPrivate;
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoResourceClass {
     pub parent_class: gobject::GObjectClass,
-    pub allocated: Option<unsafe extern "C" fn(*mut HinokoFwIsoResource, c_uint, c_uint, *mut glib::GError)>,
-    pub deallocated: Option<unsafe extern "C" fn(*mut HinokoFwIsoResource, c_uint, c_uint, *mut glib::GError)>,
+    pub allocated:
+        Option<unsafe extern "C" fn(*mut HinokoFwIsoResource, c_uint, c_uint, *mut glib::GError)>,
+    pub deallocated:
+        Option<unsafe extern "C" fn(*mut HinokoFwIsoResource, c_uint, c_uint, *mut glib::GError)>,
 }
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("allocated", &self.allocated)
-         .field("deallocated", &self.deallocated)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoResourceClass @ {:p}", self))
+            .field("parent_class", &self.parent_class)
+            .field("allocated", &self.allocated)
+            .field("deallocated", &self.deallocated)
+            .finish()
     }
 }
 
 #[repr(C)]
-pub struct _HinokoFwIsoResourcePrivate(c_void);
+pub struct _HinokoFwIsoResourcePrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 pub type HinokoFwIsoResourcePrivate = *mut _HinokoFwIsoResourcePrivate;
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoRxMultipleClass {
     pub parent_class: HinokoFwIsoCtxClass,
     pub interrupted: Option<unsafe extern "C" fn(*mut HinokoFwIsoRxMultiple, c_uint)>,
@@ -143,63 +160,75 @@ pub struct HinokoFwIsoRxMultipleClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoRxMultipleClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoRxMultipleClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("interrupted", &self.interrupted)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoRxMultipleClass @ {:p}", self))
+            .field("parent_class", &self.parent_class)
+            .field("interrupted", &self.interrupted)
+            .finish()
     }
 }
 
 #[repr(C)]
-pub struct _HinokoFwIsoRxMultiplePrivate(c_void);
+pub struct _HinokoFwIsoRxMultiplePrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 pub type HinokoFwIsoRxMultiplePrivate = *mut _HinokoFwIsoRxMultiplePrivate;
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoRxSingleClass {
     pub parent_class: HinokoFwIsoCtxClass,
-    pub interrupted: Option<unsafe extern "C" fn(*mut HinokoFwIsoRxSingle, c_uint, c_uint, *const u8, c_uint, c_uint)>,
+    pub interrupted: Option<
+        unsafe extern "C" fn(*mut HinokoFwIsoRxSingle, c_uint, c_uint, *const u8, c_uint, c_uint),
+    >,
 }
 
 impl ::std::fmt::Debug for HinokoFwIsoRxSingleClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoRxSingleClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("interrupted", &self.interrupted)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoRxSingleClass @ {:p}", self))
+            .field("parent_class", &self.parent_class)
+            .field("interrupted", &self.interrupted)
+            .finish()
     }
 }
 
 #[repr(C)]
-pub struct _HinokoFwIsoRxSinglePrivate(c_void);
+pub struct _HinokoFwIsoRxSinglePrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 pub type HinokoFwIsoRxSinglePrivate = *mut _HinokoFwIsoRxSinglePrivate;
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoTxClass {
     pub parent_class: HinokoFwIsoCtxClass,
-    pub interrupted: Option<unsafe extern "C" fn(*mut HinokoFwIsoTx, c_uint, c_uint, *const u8, c_uint, c_uint)>,
+    pub interrupted:
+        Option<unsafe extern "C" fn(*mut HinokoFwIsoTx, c_uint, c_uint, *const u8, c_uint, c_uint)>,
 }
 
 impl ::std::fmt::Debug for HinokoFwIsoTxClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoTxClass @ {:?}", self as *const _))
-         .field("parent_class", &self.parent_class)
-         .field("interrupted", &self.interrupted)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoTxClass @ {:p}", self))
+            .field("parent_class", &self.parent_class)
+            .field("interrupted", &self.interrupted)
+            .finish()
     }
 }
 
 #[repr(C)]
-pub struct _HinokoFwIsoTxPrivate(c_void);
+pub struct _HinokoFwIsoTxPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
 
 pub type HinokoFwIsoTxPrivate = *mut _HinokoFwIsoTxPrivate;
 
 // Classes
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoCtx {
     pub parent_instance: gobject::GObject,
     pub priv_: *mut HinokoFwIsoCtxPrivate,
@@ -207,15 +236,15 @@ pub struct HinokoFwIsoCtx {
 
 impl ::std::fmt::Debug for HinokoFwIsoCtx {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoCtx @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoCtx @ {:p}", self))
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoResource {
     pub parent_instance: gobject::GObject,
     pub priv_: *mut HinokoFwIsoResourcePrivate,
@@ -223,15 +252,15 @@ pub struct HinokoFwIsoResource {
 
 impl ::std::fmt::Debug for HinokoFwIsoResource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResource @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoResource @ {:p}", self))
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoResourceAuto {
     pub parent_instance: HinokoFwIsoResource,
     pub priv_: *mut HinokoFwIsoResourceAutoPrivate,
@@ -239,15 +268,15 @@ pub struct HinokoFwIsoResourceAuto {
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceAuto {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceAuto @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoResourceAuto @ {:p}", self))
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoRxMultiple {
     pub parent_instance: HinokoFwIsoCtx,
     pub priv_: *mut HinokoFwIsoRxMultiplePrivate,
@@ -255,15 +284,15 @@ pub struct HinokoFwIsoRxMultiple {
 
 impl ::std::fmt::Debug for HinokoFwIsoRxMultiple {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoRxMultiple @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoRxMultiple @ {:p}", self))
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoRxSingle {
     pub parent_instance: HinokoFwIsoCtx,
     pub priv_: *mut HinokoFwIsoRxSinglePrivate,
@@ -271,15 +300,15 @@ pub struct HinokoFwIsoRxSingle {
 
 impl ::std::fmt::Debug for HinokoFwIsoRxSingle {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoRxSingle @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoRxSingle @ {:p}", self))
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
-#[repr(C)]
 #[derive(Copy, Clone)]
+#[repr(C)]
 pub struct HinokoFwIsoTx {
     pub parent_instance: HinokoFwIsoCtx,
     pub priv_: *mut HinokoFwIsoTxPrivate,
@@ -287,13 +316,14 @@ pub struct HinokoFwIsoTx {
 
 impl ::std::fmt::Debug for HinokoFwIsoTx {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoTx @ {:?}", self as *const _))
-         .field("parent_instance", &self.parent_instance)
-         .field("priv_", &self.priv_)
-         .finish()
+        f.debug_struct(&format!("HinokoFwIsoTx @ {:p}", self))
+            .field("parent_instance", &self.parent_instance)
+            .field("priv_", &self.priv_)
+            .finish()
     }
 }
 
+#[link(name = "hinoko")]
 extern "C" {
 
     //=========================================================================
@@ -335,50 +365,145 @@ extern "C" {
     pub fn hinoko_cycle_timer_get_type() -> GType;
     pub fn hinoko_cycle_timer_new() -> *mut HinokoCycleTimer;
     pub fn hinoko_cycle_timer_get_clock_id(self_: *mut HinokoCycleTimer, clock_id: *mut c_int);
-    pub fn hinoko_cycle_timer_get_cycle_timer(self_: *mut HinokoCycleTimer, cycle_timer: *mut [u16; 3]);
-    pub fn hinoko_cycle_timer_get_timestamp(self_: *mut HinokoCycleTimer, tv_sec: *mut i64, tv_nsec: *mut i32);
+    pub fn hinoko_cycle_timer_get_cycle_timer(
+        self_: *mut HinokoCycleTimer,
+        cycle_timer: *mut [u16; 3],
+    );
+    pub fn hinoko_cycle_timer_get_timestamp(
+        self_: *mut HinokoCycleTimer,
+        tv_sec: *mut i64,
+        tv_nsec: *mut i32,
+    );
 
     //=========================================================================
     // HinokoFwIsoCtx
     //=========================================================================
     pub fn hinoko_fw_iso_ctx_get_type() -> GType;
-    pub fn hinoko_fw_iso_ctx_create_source(self_: *mut HinokoFwIsoCtx, gsrc: *mut *mut glib::GSource, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_ctx_flush_completions(self_: *mut HinokoFwIsoCtx, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_ctx_get_cycle_timer(self_: *mut HinokoFwIsoCtx, clock_id: c_int, cycle_timer: *const *mut HinokoCycleTimer, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_ctx_create_source(
+        self_: *mut HinokoFwIsoCtx,
+        gsrc: *mut *mut glib::GSource,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_ctx_flush_completions(
+        self_: *mut HinokoFwIsoCtx,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_ctx_get_cycle_timer(
+        self_: *mut HinokoFwIsoCtx,
+        clock_id: c_int,
+        cycle_timer: *const *mut HinokoCycleTimer,
+        error: *mut *mut glib::GError,
+    );
 
     //=========================================================================
     // HinokoFwIsoResource
     //=========================================================================
     pub fn hinoko_fw_iso_resource_get_type() -> GType;
     pub fn hinoko_fw_iso_resource_new() -> *mut HinokoFwIsoResource;
-    pub fn hinoko_fw_iso_resource_calculate_bandwidth(bytes_per_payload: c_uint, scode: HinokoFwScode) -> c_uint;
-    pub fn hinoko_fw_iso_resource_allocate_once_async(self_: *mut HinokoFwIsoResource, channel_candidates: *mut u8, channel_candidates_count: size_t, bandwidth: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_allocate_once_sync(self_: *mut HinokoFwIsoResource, channel_candidates: *mut u8, channel_candidates_count: size_t, bandwidth: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_create_source(self_: *mut HinokoFwIsoResource, gsrc: *mut *mut glib::GSource, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_deallocate_once_async(self_: *mut HinokoFwIsoResource, channel: c_uint, bandwidth: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_deallocate_once_sync(self_: *mut HinokoFwIsoResource, channel: c_uint, bandwidth: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_open(self_: *mut HinokoFwIsoResource, path: *const c_char, open_flag: c_int, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_resource_calculate_bandwidth(
+        bytes_per_payload: c_uint,
+        scode: HinokoFwScode,
+    ) -> c_uint;
+    pub fn hinoko_fw_iso_resource_allocate_once_async(
+        self_: *mut HinokoFwIsoResource,
+        channel_candidates: *mut u8,
+        channel_candidates_count: size_t,
+        bandwidth: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_allocate_once_sync(
+        self_: *mut HinokoFwIsoResource,
+        channel_candidates: *mut u8,
+        channel_candidates_count: size_t,
+        bandwidth: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_create_source(
+        self_: *mut HinokoFwIsoResource,
+        gsrc: *mut *mut glib::GSource,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_deallocate_once_async(
+        self_: *mut HinokoFwIsoResource,
+        channel: c_uint,
+        bandwidth: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_deallocate_once_sync(
+        self_: *mut HinokoFwIsoResource,
+        channel: c_uint,
+        bandwidth: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_open(
+        self_: *mut HinokoFwIsoResource,
+        path: *const c_char,
+        open_flag: c_int,
+        error: *mut *mut glib::GError,
+    );
 
     //=========================================================================
     // HinokoFwIsoResourceAuto
     //=========================================================================
     pub fn hinoko_fw_iso_resource_auto_get_type() -> GType;
     pub fn hinoko_fw_iso_resource_auto_new() -> *mut HinokoFwIsoResourceAuto;
-    pub fn hinoko_fw_iso_resource_auto_allocate_async(self_: *mut HinokoFwIsoResourceAuto, channel_candidates: *mut u8, channel_candidates_count: size_t, bandwidth: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_auto_allocate_sync(self_: *mut HinokoFwIsoResourceAuto, channel_candidates: *mut u8, channel_candidates_count: size_t, bandwidth: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_auto_deallocate_async(self_: *mut HinokoFwIsoResourceAuto, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_resource_auto_deallocate_sync(self_: *mut HinokoFwIsoResourceAuto, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_resource_auto_allocate_async(
+        self_: *mut HinokoFwIsoResourceAuto,
+        channel_candidates: *mut u8,
+        channel_candidates_count: size_t,
+        bandwidth: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_auto_allocate_sync(
+        self_: *mut HinokoFwIsoResourceAuto,
+        channel_candidates: *mut u8,
+        channel_candidates_count: size_t,
+        bandwidth: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_auto_deallocate_async(
+        self_: *mut HinokoFwIsoResourceAuto,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_resource_auto_deallocate_sync(
+        self_: *mut HinokoFwIsoResourceAuto,
+        error: *mut *mut glib::GError,
+    );
 
     //=========================================================================
     // HinokoFwIsoRxMultiple
     //=========================================================================
     pub fn hinoko_fw_iso_rx_multiple_get_type() -> GType;
     pub fn hinoko_fw_iso_rx_multiple_new() -> *mut HinokoFwIsoRxMultiple;
-    pub fn hinoko_fw_iso_rx_multiple_allocate(self_: *mut HinokoFwIsoRxMultiple, path: *const c_char, channels: *const u8, channels_length: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_rx_multiple_get_payload(self_: *mut HinokoFwIsoRxMultiple, index: c_uint, payload: *mut *const u8, length: *mut c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_rx_multiple_map_buffer(self_: *mut HinokoFwIsoRxMultiple, bytes_per_chunk: c_uint, chunks_per_buffer: c_uint, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_rx_multiple_allocate(
+        self_: *mut HinokoFwIsoRxMultiple,
+        path: *const c_char,
+        channels: *const u8,
+        channels_length: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_rx_multiple_get_payload(
+        self_: *mut HinokoFwIsoRxMultiple,
+        index: c_uint,
+        payload: *mut *const u8,
+        length: *mut c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_rx_multiple_map_buffer(
+        self_: *mut HinokoFwIsoRxMultiple,
+        bytes_per_chunk: c_uint,
+        chunks_per_buffer: c_uint,
+        error: *mut *mut glib::GError,
+    );
     pub fn hinoko_fw_iso_rx_multiple_release(self_: *mut HinokoFwIsoRxMultiple);
-    pub fn hinoko_fw_iso_rx_multiple_start(self_: *mut HinokoFwIsoRxMultiple, cycle_match: *const [u16; 2], sync: u32, tags: HinokoFwIsoCtxMatchFlag, chunks_per_irq: c_uint, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_rx_multiple_start(
+        self_: *mut HinokoFwIsoRxMultiple,
+        cycle_match: *const [u16; 2],
+        sync: u32,
+        tags: HinokoFwIsoCtxMatchFlag,
+        chunks_per_irq: c_uint,
+        error: *mut *mut glib::GError,
+    );
     pub fn hinoko_fw_iso_rx_multiple_stop(self_: *mut HinokoFwIsoRxMultiple);
     pub fn hinoko_fw_iso_rx_multiple_unmap_buffer(self_: *mut HinokoFwIsoRxMultiple);
 
@@ -387,12 +512,39 @@ extern "C" {
     //=========================================================================
     pub fn hinoko_fw_iso_rx_single_get_type() -> GType;
     pub fn hinoko_fw_iso_rx_single_new() -> *mut HinokoFwIsoRxSingle;
-    pub fn hinoko_fw_iso_rx_single_allocate(self_: *mut HinokoFwIsoRxSingle, path: *const c_char, channel: c_uint, header_size: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_rx_single_get_payload(self_: *mut HinokoFwIsoRxSingle, index: c_uint, payload: *mut *const u8, length: *mut c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_rx_single_map_buffer(self_: *mut HinokoFwIsoRxSingle, maximum_bytes_per_payload: c_uint, payloads_per_buffer: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_rx_single_register_packet(self_: *mut HinokoFwIsoRxSingle, schedule_interrupt: gboolean, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_rx_single_allocate(
+        self_: *mut HinokoFwIsoRxSingle,
+        path: *const c_char,
+        channel: c_uint,
+        header_size: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_rx_single_get_payload(
+        self_: *mut HinokoFwIsoRxSingle,
+        index: c_uint,
+        payload: *mut *const u8,
+        length: *mut c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_rx_single_map_buffer(
+        self_: *mut HinokoFwIsoRxSingle,
+        maximum_bytes_per_payload: c_uint,
+        payloads_per_buffer: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_rx_single_register_packet(
+        self_: *mut HinokoFwIsoRxSingle,
+        schedule_interrupt: gboolean,
+        error: *mut *mut glib::GError,
+    );
     pub fn hinoko_fw_iso_rx_single_release(self_: *mut HinokoFwIsoRxSingle);
-    pub fn hinoko_fw_iso_rx_single_start(self_: *mut HinokoFwIsoRxSingle, cycle_match: *const [u16; 2], sync: u32, tags: HinokoFwIsoCtxMatchFlag, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_rx_single_start(
+        self_: *mut HinokoFwIsoRxSingle,
+        cycle_match: *const [u16; 2],
+        sync: u32,
+        tags: HinokoFwIsoCtxMatchFlag,
+        error: *mut *mut glib::GError,
+    );
     pub fn hinoko_fw_iso_rx_single_stop(self_: *mut HinokoFwIsoRxSingle);
     pub fn hinoko_fw_iso_rx_single_unmap_buffer(self_: *mut HinokoFwIsoRxSingle);
 
@@ -401,18 +553,58 @@ extern "C" {
     //=========================================================================
     pub fn hinoko_fw_iso_tx_get_type() -> GType;
     pub fn hinoko_fw_iso_tx_new() -> *mut HinokoFwIsoTx;
-    pub fn hinoko_fw_iso_tx_allocate(self_: *mut HinokoFwIsoTx, path: *const c_char, scode: HinokoFwScode, channel: c_uint, header_size: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_tx_map_buffer(self_: *mut HinokoFwIsoTx, maximum_bytes_per_payload: c_uint, payloads_per_buffer: c_uint, error: *mut *mut glib::GError);
-    pub fn hinoko_fw_iso_tx_register_packet(self_: *mut HinokoFwIsoTx, tags: HinokoFwIsoCtxMatchFlag, sy: c_uint, header: *const u8, header_length: c_uint, payload: *const u8, payload_length: c_uint, schedule_interrupt: gboolean, error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_tx_allocate(
+        self_: *mut HinokoFwIsoTx,
+        path: *const c_char,
+        scode: HinokoFwScode,
+        channel: c_uint,
+        header_size: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_tx_map_buffer(
+        self_: *mut HinokoFwIsoTx,
+        maximum_bytes_per_payload: c_uint,
+        payloads_per_buffer: c_uint,
+        error: *mut *mut glib::GError,
+    );
+    pub fn hinoko_fw_iso_tx_register_packet(
+        self_: *mut HinokoFwIsoTx,
+        tags: HinokoFwIsoCtxMatchFlag,
+        sy: c_uint,
+        header: *const u8,
+        header_length: c_uint,
+        payload: *const u8,
+        payload_length: c_uint,
+        schedule_interrupt: gboolean,
+        error: *mut *mut glib::GError,
+    );
     pub fn hinoko_fw_iso_tx_release(self_: *mut HinokoFwIsoTx);
-    pub fn hinoko_fw_iso_tx_start(self_: *mut HinokoFwIsoTx, cycle_match: *const [u16; 2], error: *mut *mut glib::GError);
+    pub fn hinoko_fw_iso_tx_start(
+        self_: *mut HinokoFwIsoTx,
+        cycle_match: *const [u16; 2],
+        error: *mut *mut glib::GError,
+    );
     pub fn hinoko_fw_iso_tx_stop(self_: *mut HinokoFwIsoTx);
     pub fn hinoko_fw_iso_tx_unmap_buffer(self_: *mut HinokoFwIsoTx);
 
     //=========================================================================
     // Other functions
     //=========================================================================
-    pub fn hinoko_sigs_marshal_VOID__UINT_UINT_OBJECT(closure: *mut gobject::GClosure, return_value: *mut gobject::GValue, n_param_values: c_uint, param_values: *const gobject::GValue, invocation_hint: gpointer, marshal_data: gpointer);
-    pub fn hinoko_sigs_marshal_VOID__UINT_UINT_POINTER_UINT_UINT(closure: *mut gobject::GClosure, return_value: *mut gobject::GValue, n_param_values: c_uint, param_values: *const gobject::GValue, invocation_hint: gpointer, marshal_data: gpointer);
+    pub fn hinoko_sigs_marshal_VOID__UINT_UINT_OBJECT(
+        closure: *mut gobject::GClosure,
+        return_value: *mut gobject::GValue,
+        n_param_values: c_uint,
+        param_values: *const gobject::GValue,
+        invocation_hint: gpointer,
+        marshal_data: gpointer,
+    );
+    pub fn hinoko_sigs_marshal_VOID__UINT_UINT_POINTER_UINT_UINT(
+        closure: *mut gobject::GClosure,
+        return_value: *mut gobject::GValue,
+        n_param_values: c_uint,
+        param_values: *const gobject::GValue,
+        invocation_hint: gpointer,
+        marshal_data: gpointer,
+    );
 
 }
