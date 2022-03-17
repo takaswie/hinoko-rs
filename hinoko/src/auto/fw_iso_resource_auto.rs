@@ -2,36 +2,32 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::FwIsoResource;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
-use glib::Value;
-use glib_sys;
-use gobject_sys;
-use hinoko_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
-use FwIsoResource;
 
-glib_wrapper! {
-    pub struct FwIsoResourceAuto(Object<hinoko_sys::HinokoFwIsoResourceAuto, hinoko_sys::HinokoFwIsoResourceAutoClass, FwIsoResourceAutoClass>) @extends FwIsoResource;
+glib::wrapper! {
+    #[doc(alias = "HinokoFwIsoResourceAuto")]
+    pub struct FwIsoResourceAuto(Object<ffi::HinokoFwIsoResourceAuto, ffi::HinokoFwIsoResourceAutoClass>) @extends FwIsoResource;
 
     match fn {
-        get_type => || hinoko_sys::hinoko_fw_iso_resource_auto_get_type(),
+        type_ => || ffi::hinoko_fw_iso_resource_auto_get_type(),
     }
 }
 
 impl FwIsoResourceAuto {
+    pub const NONE: Option<&'static FwIsoResourceAuto> = None;
+
+    #[doc(alias = "hinoko_fw_iso_resource_auto_new")]
     pub fn new() -> FwIsoResourceAuto {
-        unsafe {
-            from_glib_full(hinoko_sys::hinoko_fw_iso_resource_auto_new())
-        }
+        unsafe { from_glib_full(ffi::hinoko_fw_iso_resource_auto_new()) }
     }
 }
 
@@ -41,28 +37,33 @@ impl Default for FwIsoResourceAuto {
     }
 }
 
-pub const NONE_FW_ISO_RESOURCE_AUTO: Option<&FwIsoResourceAuto> = None;
-
 pub trait FwIsoResourceAutoExt: 'static {
+    #[doc(alias = "hinoko_fw_iso_resource_auto_allocate_async")]
     fn allocate_async(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error>;
 
+    #[doc(alias = "hinoko_fw_iso_resource_auto_allocate_sync")]
     fn allocate_sync(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error>;
 
+    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_async")]
     fn deallocate_async(&self) -> Result<(), glib::Error>;
 
+    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_sync")]
     fn deallocate_sync(&self) -> Result<(), glib::Error>;
 
-    fn get_property_allocated(&self) -> bool;
+    fn is_allocated(&self) -> bool;
 
-    fn get_property_bandwidth(&self) -> u32;
+    fn bandwidth(&self) -> u32;
 
-    fn get_property_channel(&self) -> u32;
+    fn channel(&self) -> u32;
 
-    fn connect_property_allocated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "allocated")]
+    fn connect_allocated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_bandwidth_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "bandwidth")]
+    fn connect_bandwidth_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_channel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "channel")]
+    fn connect_channel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
 impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
@@ -70,8 +71,18 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         let channel_candidates_count = channel_candidates.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_resource_auto_allocate_async(self.as_ref().to_glib_none().0, channel_candidates.to_glib_none().0, channel_candidates_count, bandwidth, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_resource_auto_allocate_async(
+                self.as_ref().to_glib_none().0,
+                channel_candidates.to_glib_none().0,
+                channel_candidates_count,
+                bandwidth,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
@@ -79,96 +90,141 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         let channel_candidates_count = channel_candidates.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_resource_auto_allocate_sync(self.as_ref().to_glib_none().0, channel_candidates.to_glib_none().0, channel_candidates_count, bandwidth, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_resource_auto_allocate_sync(
+                self.as_ref().to_glib_none().0,
+                channel_candidates.to_glib_none().0,
+                channel_candidates_count,
+                bandwidth,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn deallocate_async(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_resource_auto_deallocate_async(self.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_resource_auto_deallocate_async(
+                self.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn deallocate_sync(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_resource_auto_deallocate_sync(self.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_resource_auto_deallocate_sync(
+                self.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
-    fn get_property_allocated(&self) -> bool {
-        unsafe {
-            let mut value = Value::from_type(<bool as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"allocated\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `allocated` getter").unwrap()
-        }
+    fn is_allocated(&self) -> bool {
+        glib::ObjectExt::property(self.as_ref(), "allocated")
     }
 
-    fn get_property_bandwidth(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"bandwidth\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `bandwidth` getter").unwrap()
-        }
+    fn bandwidth(&self) -> u32 {
+        glib::ObjectExt::property(self.as_ref(), "bandwidth")
     }
 
-    fn get_property_channel(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"channel\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `channel` getter").unwrap()
-        }
+    fn channel(&self) -> u32 {
+        glib::ObjectExt::property(self.as_ref(), "channel")
     }
 
-    fn connect_property_allocated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_allocated_trampoline<P, F: Fn(&P) + 'static>(this: *mut hinoko_sys::HinokoFwIsoResourceAuto, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FwIsoResourceAuto>
-        {
+    fn connect_allocated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_allocated_trampoline<
+            P: IsA<FwIsoResourceAuto>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoResourceAuto,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoResourceAuto::from_glib_borrow(this).unsafe_cast_ref())
+            f(FwIsoResourceAuto::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::allocated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_allocated_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::allocated\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_allocated_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_bandwidth_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_bandwidth_trampoline<P, F: Fn(&P) + 'static>(this: *mut hinoko_sys::HinokoFwIsoResourceAuto, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FwIsoResourceAuto>
-        {
+    fn connect_bandwidth_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_bandwidth_trampoline<
+            P: IsA<FwIsoResourceAuto>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoResourceAuto,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoResourceAuto::from_glib_borrow(this).unsafe_cast_ref())
+            f(FwIsoResourceAuto::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::bandwidth\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_bandwidth_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::bandwidth\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_bandwidth_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_channel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_channel_trampoline<P, F: Fn(&P) + 'static>(this: *mut hinoko_sys::HinokoFwIsoResourceAuto, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FwIsoResourceAuto>
-        {
+    fn connect_channel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_channel_trampoline<
+            P: IsA<FwIsoResourceAuto>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoResourceAuto,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoResourceAuto::from_glib_borrow(this).unsafe_cast_ref())
+            f(FwIsoResourceAuto::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::channel\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_channel_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::channel\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_channel_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }
 
 impl fmt::Display for FwIsoResourceAuto {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoResourceAuto")
+        f.write_str("FwIsoResourceAuto")
     }
 }

@@ -28,6 +28,13 @@ Dependencies
   * ``glib-sys`` >= 0.15
   * ``gobject-sys`` >= 0.15
 
+* API crate (``hinoko``)
+
+  * ``libc`` >= 0.2
+  * ``bitflags`` >= 1.0
+  * ``glib`` >= 0.15
+  * FFI crate (``hinoko-sys``)
+
 How to generate FFI and API crates
 ==================================
 

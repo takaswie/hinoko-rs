@@ -2,27 +2,27 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
+use crate::FwIsoCtx;
 use glib::object::IsA;
 use glib::translate::*;
-use hinoko_sys;
 use std::fmt;
 use std::ptr;
-use FwIsoCtx;
 
-glib_wrapper! {
-    pub struct FwIsoRxSingle(Object<hinoko_sys::HinokoFwIsoRxSingle, hinoko_sys::HinokoFwIsoRxSingleClass, FwIsoRxSingleClass>) @extends FwIsoCtx;
+glib::wrapper! {
+    #[doc(alias = "HinokoFwIsoRxSingle")]
+    pub struct FwIsoRxSingle(Object<ffi::HinokoFwIsoRxSingle, ffi::HinokoFwIsoRxSingleClass>) @extends FwIsoCtx;
 
     match fn {
-        get_type => || hinoko_sys::hinoko_fw_iso_rx_single_get_type(),
+        type_ => || ffi::hinoko_fw_iso_rx_single_get_type(),
     }
 }
 
 impl FwIsoRxSingle {
+    pub const NONE: Option<&'static FwIsoRxSingle> = None;
+
+    #[doc(alias = "hinoko_fw_iso_rx_single_new")]
     pub fn new() -> FwIsoRxSingle {
-        unsafe {
-            from_glib_full(hinoko_sys::hinoko_fw_iso_rx_single_new())
-        }
+        unsafe { from_glib_full(ffi::hinoko_fw_iso_rx_single_new()) }
     }
 }
 
@@ -32,19 +32,27 @@ impl Default for FwIsoRxSingle {
     }
 }
 
-pub const NONE_FW_ISO_RX_SINGLE: Option<&FwIsoRxSingle> = None;
-
 pub trait FwIsoRxSingleExt: 'static {
+    #[doc(alias = "hinoko_fw_iso_rx_single_allocate")]
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error>;
 
-    fn map_buffer(&self, maximum_bytes_per_payload: u32, payloads_per_buffer: u32) -> Result<(), glib::Error>;
+    #[doc(alias = "hinoko_fw_iso_rx_single_map_buffer")]
+    fn map_buffer(
+        &self,
+        maximum_bytes_per_payload: u32,
+        payloads_per_buffer: u32,
+    ) -> Result<(), glib::Error>;
 
+    #[doc(alias = "hinoko_fw_iso_rx_single_register_packet")]
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error>;
 
+    #[doc(alias = "hinoko_fw_iso_rx_single_release")]
     fn release(&self);
 
+    #[doc(alias = "hinoko_fw_iso_rx_single_stop")]
     fn stop(&self);
 
+    #[doc(alias = "hinoko_fw_iso_rx_single_unmap_buffer")]
     fn unmap_buffer(&self);
 }
 
@@ -52,48 +60,79 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExt for O {
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_rx_single_allocate(self.as_ref().to_glib_none().0, path.to_glib_none().0, channel, header_size, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_rx_single_allocate(
+                self.as_ref().to_glib_none().0,
+                path.to_glib_none().0,
+                channel,
+                header_size,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
-    fn map_buffer(&self, maximum_bytes_per_payload: u32, payloads_per_buffer: u32) -> Result<(), glib::Error> {
+    fn map_buffer(
+        &self,
+        maximum_bytes_per_payload: u32,
+        payloads_per_buffer: u32,
+    ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_rx_single_map_buffer(self.as_ref().to_glib_none().0, maximum_bytes_per_payload, payloads_per_buffer, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_rx_single_map_buffer(
+                self.as_ref().to_glib_none().0,
+                maximum_bytes_per_payload,
+                payloads_per_buffer,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_rx_single_register_packet(self.as_ref().to_glib_none().0, schedule_interrupt.to_glib(), &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_rx_single_register_packet(
+                self.as_ref().to_glib_none().0,
+                schedule_interrupt.into_glib(),
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn release(&self) {
         unsafe {
-            hinoko_sys::hinoko_fw_iso_rx_single_release(self.as_ref().to_glib_none().0);
+            ffi::hinoko_fw_iso_rx_single_release(self.as_ref().to_glib_none().0);
         }
     }
 
     fn stop(&self) {
         unsafe {
-            hinoko_sys::hinoko_fw_iso_rx_single_stop(self.as_ref().to_glib_none().0);
+            ffi::hinoko_fw_iso_rx_single_stop(self.as_ref().to_glib_none().0);
         }
     }
 
     fn unmap_buffer(&self) {
         unsafe {
-            hinoko_sys::hinoko_fw_iso_rx_single_unmap_buffer(self.as_ref().to_glib_none().0);
+            ffi::hinoko_fw_iso_rx_single_unmap_buffer(self.as_ref().to_glib_none().0);
         }
     }
 }
 
 impl fmt::Display for FwIsoRxSingle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoRxSingle")
+        f.write_str("FwIsoRxSingle")
     }
 }

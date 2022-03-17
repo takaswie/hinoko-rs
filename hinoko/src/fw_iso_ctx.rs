@@ -1,8 +1,5 @@
-use glib::object::IsA;
-use glib::translate::*;
-
-use CycleTimer;
-use FwIsoCtx;
+// SPDX-License-Identifier: MIT
+use crate::*;
 
 pub trait FwIsoCtxExtManual {
     fn get_cycle_timer(
@@ -21,7 +18,7 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
         unsafe {
             let mut error = std::ptr::null_mut();
 
-            hinoko_sys::hinoko_fw_iso_ctx_get_cycle_timer(
+            ffi::hinoko_fw_iso_ctx_get_cycle_timer(
                 self.as_ref().to_glib_none().0,
                 clock_id,
                 &mut cycle_timer.to_glib_none_mut().0,
