@@ -2,50 +2,62 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib;
 use glib::object::Cast;
 use glib::object::IsA;
 use glib::signal::connect_raw;
 use glib::signal::SignalHandlerId;
 use glib::translate::*;
-use glib::StaticType;
-use glib::Value;
-use glib_sys;
-use gobject_sys;
-use hinoko_sys;
 use std::boxed::Box as Box_;
 use std::fmt;
 use std::mem::transmute;
 use std::ptr;
 
-glib_wrapper! {
-    pub struct FwIsoCtx(Object<hinoko_sys::HinokoFwIsoCtx, hinoko_sys::HinokoFwIsoCtxClass, FwIsoCtxClass>);
+glib::wrapper! {
+    #[doc(alias = "HinokoFwIsoCtx")]
+    pub struct FwIsoCtx(Object<ffi::HinokoFwIsoCtx, ffi::HinokoFwIsoCtxClass>);
 
     match fn {
-        get_type => || hinoko_sys::hinoko_fw_iso_ctx_get_type(),
+        type_ => || ffi::hinoko_fw_iso_ctx_get_type(),
     }
 }
 
-pub const NONE_FW_ISO_CTX: Option<&FwIsoCtx> = None;
+impl FwIsoCtx {
+    pub const NONE: Option<&'static FwIsoCtx> = None;
+}
 
 pub trait FwIsoCtxExt: 'static {
+    #[doc(alias = "hinoko_fw_iso_ctx_create_source")]
     fn create_source(&self) -> Result<glib::Source, glib::Error>;
 
+    #[doc(alias = "hinoko_fw_iso_ctx_flush_completions")]
     fn flush_completions(&self) -> Result<(), glib::Error>;
 
-    fn get_property_bytes_per_chunk(&self) -> u32;
+    #[doc(alias = "bytes-per-chunk")]
+    fn bytes_per_chunk(&self) -> u32;
 
-    fn get_property_chunks_per_buffer(&self) -> u32;
+    #[doc(alias = "chunks-per-buffer")]
+    fn chunks_per_buffer(&self) -> u32;
 
-    fn get_property_registered_chunk_count(&self) -> u32;
+    #[doc(alias = "registered-chunk-count")]
+    fn registered_chunk_count(&self) -> u32;
 
-    fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "stopped")]
+    fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 
-    fn connect_property_bytes_per_chunk_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "bytes-per-chunk")]
+    fn connect_bytes_per_chunk_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_chunks_per_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "chunks-per-buffer")]
+    fn connect_chunks_per_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
 
-    fn connect_property_registered_chunk_count_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
+    #[doc(alias = "registered-chunk-count")]
+    fn connect_registered_chunk_count_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId;
 }
 
 impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
@@ -53,102 +65,160 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
         unsafe {
             let mut gsrc = ptr::null_mut();
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_ctx_create_source(self.as_ref().to_glib_none().0, &mut gsrc, &mut error);
-            if error.is_null() { Ok(from_glib_full(gsrc)) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_ctx_create_source(
+                self.as_ref().to_glib_none().0,
+                &mut gsrc,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(gsrc))
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
     fn flush_completions(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_ctx_flush_completions(self.as_ref().to_glib_none().0, &mut error);
-            if error.is_null() { Ok(()) } else { Err(from_glib_full(error)) }
+            let _ = ffi::hinoko_fw_iso_ctx_flush_completions(
+                self.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
         }
     }
 
-    fn get_property_bytes_per_chunk(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"bytes-per-chunk\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `bytes-per-chunk` getter").unwrap()
-        }
+    fn bytes_per_chunk(&self) -> u32 {
+        glib::ObjectExt::property(self.as_ref(), "bytes-per-chunk")
     }
 
-    fn get_property_chunks_per_buffer(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"chunks-per-buffer\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `chunks-per-buffer` getter").unwrap()
-        }
+    fn chunks_per_buffer(&self) -> u32 {
+        glib::ObjectExt::property(self.as_ref(), "chunks-per-buffer")
     }
 
-    fn get_property_registered_chunk_count(&self) -> u32 {
-        unsafe {
-            let mut value = Value::from_type(<u32 as StaticType>::static_type());
-            gobject_sys::g_object_get_property(self.to_glib_none().0 as *mut gobject_sys::GObject, b"registered-chunk-count\0".as_ptr() as *const _, value.to_glib_none_mut().0);
-            value.get().expect("Return Value for property `registered-chunk-count` getter").unwrap()
-        }
+    fn registered_chunk_count(&self) -> u32 {
+        glib::ObjectExt::property(self.as_ref(), "registered-chunk-count")
     }
 
-    fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn stopped_trampoline<P, F: Fn(&P, Option<&glib::Error>) + 'static>(this: *mut hinoko_sys::HinokoFwIsoCtx, error: *mut glib_sys::GError, f: glib_sys::gpointer)
-            where P: IsA<FwIsoCtx>
-        {
+    fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn stopped_trampoline<
+            P: IsA<FwIsoCtx>,
+            F: Fn(&P, Option<&glib::Error>) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoCtx,
+            error: *mut glib::ffi::GError,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref(), Option::<glib::Error>::from_glib_borrow(error).as_ref().as_ref())
+            f(
+                FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref(),
+                Option::<glib::Error>::from_glib_borrow(error)
+                    .as_ref()
+                    .as_ref(),
+            )
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"stopped\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(stopped_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"stopped\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    stopped_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_bytes_per_chunk_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_bytes_per_chunk_trampoline<P, F: Fn(&P) + 'static>(this: *mut hinoko_sys::HinokoFwIsoCtx, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FwIsoCtx>
-        {
+    fn connect_bytes_per_chunk_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_bytes_per_chunk_trampoline<
+            P: IsA<FwIsoCtx>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoCtx,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref())
+            f(FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::bytes-per-chunk\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_bytes_per_chunk_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::bytes-per-chunk\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_bytes_per_chunk_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_chunks_per_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_chunks_per_buffer_trampoline<P, F: Fn(&P) + 'static>(this: *mut hinoko_sys::HinokoFwIsoCtx, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FwIsoCtx>
-        {
+    fn connect_chunks_per_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_chunks_per_buffer_trampoline<
+            P: IsA<FwIsoCtx>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoCtx,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref())
+            f(FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::chunks-per-buffer\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_chunks_per_buffer_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::chunks-per-buffer\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_chunks_per_buffer_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 
-    fn connect_property_registered_chunk_count_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn notify_registered_chunk_count_trampoline<P, F: Fn(&P) + 'static>(this: *mut hinoko_sys::HinokoFwIsoCtx, _param_spec: glib_sys::gpointer, f: glib_sys::gpointer)
-            where P: IsA<FwIsoCtx>
-        {
+    fn connect_registered_chunk_count_notify<F: Fn(&Self) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_registered_chunk_count_trampoline<
+            P: IsA<FwIsoCtx>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::HinokoFwIsoCtx,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
             let f: &F = &*(f as *const F);
-            f(&FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref())
+            f(FwIsoCtx::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
-            connect_raw(self.as_ptr() as *mut _, b"notify::registered-chunk-count\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(notify_registered_chunk_count_trampoline::<Self, F> as *const ())), Box_::into_raw(f))
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::registered-chunk-count\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_registered_chunk_count_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }
 
 impl fmt::Display for FwIsoCtx {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoCtx")
+        f.write_str("FwIsoCtx")
     }
 }

@@ -1,15 +1,5 @@
-use glib;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib_sys;
-use hinoko_sys;
-use libc::*;
-
-use FwIsoCtxMatchFlag;
-use FwIsoRxSingle;
+// SPDX-License-Identifier: MIT
+use crate::*;
 
 pub trait FwIsoRxSingleExtManual {
     fn start(
@@ -40,11 +30,11 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            hinoko_sys::hinoko_fw_iso_rx_single_start(
+            ffi::hinoko_fw_iso_rx_single_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
                 sync,
-                tags.to_glib(),
+                tags.into_glib(),
                 &mut error,
             );
 
@@ -62,7 +52,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();
 
-            hinoko_sys::hinoko_fw_iso_rx_single_get_payload(
+            ffi::hinoko_fw_iso_rx_single_get_payload(
                 self.as_ref().to_glib_none().0,
                 index,
                 &mut data,
@@ -86,13 +76,13 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
         F: Fn(&Self, u32, u32, &[u8], u32) + 'static,
     {
         unsafe extern "C" fn interrupted_trampoline<P, F>(
-            this: *mut hinoko_sys::HinokoFwIsoRxSingle,
+            this: *mut ffi::HinokoFwIsoRxSingle,
             sec: c_uint,
             cycle: c_uint,
             header: *const u8,
             header_length: c_uint,
             count: c_uint,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FwIsoRxSingle>,
             F: Fn(&P, u32, u32, &[u8], u32) + 'static,

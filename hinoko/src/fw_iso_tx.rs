@@ -1,14 +1,5 @@
-use glib;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib_sys;
-use hinoko_sys;
-use libc::*;
-
-use crate::{FwIsoCtxMatchFlag, FwIsoTx};
+// SPDX-License-Identifier: MIT
+use crate::*;
 
 pub trait FwIsoTxExtManual {
     fn register_packet(
@@ -17,7 +8,7 @@ pub trait FwIsoTxExtManual {
         sy: u32,
         header: Option<&[u8]>,
         payload: Option<&[u8]>,
-        schedule_interrupt: bool
+        schedule_interrupt: bool,
     ) -> Result<(), glib::Error>;
 
     fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), glib::Error>;
@@ -34,7 +25,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
         sy: u32,
         header: Option<&[u8]>,
         payload: Option<&[u8]>,
-        schedule_interrupt: bool
+        schedule_interrupt: bool,
     ) -> Result<(), glib::Error> {
         let (header_ptr, header_length) = match header {
             Some(h) => (h.as_ptr(), h.len() as u32),
@@ -47,16 +38,16 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
 
         unsafe {
             let mut error = std::ptr::null_mut();
-            let _ = hinoko_sys::hinoko_fw_iso_tx_register_packet(
+            let _ = ffi::hinoko_fw_iso_tx_register_packet(
                 self.as_ref().to_glib_none().0,
-                tags.to_glib(),
+                tags.into_glib(),
                 sy,
                 header_ptr,
                 header_length,
                 payload_ptr,
                 payload_length,
-                schedule_interrupt.to_glib(),
-                &mut error
+                schedule_interrupt.into_glib(),
+                &mut error,
             );
 
             if error.is_null() {
@@ -75,11 +66,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            hinoko_sys::hinoko_fw_iso_tx_start(
-                self.as_ref().to_glib_none().0,
-                ptr,
-                &mut error,
-            );
+            ffi::hinoko_fw_iso_tx_start(self.as_ref().to_glib_none().0, ptr, &mut error);
 
             if error.is_null() {
                 Ok(())
@@ -94,13 +81,13 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
         F: Fn(&Self, u32, u32, &[u8], u32) + 'static,
     {
         unsafe extern "C" fn interrupted_trampoline<P, F>(
-            this: *mut hinoko_sys::HinokoFwIsoTx,
+            this: *mut ffi::HinokoFwIsoTx,
             sec: c_uint,
             cycle: c_uint,
             header: *const u8,
             header_length: c_uint,
             count: c_uint,
-            f: glib_sys::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FwIsoTx>,
             F: Fn(&P, u32, u32, &[u8], u32) + 'static,

@@ -1,16 +1,5 @@
-use glib;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use glib::StaticType;
-use glib::Value;
-use glib_sys;
-use hinoko_sys;
-
-use FwIsoCtxMatchFlag;
-use FwIsoRxMultiple;
+// SPDX-License-Identifier: MIT
+use crate::*;
 
 pub trait FwIsoRxMultipleExtManual {
     fn get_property_channels(&self) -> Option<Vec<u8>>;
@@ -33,22 +22,21 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
     fn get_property_channels(&self) -> Option<Vec<u8>> {
         unsafe {
             let mut value = Value::from_type(<glib::ByteArray as StaticType>::static_type());
-            gobject_sys::g_object_get_property(
-                self.to_glib_none().0 as *mut gobject_sys::GObject,
+            glib::gobject_ffi::g_object_get_property(
+                self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
                 b"channels\0".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
 
             match value.get::<glib::ByteArray>() {
-                Ok(content) => match content {
-                    Some(data) => {
-                        let mut channels = Vec::<u8>::new();
-                        channels.extend_from_slice(&data);
-                        Some(channels)
-                    }
-                    None => None,
-                },
+                Ok(data) => Some(data.to_vec()),
                 Err(_) => None,
+                //Some(data) => {
+                //    let mut channels = Vec::<u8>::new();
+                //    channels.extend_from_slice(&data);
+                //    Some(channels)
+                //}
+                //None => None,
             }
         }
     }
@@ -58,9 +46,9 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
         F: Fn(&Self) + 'static,
     {
         unsafe extern "C" fn notify_channels_trampoline<P, F>(
-            this: *mut hinoko_sys::HinokoFwIsoRxMultiple,
-            _param_spec: glib_sys::gpointer,
-            f: glib_sys::gpointer,
+            this: *mut ffi::HinokoFwIsoRxMultiple,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
         ) where
             P: IsA<FwIsoRxMultiple>,
             F: Fn(&P) + 'static,
@@ -95,11 +83,11 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            hinoko_sys::hinoko_fw_iso_rx_multiple_start(
+            ffi::hinoko_fw_iso_rx_multiple_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
                 sync,
-                tags.to_glib(),
+                tags.into_glib(),
                 chunks_per_irq,
                 &mut error,
             );
@@ -118,7 +106,7 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();
 
-            hinoko_sys::hinoko_fw_iso_rx_multiple_get_payload(
+            ffi::hinoko_fw_iso_rx_multiple_get_payload(
                 self.as_ref().to_glib_none().0,
                 index,
                 &mut data,

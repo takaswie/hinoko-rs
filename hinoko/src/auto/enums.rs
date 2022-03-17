@@ -5,26 +5,29 @@
 use glib::error::ErrorDomain;
 use glib::translate::*;
 use glib::value::FromValue;
-use glib::value::FromValueOptional;
-use glib::value::SetValue;
-use glib::value::Value;
+use glib::value::ToValue;
 use glib::Quark;
 use glib::StaticType;
 use glib::Type;
-use gobject_sys;
-use hinoko_sys;
 use std::fmt;
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HinokoFwIsoCtxError")]
 pub enum FwIsoCtxError {
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_ALLOCATED")]
     Allocated,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_NOT_ALLOCATED")]
     NotAllocated,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_MAPPED")]
     Mapped,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_NOT_MAPPED")]
     NotMapped,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_CHUNK_UNREGISTERED")]
     ChunkUnregistered,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_NO_ISOC_CHANNEL")]
     NoIsocChannel,
     #[doc(hidden)]
     __Unknown(i32),
@@ -32,106 +35,121 @@ pub enum FwIsoCtxError {
 
 impl fmt::Display for FwIsoCtxError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoCtxError::{}", match *self {
-            FwIsoCtxError::Failed => "Failed",
-            FwIsoCtxError::Allocated => "Allocated",
-            FwIsoCtxError::NotAllocated => "NotAllocated",
-            FwIsoCtxError::Mapped => "Mapped",
-            FwIsoCtxError::NotMapped => "NotMapped",
-            FwIsoCtxError::ChunkUnregistered => "ChunkUnregistered",
-            FwIsoCtxError::NoIsocChannel => "NoIsocChannel",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "FwIsoCtxError::{}",
+            match *self {
+                Self::Failed => "Failed",
+                Self::Allocated => "Allocated",
+                Self::NotAllocated => "NotAllocated",
+                Self::Mapped => "Mapped",
+                Self::NotMapped => "NotMapped",
+                Self::ChunkUnregistered => "ChunkUnregistered",
+                Self::NoIsocChannel => "NoIsocChannel",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for FwIsoCtxError {
-    type GlibType = hinoko_sys::HinokoFwIsoCtxError;
+impl IntoGlib for FwIsoCtxError {
+    type GlibType = ffi::HinokoFwIsoCtxError;
 
-    fn to_glib(&self) -> hinoko_sys::HinokoFwIsoCtxError {
-        match *self {
-            FwIsoCtxError::Failed => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_FAILED,
-            FwIsoCtxError::Allocated => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_ALLOCATED,
-            FwIsoCtxError::NotAllocated => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_NOT_ALLOCATED,
-            FwIsoCtxError::Mapped => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_MAPPED,
-            FwIsoCtxError::NotMapped => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_NOT_MAPPED,
-            FwIsoCtxError::ChunkUnregistered => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_CHUNK_UNREGISTERED,
-            FwIsoCtxError::NoIsocChannel => hinoko_sys::HINOKO_FW_ISO_CTX_ERROR_NO_ISOC_CHANNEL,
-            FwIsoCtxError::__Unknown(value) => value
+    fn into_glib(self) -> ffi::HinokoFwIsoCtxError {
+        match self {
+            Self::Failed => ffi::HINOKO_FW_ISO_CTX_ERROR_FAILED,
+            Self::Allocated => ffi::HINOKO_FW_ISO_CTX_ERROR_ALLOCATED,
+            Self::NotAllocated => ffi::HINOKO_FW_ISO_CTX_ERROR_NOT_ALLOCATED,
+            Self::Mapped => ffi::HINOKO_FW_ISO_CTX_ERROR_MAPPED,
+            Self::NotMapped => ffi::HINOKO_FW_ISO_CTX_ERROR_NOT_MAPPED,
+            Self::ChunkUnregistered => ffi::HINOKO_FW_ISO_CTX_ERROR_CHUNK_UNREGISTERED,
+            Self::NoIsocChannel => ffi::HINOKO_FW_ISO_CTX_ERROR_NO_ISOC_CHANNEL,
+            Self::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<hinoko_sys::HinokoFwIsoCtxError> for FwIsoCtxError {
-    fn from_glib(value: hinoko_sys::HinokoFwIsoCtxError) -> Self {
+impl FromGlib<ffi::HinokoFwIsoCtxError> for FwIsoCtxError {
+    unsafe fn from_glib(value: ffi::HinokoFwIsoCtxError) -> Self {
         match value {
-            0 => FwIsoCtxError::Failed,
-            1 => FwIsoCtxError::Allocated,
-            2 => FwIsoCtxError::NotAllocated,
-            3 => FwIsoCtxError::Mapped,
-            4 => FwIsoCtxError::NotMapped,
-            5 => FwIsoCtxError::ChunkUnregistered,
-            6 => FwIsoCtxError::NoIsocChannel,
-            value => FwIsoCtxError::__Unknown(value),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_FAILED => Self::Failed,
+            ffi::HINOKO_FW_ISO_CTX_ERROR_ALLOCATED => Self::Allocated,
+            ffi::HINOKO_FW_ISO_CTX_ERROR_NOT_ALLOCATED => Self::NotAllocated,
+            ffi::HINOKO_FW_ISO_CTX_ERROR_MAPPED => Self::Mapped,
+            ffi::HINOKO_FW_ISO_CTX_ERROR_NOT_MAPPED => Self::NotMapped,
+            ffi::HINOKO_FW_ISO_CTX_ERROR_CHUNK_UNREGISTERED => Self::ChunkUnregistered,
+            ffi::HINOKO_FW_ISO_CTX_ERROR_NO_ISOC_CHANNEL => Self::NoIsocChannel,
+            value => Self::__Unknown(value),
         }
     }
 }
 
 impl ErrorDomain for FwIsoCtxError {
     fn domain() -> Quark {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_ctx_error_quark()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_ctx_error_quark()) }
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
         match code {
-            0 => Some(FwIsoCtxError::Failed),
-            1 => Some(FwIsoCtxError::Allocated),
-            2 => Some(FwIsoCtxError::NotAllocated),
-            3 => Some(FwIsoCtxError::Mapped),
-            4 => Some(FwIsoCtxError::NotMapped),
-            5 => Some(FwIsoCtxError::ChunkUnregistered),
-            6 => Some(FwIsoCtxError::NoIsocChannel),
-            _ => Some(FwIsoCtxError::Failed),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_FAILED => Some(Self::Failed),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_ALLOCATED => Some(Self::Allocated),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_NOT_ALLOCATED => Some(Self::NotAllocated),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_MAPPED => Some(Self::Mapped),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_NOT_MAPPED => Some(Self::NotMapped),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_CHUNK_UNREGISTERED => Some(Self::ChunkUnregistered),
+            ffi::HINOKO_FW_ISO_CTX_ERROR_NO_ISOC_CHANNEL => Some(Self::NoIsocChannel),
+            _ => Some(Self::Failed),
         }
     }
 }
 
 impl StaticType for FwIsoCtxError {
     fn static_type() -> Type {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_ctx_error_get_type()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_ctx_error_get_type()) }
     }
 }
 
-impl<'a> FromValueOptional<'a> for FwIsoCtxError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
+impl glib::value::ValueType for FwIsoCtxError {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for FwIsoCtxError {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl<'a> FromValue<'a> for FwIsoCtxError {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+impl ToValue for FwIsoCtxError {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl SetValue for FwIsoCtxError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HinokoFwIsoCtxMode")]
 pub enum FwIsoCtxMode {
+    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_TX")]
     Tx,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_RX_SINGLE")]
     RxSingle,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE")]
     RxMultiple,
     #[doc(hidden)]
     __Unknown(i32),
@@ -139,72 +157,88 @@ pub enum FwIsoCtxMode {
 
 impl fmt::Display for FwIsoCtxMode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoCtxMode::{}", match *self {
-            FwIsoCtxMode::Tx => "Tx",
-            FwIsoCtxMode::RxSingle => "RxSingle",
-            FwIsoCtxMode::RxMultiple => "RxMultiple",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "FwIsoCtxMode::{}",
+            match *self {
+                Self::Tx => "Tx",
+                Self::RxSingle => "RxSingle",
+                Self::RxMultiple => "RxMultiple",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for FwIsoCtxMode {
-    type GlibType = hinoko_sys::HinokoFwIsoCtxMode;
+impl IntoGlib for FwIsoCtxMode {
+    type GlibType = ffi::HinokoFwIsoCtxMode;
 
-    fn to_glib(&self) -> hinoko_sys::HinokoFwIsoCtxMode {
-        match *self {
-            FwIsoCtxMode::Tx => hinoko_sys::HINOKO_FW_ISO_CTX_MODE_TX,
-            FwIsoCtxMode::RxSingle => hinoko_sys::HINOKO_FW_ISO_CTX_MODE_RX_SINGLE,
-            FwIsoCtxMode::RxMultiple => hinoko_sys::HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE,
-            FwIsoCtxMode::__Unknown(value) => value
+    fn into_glib(self) -> ffi::HinokoFwIsoCtxMode {
+        match self {
+            Self::Tx => ffi::HINOKO_FW_ISO_CTX_MODE_TX,
+            Self::RxSingle => ffi::HINOKO_FW_ISO_CTX_MODE_RX_SINGLE,
+            Self::RxMultiple => ffi::HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE,
+            Self::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<hinoko_sys::HinokoFwIsoCtxMode> for FwIsoCtxMode {
-    fn from_glib(value: hinoko_sys::HinokoFwIsoCtxMode) -> Self {
+impl FromGlib<ffi::HinokoFwIsoCtxMode> for FwIsoCtxMode {
+    unsafe fn from_glib(value: ffi::HinokoFwIsoCtxMode) -> Self {
         match value {
-            0 => FwIsoCtxMode::Tx,
-            1 => FwIsoCtxMode::RxSingle,
-            2 => FwIsoCtxMode::RxMultiple,
-            value => FwIsoCtxMode::__Unknown(value),
+            ffi::HINOKO_FW_ISO_CTX_MODE_TX => Self::Tx,
+            ffi::HINOKO_FW_ISO_CTX_MODE_RX_SINGLE => Self::RxSingle,
+            ffi::HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE => Self::RxMultiple,
+            value => Self::__Unknown(value),
         }
     }
 }
 
 impl StaticType for FwIsoCtxMode {
     fn static_type() -> Type {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_ctx_mode_get_type()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_ctx_mode_get_type()) }
     }
 }
 
-impl<'a> FromValueOptional<'a> for FwIsoCtxMode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
+impl glib::value::ValueType for FwIsoCtxMode {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for FwIsoCtxMode {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl<'a> FromValue<'a> for FwIsoCtxMode {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+impl ToValue for FwIsoCtxMode {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl SetValue for FwIsoCtxMode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HinokoFwIsoResourceAutoError")]
 pub enum FwIsoResourceAutoError {
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED")]
     Allocated,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED")]
     NotAllocated,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_TIMEOUT")]
     Timeout,
     #[doc(hidden)]
     __Unknown(i32),
@@ -212,96 +246,113 @@ pub enum FwIsoResourceAutoError {
 
 impl fmt::Display for FwIsoResourceAutoError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoResourceAutoError::{}", match *self {
-            FwIsoResourceAutoError::Failed => "Failed",
-            FwIsoResourceAutoError::Allocated => "Allocated",
-            FwIsoResourceAutoError::NotAllocated => "NotAllocated",
-            FwIsoResourceAutoError::Timeout => "Timeout",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "FwIsoResourceAutoError::{}",
+            match *self {
+                Self::Failed => "Failed",
+                Self::Allocated => "Allocated",
+                Self::NotAllocated => "NotAllocated",
+                Self::Timeout => "Timeout",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for FwIsoResourceAutoError {
-    type GlibType = hinoko_sys::HinokoFwIsoResourceAutoError;
+impl IntoGlib for FwIsoResourceAutoError {
+    type GlibType = ffi::HinokoFwIsoResourceAutoError;
 
-    fn to_glib(&self) -> hinoko_sys::HinokoFwIsoResourceAutoError {
-        match *self {
-            FwIsoResourceAutoError::Failed => hinoko_sys::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED,
-            FwIsoResourceAutoError::Allocated => hinoko_sys::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED,
-            FwIsoResourceAutoError::NotAllocated => hinoko_sys::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED,
-            FwIsoResourceAutoError::Timeout => hinoko_sys::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_TIMEOUT,
-            FwIsoResourceAutoError::__Unknown(value) => value
+    fn into_glib(self) -> ffi::HinokoFwIsoResourceAutoError {
+        match self {
+            Self::Failed => ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED,
+            Self::Allocated => ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED,
+            Self::NotAllocated => ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED,
+            Self::Timeout => ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_TIMEOUT,
+            Self::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<hinoko_sys::HinokoFwIsoResourceAutoError> for FwIsoResourceAutoError {
-    fn from_glib(value: hinoko_sys::HinokoFwIsoResourceAutoError) -> Self {
+impl FromGlib<ffi::HinokoFwIsoResourceAutoError> for FwIsoResourceAutoError {
+    unsafe fn from_glib(value: ffi::HinokoFwIsoResourceAutoError) -> Self {
         match value {
-            0 => FwIsoResourceAutoError::Failed,
-            1 => FwIsoResourceAutoError::Allocated,
-            2 => FwIsoResourceAutoError::NotAllocated,
-            3 => FwIsoResourceAutoError::Timeout,
-            value => FwIsoResourceAutoError::__Unknown(value),
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED => Self::Failed,
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED => Self::Allocated,
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED => Self::NotAllocated,
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_TIMEOUT => Self::Timeout,
+            value => Self::__Unknown(value),
         }
     }
 }
 
 impl ErrorDomain for FwIsoResourceAutoError {
     fn domain() -> Quark {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_resource_auto_error_quark()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_resource_auto_error_quark()) }
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
         match code {
-            0 => Some(FwIsoResourceAutoError::Failed),
-            1 => Some(FwIsoResourceAutoError::Allocated),
-            2 => Some(FwIsoResourceAutoError::NotAllocated),
-            3 => Some(FwIsoResourceAutoError::Timeout),
-            _ => Some(FwIsoResourceAutoError::Failed),
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED => Some(Self::Failed),
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED => Some(Self::Allocated),
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED => Some(Self::NotAllocated),
+            ffi::HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_TIMEOUT => Some(Self::Timeout),
+            _ => Some(Self::Failed),
         }
     }
 }
 
 impl StaticType for FwIsoResourceAutoError {
     fn static_type() -> Type {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_resource_auto_error_get_type()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_resource_auto_error_get_type()) }
     }
 }
 
-impl<'a> FromValueOptional<'a> for FwIsoResourceAutoError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
+impl glib::value::ValueType for FwIsoResourceAutoError {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for FwIsoResourceAutoError {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl<'a> FromValue<'a> for FwIsoResourceAutoError {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+impl ToValue for FwIsoResourceAutoError {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl SetValue for FwIsoResourceAutoError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HinokoFwIsoResourceError")]
 pub enum FwIsoResourceError {
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_FAILED")]
     Failed,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_OPENED")]
     Opened,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_NOT_OPENED")]
     NotOpened,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_TIMEOUT")]
     Timeout,
+    #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_EVENT")]
     Event,
     #[doc(hidden)]
     __Unknown(i32),
@@ -309,101 +360,119 @@ pub enum FwIsoResourceError {
 
 impl fmt::Display for FwIsoResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwIsoResourceError::{}", match *self {
-            FwIsoResourceError::Failed => "Failed",
-            FwIsoResourceError::Opened => "Opened",
-            FwIsoResourceError::NotOpened => "NotOpened",
-            FwIsoResourceError::Timeout => "Timeout",
-            FwIsoResourceError::Event => "Event",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "FwIsoResourceError::{}",
+            match *self {
+                Self::Failed => "Failed",
+                Self::Opened => "Opened",
+                Self::NotOpened => "NotOpened",
+                Self::Timeout => "Timeout",
+                Self::Event => "Event",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for FwIsoResourceError {
-    type GlibType = hinoko_sys::HinokoFwIsoResourceError;
+impl IntoGlib for FwIsoResourceError {
+    type GlibType = ffi::HinokoFwIsoResourceError;
 
-    fn to_glib(&self) -> hinoko_sys::HinokoFwIsoResourceError {
-        match *self {
-            FwIsoResourceError::Failed => hinoko_sys::HINOKO_FW_ISO_RESOURCE_ERROR_FAILED,
-            FwIsoResourceError::Opened => hinoko_sys::HINOKO_FW_ISO_RESOURCE_ERROR_OPENED,
-            FwIsoResourceError::NotOpened => hinoko_sys::HINOKO_FW_ISO_RESOURCE_ERROR_NOT_OPENED,
-            FwIsoResourceError::Timeout => hinoko_sys::HINOKO_FW_ISO_RESOURCE_ERROR_TIMEOUT,
-            FwIsoResourceError::Event => hinoko_sys::HINOKO_FW_ISO_RESOURCE_ERROR_EVENT,
-            FwIsoResourceError::__Unknown(value) => value
+    fn into_glib(self) -> ffi::HinokoFwIsoResourceError {
+        match self {
+            Self::Failed => ffi::HINOKO_FW_ISO_RESOURCE_ERROR_FAILED,
+            Self::Opened => ffi::HINOKO_FW_ISO_RESOURCE_ERROR_OPENED,
+            Self::NotOpened => ffi::HINOKO_FW_ISO_RESOURCE_ERROR_NOT_OPENED,
+            Self::Timeout => ffi::HINOKO_FW_ISO_RESOURCE_ERROR_TIMEOUT,
+            Self::Event => ffi::HINOKO_FW_ISO_RESOURCE_ERROR_EVENT,
+            Self::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<hinoko_sys::HinokoFwIsoResourceError> for FwIsoResourceError {
-    fn from_glib(value: hinoko_sys::HinokoFwIsoResourceError) -> Self {
+impl FromGlib<ffi::HinokoFwIsoResourceError> for FwIsoResourceError {
+    unsafe fn from_glib(value: ffi::HinokoFwIsoResourceError) -> Self {
         match value {
-            0 => FwIsoResourceError::Failed,
-            1 => FwIsoResourceError::Opened,
-            2 => FwIsoResourceError::NotOpened,
-            3 => FwIsoResourceError::Timeout,
-            4 => FwIsoResourceError::Event,
-            value => FwIsoResourceError::__Unknown(value),
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_FAILED => Self::Failed,
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_OPENED => Self::Opened,
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_NOT_OPENED => Self::NotOpened,
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_TIMEOUT => Self::Timeout,
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_EVENT => Self::Event,
+            value => Self::__Unknown(value),
         }
     }
 }
 
 impl ErrorDomain for FwIsoResourceError {
     fn domain() -> Quark {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_resource_error_quark()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_resource_error_quark()) }
     }
 
     fn code(self) -> i32 {
-        self.to_glib()
+        self.into_glib()
     }
 
     fn from(code: i32) -> Option<Self> {
         match code {
-            0 => Some(FwIsoResourceError::Failed),
-            1 => Some(FwIsoResourceError::Opened),
-            2 => Some(FwIsoResourceError::NotOpened),
-            3 => Some(FwIsoResourceError::Timeout),
-            4 => Some(FwIsoResourceError::Event),
-            _ => Some(FwIsoResourceError::Failed),
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_FAILED => Some(Self::Failed),
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_OPENED => Some(Self::Opened),
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_NOT_OPENED => Some(Self::NotOpened),
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_TIMEOUT => Some(Self::Timeout),
+            ffi::HINOKO_FW_ISO_RESOURCE_ERROR_EVENT => Some(Self::Event),
+            _ => Some(Self::Failed),
         }
     }
 }
 
 impl StaticType for FwIsoResourceError {
     fn static_type() -> Type {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_iso_resource_error_get_type()) }
+        unsafe { from_glib(ffi::hinoko_fw_iso_resource_error_get_type()) }
     }
 }
 
-impl<'a> FromValueOptional<'a> for FwIsoResourceError {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
+impl glib::value::ValueType for FwIsoResourceError {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for FwIsoResourceError {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl<'a> FromValue<'a> for FwIsoResourceError {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+impl ToValue for FwIsoResourceError {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
 
-impl SetValue for FwIsoResourceError {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "HinokoFwScode")]
 pub enum FwScode {
+    #[doc(alias = "HINOKO_FW_SCODE_S100")]
     S100,
+    #[doc(alias = "HINOKO_FW_SCODE_S200")]
     S200,
+    #[doc(alias = "HINOKO_FW_SCODE_S400")]
     S400,
+    #[doc(alias = "HINOKO_FW_SCODE_S800")]
     S800,
+    #[doc(alias = "HINOKO_FW_SCODE_S1600")]
     S1600,
+    #[doc(alias = "HINOKO_FW_SCODE_S3200")]
     S3200,
     #[doc(hidden)]
     __Unknown(i32),
@@ -411,71 +480,82 @@ pub enum FwScode {
 
 impl fmt::Display for FwScode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FwScode::{}", match *self {
-            FwScode::S100 => "S100",
-            FwScode::S200 => "S200",
-            FwScode::S400 => "S400",
-            FwScode::S800 => "S800",
-            FwScode::S1600 => "S1600",
-            FwScode::S3200 => "S3200",
-            _ => "Unknown",
-        })
+        write!(
+            f,
+            "FwScode::{}",
+            match *self {
+                Self::S100 => "S100",
+                Self::S200 => "S200",
+                Self::S400 => "S400",
+                Self::S800 => "S800",
+                Self::S1600 => "S1600",
+                Self::S3200 => "S3200",
+                _ => "Unknown",
+            }
+        )
     }
 }
 
 #[doc(hidden)]
-impl ToGlib for FwScode {
-    type GlibType = hinoko_sys::HinokoFwScode;
+impl IntoGlib for FwScode {
+    type GlibType = ffi::HinokoFwScode;
 
-    fn to_glib(&self) -> hinoko_sys::HinokoFwScode {
-        match *self {
-            FwScode::S100 => hinoko_sys::HINOKO_FW_SCODE_S100,
-            FwScode::S200 => hinoko_sys::HINOKO_FW_SCODE_S200,
-            FwScode::S400 => hinoko_sys::HINOKO_FW_SCODE_S400,
-            FwScode::S800 => hinoko_sys::HINOKO_FW_SCODE_S800,
-            FwScode::S1600 => hinoko_sys::HINOKO_FW_SCODE_S1600,
-            FwScode::S3200 => hinoko_sys::HINOKO_FW_SCODE_S3200,
-            FwScode::__Unknown(value) => value
+    fn into_glib(self) -> ffi::HinokoFwScode {
+        match self {
+            Self::S100 => ffi::HINOKO_FW_SCODE_S100,
+            Self::S200 => ffi::HINOKO_FW_SCODE_S200,
+            Self::S400 => ffi::HINOKO_FW_SCODE_S400,
+            Self::S800 => ffi::HINOKO_FW_SCODE_S800,
+            Self::S1600 => ffi::HINOKO_FW_SCODE_S1600,
+            Self::S3200 => ffi::HINOKO_FW_SCODE_S3200,
+            Self::__Unknown(value) => value,
         }
     }
 }
 
 #[doc(hidden)]
-impl FromGlib<hinoko_sys::HinokoFwScode> for FwScode {
-    fn from_glib(value: hinoko_sys::HinokoFwScode) -> Self {
+impl FromGlib<ffi::HinokoFwScode> for FwScode {
+    unsafe fn from_glib(value: ffi::HinokoFwScode) -> Self {
         match value {
-            0 => FwScode::S100,
-            1 => FwScode::S200,
-            2 => FwScode::S400,
-            3 => FwScode::S800,
-            4 => FwScode::S1600,
-            5 => FwScode::S3200,
-            value => FwScode::__Unknown(value),
+            ffi::HINOKO_FW_SCODE_S100 => Self::S100,
+            ffi::HINOKO_FW_SCODE_S200 => Self::S200,
+            ffi::HINOKO_FW_SCODE_S400 => Self::S400,
+            ffi::HINOKO_FW_SCODE_S800 => Self::S800,
+            ffi::HINOKO_FW_SCODE_S1600 => Self::S1600,
+            ffi::HINOKO_FW_SCODE_S3200 => Self::S3200,
+            value => Self::__Unknown(value),
         }
     }
 }
 
 impl StaticType for FwScode {
     fn static_type() -> Type {
-        unsafe { from_glib(hinoko_sys::hinoko_fw_scode_get_type()) }
+        unsafe { from_glib(ffi::hinoko_fw_scode_get_type()) }
     }
 }
 
-impl<'a> FromValueOptional<'a> for FwScode {
-    unsafe fn from_value_optional(value: &Value) -> Option<Self> {
-        Some(FromValue::from_value(value))
+impl glib::value::ValueType for FwScode {
+    type Type = Self;
+}
+
+unsafe impl<'a> FromValue<'a> for FwScode {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
     }
 }
 
-impl<'a> FromValue<'a> for FwScode {
-    unsafe fn from_value(value: &Value) -> Self {
-        from_glib(gobject_sys::g_value_get_enum(value.to_glib_none().0))
+impl ToValue for FwScode {
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
     }
 }
-
-impl SetValue for FwScode {
-    unsafe fn set_value(value: &mut Value, this: &Self) {
-        gobject_sys::g_value_set_enum(value.to_glib_none_mut().0, this.to_glib())
-    }
-}
-

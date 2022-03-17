@@ -3,28 +3,22 @@
 // DO NOT EDIT
 
 mod fw_iso_ctx;
-pub use self::fw_iso_ctx::{FwIsoCtx, FwIsoCtxClass, NONE_FW_ISO_CTX};
-pub use self::fw_iso_ctx::FwIsoCtxExt;
+pub use self::fw_iso_ctx::FwIsoCtx;
 
 mod fw_iso_resource;
-pub use self::fw_iso_resource::{FwIsoResource, FwIsoResourceClass, NONE_FW_ISO_RESOURCE};
-pub use self::fw_iso_resource::FwIsoResourceExt;
+pub use self::fw_iso_resource::FwIsoResource;
 
 mod fw_iso_resource_auto;
-pub use self::fw_iso_resource_auto::{FwIsoResourceAuto, FwIsoResourceAutoClass, NONE_FW_ISO_RESOURCE_AUTO};
-pub use self::fw_iso_resource_auto::FwIsoResourceAutoExt;
+pub use self::fw_iso_resource_auto::FwIsoResourceAuto;
 
 mod fw_iso_rx_multiple;
-pub use self::fw_iso_rx_multiple::{FwIsoRxMultiple, FwIsoRxMultipleClass, NONE_FW_ISO_RX_MULTIPLE};
-pub use self::fw_iso_rx_multiple::FwIsoRxMultipleExt;
+pub use self::fw_iso_rx_multiple::FwIsoRxMultiple;
 
 mod fw_iso_rx_single;
-pub use self::fw_iso_rx_single::{FwIsoRxSingle, FwIsoRxSingleClass, NONE_FW_ISO_RX_SINGLE};
-pub use self::fw_iso_rx_single::FwIsoRxSingleExt;
+pub use self::fw_iso_rx_single::FwIsoRxSingle;
 
 mod fw_iso_tx;
-pub use self::fw_iso_tx::{FwIsoTx, FwIsoTxClass, NONE_FW_ISO_TX};
-pub use self::fw_iso_tx::FwIsoTxExt;
+pub use self::fw_iso_tx::FwIsoTx;
 
 mod cycle_timer;
 pub use self::cycle_timer::CycleTimer;
@@ -41,10 +35,10 @@ pub use self::flags::FwIsoCtxMatchFlag;
 
 #[doc(hidden)]
 pub mod traits {
-    pub use super::FwIsoCtxExt;
-    pub use super::FwIsoResourceExt;
-    pub use super::FwIsoResourceAutoExt;
-    pub use super::FwIsoRxMultipleExt;
-    pub use super::FwIsoRxSingleExt;
-    pub use super::FwIsoTxExt;
+    pub use super::fw_iso_ctx::FwIsoCtxExt;
+    pub use super::fw_iso_resource::FwIsoResourceExt;
+    pub use super::fw_iso_resource_auto::FwIsoResourceAutoExt;
+    pub use super::fw_iso_rx_multiple::FwIsoRxMultipleExt;
+    pub use super::fw_iso_rx_single::FwIsoRxSingleExt;
+    pub use super::fw_iso_tx::FwIsoTxExt;
 }

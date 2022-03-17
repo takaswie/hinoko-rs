@@ -1,37 +1,24 @@
-#[macro_use]
-extern crate glib;
-#[macro_use]
-extern crate bitflags;
-extern crate glib_sys;
-extern crate gobject_sys;
-extern crate hinoko_sys;
-extern crate libc;
-
-pub use glib::Error;
-
+// SPDX-License-Identifier: MIT
 mod auto;
-pub use auto::*;
-
 mod cycle_timer;
-pub use cycle_timer::*;
-
 mod fw_iso_ctx;
-pub use fw_iso_ctx::*;
-
-mod fw_iso_rx_single;
-pub use fw_iso_rx_single::*;
-
 mod fw_iso_rx_multiple;
-pub use fw_iso_rx_multiple::*;
-
+mod fw_iso_rx_single;
 mod fw_iso_tx;
-pub use fw_iso_tx::*;
+
+pub use crate::{
+    auto::*, cycle_timer::*, fw_iso_ctx::*, fw_iso_rx_multiple::*, fw_iso_rx_single::*,
+    fw_iso_tx::*, traits::*,
+};
+pub use ffi;
+
+use glib::{signal::*, translate::*, Cast, IsA, SignalHandlerId, StaticType, Value};
+
+use libc::c_uint;
 
 #[cfg(test)]
 mod tests {
-    use glib;
     use crate::*;
-
     use std::{cmp, sync, thread, time::Duration};
 
     const PATH: &str = "/dev/fw1";
@@ -79,7 +66,8 @@ mod tests {
             println!("Need to have access permission to {}.", PATH);
             return;
         }
-        ir.map_buffer(MAXIMUM_BYTES_PER_PAYLOAD, PAYLOADS_PER_BUFFER).unwrap();
+        ir.map_buffer(MAXIMUM_BYTES_PER_PAYLOAD, PAYLOADS_PER_BUFFER)
+            .unwrap();
 
         let cntr = packet_count_cntr.clone();
         ir.connect_interrupted(move |ir, sec: u32, cycle: u32, header: &[u8], count: u32| {
@@ -88,31 +76,30 @@ mod tests {
             println!("sec: {}, cycle: {}, count: {}", sec, cycle, count);
 
             if let Ok(mut packet_count) = cntr.lock() {
-             (0..count)
-                 .for_each(|i| {
-                     let mut ctx_header: [u32; 2] = [0; 2];
-                     let pos: usize = (CTX_HEADER_SIZE * i) as usize;
-                     frames.copy_from_slice(&header[pos..(pos+ 4)]);
-                     ctx_header[0] = u32::from_be_bytes(frames);
-                     frames.copy_from_slice(&header[(pos+ 4)..(pos + 8)]);
-                     ctx_header[1] = u32::from_be_bytes(frames);
+                (0..count).for_each(|i| {
+                    let mut ctx_header: [u32; 2] = [0; 2];
+                    let pos: usize = (CTX_HEADER_SIZE * i) as usize;
+                    frames.copy_from_slice(&header[pos..(pos + 4)]);
+                    ctx_header[0] = u32::from_be_bytes(frames);
+                    frames.copy_from_slice(&header[(pos + 4)..(pos + 8)]);
+                    ctx_header[1] = u32::from_be_bytes(frames);
 
-                     let payload = ir.get_payload(i).unwrap();
-                     println!(
-                         "  {:2}: {:08x} {:08x} {:2}",
-                         i,
-                         ctx_header[0],
-                         ctx_header[1],
-                         payload.len()
-                     );
+                    let payload = ir.get_payload(i).unwrap();
+                    println!(
+                        "  {:2}: {:08x} {:08x} {:2}",
+                        i,
+                        ctx_header[0],
+                        ctx_header[1],
+                        payload.len()
+                    );
 
-                     *packet_count += 1;
-                     if *packet_count >= u32::MAX {
-                         *packet_count %= PAYLOADS_PER_INTERRUPT;
-                     }
-                     let schedule_interrupt = *packet_count % PAYLOADS_PER_INTERRUPT == 0;
-                     ir.register_packet(schedule_interrupt).unwrap();
-                 });
+                    *packet_count += 1;
+                    if *packet_count >= u32::MAX {
+                        *packet_count %= PAYLOADS_PER_INTERRUPT;
+                    }
+                    let schedule_interrupt = *packet_count % PAYLOADS_PER_INTERRUPT == 0;
+                    ir.register_packet(schedule_interrupt).unwrap();
+                });
             }
         });
 
@@ -120,11 +107,10 @@ mod tests {
         let (dispatcher_cntr, th) = launch_dispatcher(&src);
 
         let init_count: u32 = cmp::min(PAYLOADS_PER_BUFFER / 2, PAYLOADS_PER_INTERRUPT * 2);
-        (0..init_count)
-            .for_each(|i| {
-                let schedule_interrupt = i % PAYLOADS_PER_INTERRUPT == 0;
-                ir.register_packet(schedule_interrupt).unwrap();
-            });
+        (0..init_count).for_each(|i| {
+            let schedule_interrupt = i % PAYLOADS_PER_INTERRUPT == 0;
+            ir.register_packet(schedule_interrupt).unwrap();
+        });
         *packet_count_cntr.lock().unwrap() = init_count;
 
         ir.start(None, ISOC_SYNC, ISOC_TAG).unwrap();
@@ -149,9 +135,9 @@ mod tests {
         const CHUNKS_PER_INTERRUPT: u32 = 4;
 
         let isoc_tags: FwIsoCtxMatchFlag = FwIsoCtxMatchFlag::TAG0
-                                         | FwIsoCtxMatchFlag::TAG1
-                                         | FwIsoCtxMatchFlag::TAG2
-                                         | FwIsoCtxMatchFlag::TAG3;
+            | FwIsoCtxMatchFlag::TAG1
+            | FwIsoCtxMatchFlag::TAG2
+            | FwIsoCtxMatchFlag::TAG3;
         let ir = FwIsoRxMultiple::new();
         if ir.allocate(PATH, ISOC_CHANNELS).is_err() {
             println!("Need to have access permission to {}.", PATH);
@@ -162,27 +148,27 @@ mod tests {
         ir.connect_interrupted(|ir, count: u32| {
             let mut frames = [0; 4];
 
-            (0..count)
-                .for_each(|i| {
-                    let data = ir.get_payload(i).unwrap();
+            (0..count).for_each(|i| {
+                let data = ir.get_payload(i).unwrap();
 
-                    frames.copy_from_slice(&data[0..4]);
-                    let iso_header = u32::from_le_bytes(frames);
+                frames.copy_from_slice(&data[0..4]);
+                let iso_header = u32::from_le_bytes(frames);
 
-                    let payload_size = data.len() - 8;
+                let payload_size = data.len() - 8;
 
-                    let end = data.len();
-                    frames.copy_from_slice(&data[(end - 4)..end]);
-                    let tstamp = u32::from_le_bytes(frames);
+                let end = data.len();
+                frames.copy_from_slice(&data[(end - 4)..end]);
+                let tstamp = u32::from_le_bytes(frames);
 
-                    println!("{:8x} {:8x} {:4}", tstamp, iso_header, payload_size);
-                });
+                println!("{:8x} {:8x} {:4}", tstamp, iso_header, payload_size);
+            });
         });
 
         let src = ir.create_source().unwrap();
         let (dispatcher_cntr, th) = launch_dispatcher(&src);
 
-        ir.start(None, ISOC_SYNC, isoc_tags, CHUNKS_PER_INTERRUPT).unwrap();
+        ir.start(None, ISOC_SYNC, isoc_tags, CHUNKS_PER_INTERRUPT)
+            .unwrap();
 
         thread::sleep(DURATION);
 
@@ -209,12 +195,16 @@ mod tests {
         let packet_count_cntr: sync::Arc<sync::Mutex<u32>> = sync::Arc::new(sync::Mutex::new(0));
 
         let it = FwIsoTx::new();
-        if it.allocate(PATH, ISOC_SPEED, ISOC_CHANNEL, CTX_HEADER_SIZE).is_err() {
+        if it
+            .allocate(PATH, ISOC_SPEED, ISOC_CHANNEL, CTX_HEADER_SIZE)
+            .is_err()
+        {
             println!("Need to have access permission to {}.", PATH);
             return;
         }
 
-        it.map_buffer(MAXIMUM_BYTES_PER_PAYLOAD, PAYLOADS_PER_BUFFER).unwrap();
+        it.map_buffer(MAXIMUM_BYTES_PER_PAYLOAD, PAYLOADS_PER_BUFFER)
+            .unwrap();
 
         let cntr = packet_count_cntr.clone();
         it.connect_interrupted(move |it, sec: u32, cycle: u32, header: &[u8], count: u32| {
@@ -225,28 +215,27 @@ mod tests {
             println!("sec: {}, cycle: {}, count: {}", sec, cycle, count);
 
             if let Ok(mut packet_count) = cntr.lock() {
-                (0..count)
-                    .for_each(|i| {
-                        let index = 4 * i as usize;
-                        frames.copy_from_slice(&header[index..(index + 4)]);
-                        let tstamp = u32::from_be_bytes(frames);
-                        println!("  {:2}: {:08x}", i, tstamp);
+                (0..count).for_each(|i| {
+                    let index = 4 * i as usize;
+                    frames.copy_from_slice(&header[index..(index + 4)]);
+                    let tstamp = u32::from_be_bytes(frames);
+                    println!("  {:2}: {:08x}", i, tstamp);
 
-                        *packet_count += 1;
-                        if *packet_count >= u32::MAX {
-                            *packet_count %= PAYLOADS_PER_INTERRUPT;
-                        }
-                        let schedule_interrupt =  *packet_count % PAYLOADS_PER_INTERRUPT == 0;
+                    *packet_count += 1;
+                    if *packet_count >= u32::MAX {
+                        *packet_count %= PAYLOADS_PER_INTERRUPT;
+                    }
+                    let schedule_interrupt = *packet_count % PAYLOADS_PER_INTERRUPT == 0;
 
-                        it.register_packet(
-                            ISOC_TAG,
-                            ISOC_SYNC,
-                            Some(&my_header),
-                            Some(&my_payload),
-                            schedule_interrupt
-                        )
-                            .unwrap();
-                    });
+                    it.register_packet(
+                        ISOC_TAG,
+                        ISOC_SYNC,
+                        Some(&my_header),
+                        Some(&my_payload),
+                        schedule_interrupt,
+                    )
+                    .unwrap();
+                });
             }
         });
 
@@ -254,11 +243,11 @@ mod tests {
         let (dispatcher_cntr, th) = launch_dispatcher(&src);
 
         let skip_count: u32 = cmp::min(PAYLOADS_PER_BUFFER / 2, PAYLOADS_PER_INTERRUPT * 2);
-        (0..skip_count)
-            .for_each(|i| {
-                let schedule_interrupt =  i % PAYLOADS_PER_INTERRUPT == 0;
-                it.register_packet(ISOC_TAG, ISOC_SYNC, None, None, schedule_interrupt).unwrap();
-            });
+        (0..skip_count).for_each(|i| {
+            let schedule_interrupt = i % PAYLOADS_PER_INTERRUPT == 0;
+            it.register_packet(ISOC_TAG, ISOC_SYNC, None, None, schedule_interrupt)
+                .unwrap();
+        });
         *packet_count_cntr.lock().unwrap() = skip_count;
 
         it.start(None).unwrap();
