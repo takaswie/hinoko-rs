@@ -8,7 +8,7 @@ mod fw_iso_tx;
 
 pub use crate::{
     auto::*, cycle_timer::*, fw_iso_ctx::*, fw_iso_rx_multiple::*, fw_iso_rx_single::*,
-    fw_iso_tx::*, traits::*,
+    fw_iso_tx::*,
 };
 pub use ffi;
 

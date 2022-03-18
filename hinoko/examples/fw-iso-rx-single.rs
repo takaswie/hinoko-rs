@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-use hinoko::*;
+
+use hinoko::{traits::*, *};
 use std::{cmp, sync, thread, time::Duration};
 
 const PATH: &str = "/dev/fw1";
