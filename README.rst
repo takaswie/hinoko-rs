@@ -2,7 +2,7 @@
 Hinoko Rust bindings
 ====================
 
-2022/03/17
+2022/05/08
 Takashi Sakamoto
 
 Introduction

@@ -4,7 +4,7 @@ work_mode = "normal"
 library = "Hinoko"
 version = "0.0"
 use_gi_docgen = true
-min_cfg_version = "0.6"
+min_cfg_version = "0.7"
 single_version_file = true
 
 generate = [
@@ -13,6 +13,7 @@ generate = [
     "Hinoko.FwIsoCtxMatchFlag",
     "Hinoko.FwIsoResource",
     "Hinoko.FwIsoResourceAuto",
+    "Hinoko.FwIsoResourceOnce",
     "Hinoko.FwIsoCtxError",
     "Hinoko.FwIsoResourceError",
     "Hinoko.FwIsoResourceAutoError",

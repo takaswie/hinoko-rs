@@ -9,9 +9,9 @@ pub trait FwIsoTxExtManual {
         header: Option<&[u8]>,
         payload: Option<&[u8]>,
         schedule_interrupt: bool,
-    ) -> Result<(), glib::Error>;
+    ) -> Result<(), Error>;
 
-    fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), glib::Error>;
+    fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), Error>;
 
     fn connect_interrupted<F>(&self, f: F) -> SignalHandlerId
     where
@@ -26,7 +26,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
         header: Option<&[u8]>,
         payload: Option<&[u8]>,
         schedule_interrupt: bool,
-    ) -> Result<(), glib::Error> {
+    ) -> Result<(), Error> {
         let (header_ptr, header_length) = match header {
             Some(h) => (h.as_ptr(), h.len() as u32),
             None => (std::ptr::null(), 0),
@@ -58,7 +58,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
         }
     }
 
-    fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), glib::Error> {
+    fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), Error> {
         unsafe {
             let ptr: *const [u16; 2] = match cycle_match {
                 Some(data) => data,

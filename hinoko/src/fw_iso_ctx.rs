@@ -6,7 +6,7 @@ pub trait FwIsoCtxExtManual {
         &self,
         clock_id: i32,
         cycle_timer: &mut CycleTimer,
-    ) -> Result<(), glib::Error>;
+    ) -> Result<(), Error>;
 }
 
 impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
@@ -14,7 +14,7 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
         &self,
         clock_id: i32,
         cycle_timer: &mut CycleTimer,
-    ) -> Result<(), glib::Error> {
+    ) -> Result<(), Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
 

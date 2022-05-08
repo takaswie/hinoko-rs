@@ -32,7 +32,7 @@ fn launch_dispatcher(src: &glib::Source) -> (sync::Arc<glib::MainLoop>, thread::
 
 fn main() {
     // Test allocation bound to bus-generation.
-    let res = FwIsoResource::new();
+    let res = FwIsoResourceOnce::new();
     if res.open(PATH, 0).is_err() {
         println!("Need to have access permission to /dev/fw1.");
         return;
@@ -41,8 +41,12 @@ fn main() {
     let src = res.create_source().unwrap();
     let (dispatcher_cntr, th) = launch_dispatcher(&src);
 
-    res.allocate_once_sync(&[CHANNEL.into()], TIMEOUT).unwrap();
-    res.deallocate_once_sync(CHANNEL.into(), TIMEOUT).unwrap();
+    let bandwidth = FwIsoResource::calculate_bandwidth(120, FwScode::S400);
+
+    res.allocate_sync(&[CHANNEL.into()], bandwidth, TIMEOUT)
+        .unwrap();
+    res.deallocate_sync(CHANNEL.into(), bandwidth, TIMEOUT)
+        .unwrap();
 
     src.destroy();
     dispatcher_cntr.quit();
@@ -58,8 +62,8 @@ fn main() {
     let src = res.create_source().unwrap();
     let (dispatcher_cntr, th) = launch_dispatcher(&src);
 
-    res.allocate_sync(&[CHANNEL], TIMEOUT).unwrap();
-    res.deallocate_sync().unwrap();
+    res.allocate_sync(&[CHANNEL], bandwidth, TIMEOUT).unwrap();
+    res.deallocate_sync(TIMEOUT).unwrap();
 
     src.destroy();
     dispatcher_cntr.quit();

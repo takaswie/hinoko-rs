@@ -7,9 +7,9 @@ pub trait FwIsoRxSingleExtManual {
         cycle_match: Option<&[u16; 2]>,
         sync: u32,
         tags: FwIsoCtxMatchFlag,
-    ) -> Result<(), glib::Error>;
+    ) -> Result<(), Error>;
 
-    fn get_payload(&self, index: u32) -> Result<&[u8], glib::Error>;
+    fn get_payload(&self, index: u32) -> &[u8];
     fn connect_interrupted<F: Fn(&Self, u32, u32, &[u8], u32) + 'static>(
         &self,
         f: F,
@@ -22,7 +22,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
         cycle_match: Option<&[u16; 2]>,
         sync: u32,
         tags: FwIsoCtxMatchFlag,
-    ) -> Result<(), glib::Error> {
+    ) -> Result<(), Error> {
         unsafe {
             let ptr: *const [u16; 2] = match cycle_match {
                 Some(data) => data,
@@ -46,9 +46,8 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
         }
     }
 
-    fn get_payload(&self, index: u32) -> Result<&[u8], glib::Error> {
+    fn get_payload(&self, index: u32) -> &[u8] {
         unsafe {
-            let mut error = std::ptr::null_mut();
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();
 
@@ -57,17 +56,9 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
                 index,
                 &mut data,
                 size.as_mut_ptr(),
-                &mut error,
             );
 
-            if error.is_null() {
-                Ok(std::slice::from_raw_parts(
-                    data,
-                    size.assume_init() as usize,
-                ))
-            } else {
-                Err(from_glib_full(error))
-            }
+            std::slice::from_raw_parts(data, size.assume_init() as usize)
         }
     }
 
