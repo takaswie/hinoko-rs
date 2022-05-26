@@ -235,7 +235,7 @@ unsafe extern "C" fn fw_iso_resource_create_source<T: FwIsoResourceImpl>(
 
 unsafe extern "C" fn fw_iso_resource_allocate_async<T: FwIsoResourceImpl>(
     resource: *mut ffi::HinokoFwIsoResource,
-    channel_candidates: *mut u8,
+    channel_candidates: *const u8,
     channel_candidates_count: size_t,
     bandwidth: c_uint,
     error: *mut *mut glib::ffi::GError,
@@ -303,13 +303,8 @@ mod test {
     pub mod imp {
         use super::*;
 
+        #[derive(Default)]
         pub struct FwIsoResourceTest;
-
-        impl Default for FwIsoResourceTest {
-            fn default() -> Self {
-                Self {}
-            }
-        }
 
         #[glib::object_subclass]
         impl ObjectSubclass for FwIsoResourceTest {

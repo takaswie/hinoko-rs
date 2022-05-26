@@ -148,7 +148,7 @@ pub struct HinokoFwIsoResourceInterface {
     pub allocate_async: Option<
         unsafe extern "C" fn(
             *mut HinokoFwIsoResource,
-            *mut u8,
+            *const u8,
             size_t,
             c_uint,
             *mut *mut glib::GError,
@@ -566,14 +566,14 @@ extern "C" {
     ) -> c_uint;
     pub fn hinoko_fw_iso_resource_allocate_async(
         self_: *mut HinokoFwIsoResource,
-        channel_candidates: *mut u8,
+        channel_candidates: *const u8,
         channel_candidates_count: size_t,
         bandwidth: c_uint,
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn hinoko_fw_iso_resource_allocate_sync(
         self_: *mut HinokoFwIsoResource,
-        channel_candidates: *mut u8,
+        channel_candidates: *const u8,
         channel_candidates_count: size_t,
         bandwidth: c_uint,
         timeout_ms: c_uint,

@@ -13,10 +13,7 @@ version = "0.1.0"
 features = ["dox"]
 [package.metadata.system-deps.hinoko]
 name = "hinoko"
-version = "0.6"
-
-[package.metadata.system-deps.hinoko.v0_7]
-version = "0.7"
+version = "0.7.1"
 
 [lib]
 name = "hinoko_sys"
@@ -41,6 +38,4 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-v0_6 = []
 dox = []
-v0_7 = []
