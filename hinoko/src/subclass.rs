@@ -6,13 +6,10 @@ mod fw_iso_rx_multiple;
 mod fw_iso_rx_single;
 mod fw_iso_tx;
 
+/// For convenience to provide traits and their blanket implementations to write subclass.
 pub mod prelude {
-    pub use {
-        super::fw_iso_ctx::{FwIsoCtxImpl, FwIsoCtxImplExt},
-        super::fw_iso_resource::{FwIsoResourceImpl, FwIsoResourceImplExt},
-        super::fw_iso_rx_multiple::{FwIsoRxMultipleImpl, FwIsoRxMultipleImplExt},
-        super::fw_iso_rx_single::{FwIsoRxSingleImpl, FwIsoRxSingleImplExt},
-        super::fw_iso_tx::{FwIsoTxImpl, FwIsoTxImplExt},
+    pub use super::{
+        fw_iso_ctx::*, fw_iso_resource::*, fw_iso_rx_multiple::*, fw_iso_rx_single::*, fw_iso_tx::*,
     };
 }
 
