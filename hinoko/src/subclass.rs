@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-pub mod fw_iso_ctx;
-pub mod fw_iso_resource;
-pub mod fw_iso_rx_multiple;
-pub mod fw_iso_rx_single;
-pub mod fw_iso_tx;
+mod fw_iso_ctx;
+mod fw_iso_resource;
+mod fw_iso_rx_multiple;
+mod fw_iso_rx_single;
+mod fw_iso_tx;
 
 pub mod prelude {
     pub use {
