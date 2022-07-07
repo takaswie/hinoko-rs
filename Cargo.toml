@@ -11,3 +11,11 @@ exclude = [
 default-members = [
     "hinoko",
 ]
+
+# For my convenience to generate README.md for each crates by my tool.
+[workspace.metadata.library.hinoko]
+repository = "https://github.com/takaswie/libhinoko"
+purpose = """
+operate Linux FireWire character device for isochronous packets and resources
+in IEEE 1394 bus.
+"""
