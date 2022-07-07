@@ -297,7 +297,7 @@ unsafe extern "C" fn fw_iso_resource_deallocated<T: FwIsoResourceImpl>(
 
 #[cfg(test)]
 mod test {
-    use crate::{subclass::prelude::*, traits::*, *};
+    use crate::{prelude::*, subclass::prelude::*, *};
     use glib::{subclass::prelude::*, Error, ParamSpec, ParamSpecOverride, Source, ToValue, Value};
 
     pub mod imp {
