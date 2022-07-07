@@ -9,7 +9,7 @@ pub trait FwIsoRxSingleExtManual {
         tags: FwIsoCtxMatchFlag,
     ) -> Result<(), Error>;
 
-    fn get_payload(&self, index: u32) -> &[u8];
+    fn payload(&self, index: u32) -> &[u8];
     fn connect_interrupted<F: Fn(&Self, u32, u32, &[u8], u32) + 'static>(
         &self,
         f: F,
@@ -46,7 +46,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
         }
     }
 
-    fn get_payload(&self, index: u32) -> &[u8] {
+    fn payload(&self, index: u32) -> &[u8] {
         unsafe {
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();

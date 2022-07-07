@@ -63,7 +63,7 @@ fn main() {
                 frames.copy_from_slice(&header[(pos + 4)..(pos + 8)]);
                 ctx_header[1] = u32::from_be_bytes(frames);
 
-                let payload = ir.get_payload(i);
+                let payload = ir.payload(i);
                 println!(
                     "  {:2}: {:08x} {:08x} {:2}",
                     i,
