@@ -31,7 +31,7 @@ status = "generate"
 concurrency = "send"
     [[object.function]]
     name = "get_cycle_timer"
-    ignore = true
+    manual = true
 
 [[object]]
 name = "Hinoko.FwIsoCtx"
@@ -39,7 +39,7 @@ status = "generate"
 manual_traits = ["FwIsoCtxExtManual"]
     [[object.function]]
     name = "get_cycle_timer"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoCtxExtManual"
 
 [[object]]
@@ -48,15 +48,15 @@ status = "generate"
 manual_traits = ["FwIsoRxSingleExtManual"]
     [[object.function]]
     name = "start"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoRxSingleExtManual"
     [[object.function]]
     name = "get_payload"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoRxSingleExtManual"
     [[object.signal]]
     name = "interrupted"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoRxSingleExtManual"
 
 [[object]]
@@ -65,15 +65,15 @@ status = "generate"
 manual_traits = ["FwIsoRxMultipleExtManual"]
     [[object.property]]
     name = "channels"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoRxMultipleExtManual"
     [[object.function]]
     name = "start"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoRxMultipleExtManual"
     [[object.function]]
     name = "get_payload"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoRxMultipleExtManual"
 
 [[object]]
@@ -82,13 +82,13 @@ status = "generate"
 manual_traits = ["FwIsoTxExtManual"]
     [[object.function]]
     name = "register_packet"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoTxExtManual"
     [[object.function]]
     name = "start"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoTxExtManual"
     [[object.signal]]
     name = "interrupted"
-    ignore = true
+    manual = true
     doc_trait_name = "FwIsoTxExtManual"
