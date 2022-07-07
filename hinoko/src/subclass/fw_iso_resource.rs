@@ -2,6 +2,7 @@
 
 use super::*;
 
+/// Trait which should be implemented by subclass of [`FwIsoResource`][crate::FwIsoResource].
 pub trait FwIsoResourceImpl: ObjectImpl {
     fn open(&self, resource: &Self::Type, path: &str, open_flag: i32) -> Result<(), Error>;
     fn create_source(&self, resource: &Self::Type) -> Result<Source, Error>;
@@ -21,6 +22,8 @@ pub trait FwIsoResourceImpl: ObjectImpl {
     );
 }
 
+/// Trait which is automatically implemented to implementator of
+/// [`FwIsoResourceImpl`][self::FwIsoResourceImpl].
 pub trait FwIsoResourceImplExt: ObjectSubclass {
     fn parent_open(&self, resource: &Self::Type, path: &str, open_flag: i32) -> Result<(), Error>;
     fn parent_create_source(&self, resource: &Self::Type) -> Result<Source, Error>;

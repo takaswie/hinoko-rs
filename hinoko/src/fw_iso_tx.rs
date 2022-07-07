@@ -1,7 +1,33 @@
 // SPDX-License-Identifier: MIT
 use crate::*;
 
+/// Trait containing the rest of[`struct@FwIsoTx`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoTx`][struct@crate::FwIsoTx]
 pub trait FwIsoTxExtManual {
+    /// Register packet data with header and payload for IT context. The content of given header and
+    /// payload is appended into data field of isochronous packet to be sent. The caller can schedule
+    /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
+    /// `signal::FwIsoTx::interrupted`.
+    /// ## `tags`
+    /// The value of tag field for isochronous packet to register.
+    /// ## `sync_code`
+    /// The value of sync field in isochronous packet header for packet processing, up to 15.
+    /// ## `header`
+    /// The header of IT context for isochronous
+    ///     packet. The length of header should be the same as the size of header indicated in
+    ///     allocation if it's not null.
+    /// ## `payload`
+    /// The payload of IT context for isochronous
+    ///      packet.
+    /// ## `schedule_interrupt`
+    /// Whether to schedule hardware interrupt at isochronous cycle for the packet.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successful, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_tx_register_packet")]
     fn register_packet(
         &self,
@@ -12,9 +38,36 @@ pub trait FwIsoTxExtManual {
         schedule_interrupt: bool,
     ) -> Result<(), Error>;
 
+    /// Start IT context.
+    /// ## `cycle_match`
+    /// The isochronous cycle
+    ///      to start packet processing. The first element should be the second part of
+    ///      isochronous cycle, up to 3. The second element should be the cycle part of
+    ///      isochronous cycle, up to 7999.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successful, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_tx_start")]
     fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), Error>;
 
+    /// Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
+    /// for Linux FireWire subsystem to generate the event:
+    ///
+    /// - When OHCI 1394 controller generates hardware interrupt as a result of processing the
+    ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
+    /// - When the number of isochronous packets sent since the last interrupt event reaches
+    ///   one quarter of memory page size (usually 4,096 / 4 = 1,024 packets).
+    /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
+    /// ## `sec`
+    /// sec part of isochronous cycle when interrupt occurs, up to 7.
+    /// ## `cycle`
+    /// cycle part of of isochronous cycle when interrupt occurs, up to 7999.
+    /// ## `tstamp`
+    /// A series of timestamps for
+    ///     packets already handled.
+    /// ## `count`
+    /// the number of handled packets.
     #[doc(alias = "interrupted")]
     fn connect_interrupted<F>(&self, f: F) -> SignalHandlerId
     where

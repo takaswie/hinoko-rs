@@ -15,6 +15,14 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    /// An basic interface to operate isochronous context on 1394 OHCI controller.
+    ///
+    /// A [`FwIsoCtx`][crate::FwIsoCtx] is an basic interface to use UAPI of Linux FireWire subsystem to operate
+    /// 1394 OHCI controller.
+    ///
+    /// # Implements
+    ///
+    /// [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
     #[doc(alias = "HinokoFwIsoCtx")]
     pub struct FwIsoCtx(Interface<ffi::HinokoFwIsoCtx, ffi::HinokoFwIsoCtxInterface>);
 
@@ -27,28 +35,57 @@ impl FwIsoCtx {
     pub const NONE: Option<&'static FwIsoCtx> = None;
 }
 
+/// Trait containing the part of[`struct@FwIsoCtx`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple], [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle], [`FwIsoTx`][struct@crate::FwIsoTx]
 pub trait FwIsoCtxExt: 'static {
+    /// Create [`glib::Source`][crate::glib::Source] for `GLib::MainContext` to dispatch events for isochronous
+    /// context.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
+    ///
+    /// ## `source`
+    /// A [`glib::Source`][crate::glib::Source].
     #[doc(alias = "hinoko_fw_iso_ctx_create_source")]
     fn create_source(&self) -> Result<glib::Source, glib::Error>;
 
+    /// Flush isochronous context until recent isochronous cycle. The call of function forces the
+    /// context to queue any type of interrupt event for the recent isochronous cycle. Application can
+    /// process the content of isochronous packet without waiting for actual hardware interrupt.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_ctx_flush_completions")]
     fn flush_completions(&self) -> Result<(), glib::Error>;
 
+    /// Release the contest from 1394 OHCI controller.
     #[doc(alias = "hinoko_fw_iso_ctx_release")]
     fn release(&self);
 
+    /// Stop isochronous context.
     #[doc(alias = "hinoko_fw_iso_ctx_stop")]
     fn stop(&self);
 
+    /// Unmap intermediate buffer shared with 1394 OHCI controller for the context.
     #[doc(alias = "hinoko_fw_iso_ctx_unmap_buffer")]
     fn unmap_buffer(&self);
 
+    /// The number of bytes per chunk in buffer.
     #[doc(alias = "bytes-per-chunk")]
     fn bytes_per_chunk(&self) -> u32;
 
+    /// The number of chunks per buffer.
     #[doc(alias = "chunks-per-buffer")]
     fn chunks_per_buffer(&self) -> u32;
 
+    /// Emitted when isochronous context is stopped.
+    /// ## `error`
+    /// A [`glib::Error`][crate::glib::Error].
     #[doc(alias = "stopped")]
     fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(
         &self,

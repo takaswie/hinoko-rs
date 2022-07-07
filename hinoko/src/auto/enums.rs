@@ -12,22 +12,30 @@ use glib::StaticType;
 use glib::Type;
 use std::fmt;
 
+/// A set of error code for [`FwIsoCtx`][crate::FwIsoCtx].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoCtxError")]
 pub enum FwIsoCtxError {
+    /// The system call fails.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_FAILED")]
     Failed,
+    /// The instance is already associated to any firewire character device.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_ALLOCATED")]
     Allocated,
+    /// The instance is not associated to any firewire character device.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_NOT_ALLOCATED")]
     NotAllocated,
+    /// The intermediate buffer is already mapped to the process.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_MAPPED")]
     Mapped,
+    /// The intermediate buffer is not mapped to the process.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_NOT_MAPPED")]
     NotMapped,
+    /// No chunk registered before starting.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_CHUNK_UNREGISTERED")]
     ChunkUnregistered,
+    /// No isochronous channel is available.
     #[doc(alias = "HINOKO_FW_ISO_CTX_ERROR_NO_ISOC_CHANNEL")]
     NoIsocChannel,
     #[doc(hidden)]
@@ -142,14 +150,18 @@ impl ToValue for FwIsoCtxError {
     }
 }
 
+/// A set of mode for isochronous context of Linux FireWire subsystem.
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoCtxMode")]
 pub enum FwIsoCtxMode {
+    // The mode of IT context of 1394 OHCI.
     #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_TX")]
     Tx,
+    /// The mode of IR context of 1394 OHCI with packer-per-buffer protocol
     #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_RX_SINGLE")]
     RxSingle,
+    /// The mode of IR context of 1394 OHCI with buffer-fill protocol.
     #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE")]
     RxMultiple,
     #[doc(hidden)]
@@ -229,14 +241,18 @@ impl ToValue for FwIsoCtxMode {
     }
 }
 
+/// A set of error code for [`FwIsoResourceAuto`][crate::FwIsoResourceAuto].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoResourceAutoError")]
 pub enum FwIsoResourceAutoError {
+    /// The system call fails.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED")]
     Failed,
+    /// The instance is already associated to allocated isochronous resources.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED")]
     Allocated,
+    /// The instance is not associated to allocated isochronous resources.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED")]
     NotAllocated,
     #[doc(hidden)]
@@ -335,18 +351,24 @@ impl ToValue for FwIsoResourceAutoError {
     }
 }
 
+/// A set of error code for [`FwIsoResource`][crate::FwIsoResource].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoResourceError")]
 pub enum FwIsoResourceError {
+    /// The system call fails.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_FAILED")]
     Failed,
+    /// The instance is already associated to any firewire character device.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_OPENED")]
     Opened,
+    /// The instance is not associated to any firewire character device.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_NOT_OPENED")]
     NotOpened,
+    /// No event to the request arrives within timeout.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_TIMEOUT")]
     Timeout,
+    /// Event for the request arrives but includes error code.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_ERROR_EVENT")]
     Event,
     #[doc(hidden)]
@@ -453,20 +475,27 @@ impl ToValue for FwIsoResourceError {
     }
 }
 
+/// A set of speed for isochronous context on IEEE 1394 bus.
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwScode")]
 pub enum FwScode {
+    /// 100 Mbps.
     #[doc(alias = "HINOKO_FW_SCODE_S100")]
     S100,
+    /// 200 Mbps.
     #[doc(alias = "HINOKO_FW_SCODE_S200")]
     S200,
+    /// 400 Mbps.
     #[doc(alias = "HINOKO_FW_SCODE_S400")]
     S400,
+    /// 800 Mbps.
     #[doc(alias = "HINOKO_FW_SCODE_S800")]
     S800,
+    /// 1600 Mbps.
     #[doc(alias = "HINOKO_FW_SCODE_S1600")]
     S1600,
+    /// 3200 Mbps.
     #[doc(alias = "HINOKO_FW_SCODE_S3200")]
     S3200,
     #[doc(hidden)]

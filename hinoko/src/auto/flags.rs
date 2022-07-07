@@ -12,14 +12,19 @@ use glib::Type;
 use std::fmt;
 
 bitflags! {
+    /// A set of tag field of isochronous packet on IEEE 1394 bus.
     #[doc(alias = "HinokoFwIsoCtxMatchFlag")]
     pub struct FwIsoCtxMatchFlag: u32 {
+        /// The value of tag0 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG0")]
         const TAG0 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG0 as u32;
+        /// The value of tag1 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG1")]
         const TAG1 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG1 as u32;
+        /// The value of tag2 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2")]
         const TAG2 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2 as u32;
+        /// The value of tag3 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3")]
         const TAG3 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3 as u32;
     }

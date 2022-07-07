@@ -1,13 +1,33 @@
 // SPDX-License-Identifier: MIT
 use crate::*;
 
+/// Trait containing the rest of[`struct@FwIsoRxMultiple`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple]
 pub trait FwIsoRxMultipleExtManual {
+    /// The array with elements to express isochronous channels to be listened to.
     fn channels(&self) -> Option<Vec<u8>>;
     #[doc(alias = "channels")]
     fn connect_channels_notify<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self) + 'static;
 
+    /// Start IR context.
+    /// ## `cycle_match`
+    /// The isochronous cycle
+    ///      to start packet processing. The first element should be the second part of
+    ///      isochronous cycle, up to 3. The second element should be the cycle part of
+    ///      isochronous cycle, up to 7999.
+    /// ## `sync_code`
+    /// The value of sy field in isochronous packet header for packet processing, up to 15.
+    /// ## `tags`
+    /// The value of tag field in isochronous header for packet processing.
+    /// ## `chunks_per_irq`
+    /// The number of chunks per interval of interrupt. When 0 is given, application
+    ///         should call [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] voluntarily to generate
+    ///         `signal::FwIsoRxMultiple::interrupted` event.
     #[doc(alias = "hinoko_fw_iso_rx_multiple_start")]
     fn start(
         &self,
@@ -17,6 +37,17 @@ pub trait FwIsoRxMultipleExtManual {
         chunks_per_irq: u32,
     ) -> Result<(), Error>;
 
+    /// Retrieve data for packet indicated by the index parameter. The data has isochronous packet header
+    /// in its first quadlet, timestamp in its last quadlet. The rest is data of isochronous packet.
+    /// ## `index`
+    /// the index of packet available in this interrupt.
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `payload`
+    /// The array with data frame for payload of
+    ///      IR context.
     #[doc(alias = "hinoko_fw_iso_rx_multiple_get_payload")]
     #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];

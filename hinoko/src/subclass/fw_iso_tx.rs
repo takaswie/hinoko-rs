@@ -2,12 +2,14 @@
 
 use super::*;
 
+/// Trait which should be implemented by subclass of [`FwIsoTx`][crate::FwIsoTx].
 pub trait FwIsoTxImpl: FwIsoCtxImpl {
     fn interrupted(&self, ctx: &Self::Type, sec: u32, cycle: u32, header: &[u8], count: u32) {
         self.parent_interrupted(ctx, sec, cycle, header, count)
     }
 }
 
+/// Trait which is automatically implemented to implementator of [`FwIsoTxImpl`][self::FwIsoTxImpl].
 pub trait FwIsoTxImplExt: ObjectSubclass {
     fn parent_interrupted(&self, ctx: &Self::Type, sec: u32, cycle: u32, header: &[u8], count: u32);
 }

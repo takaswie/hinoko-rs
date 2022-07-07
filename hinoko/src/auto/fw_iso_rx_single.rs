@@ -10,6 +10,16 @@ use std::fmt;
 use std::ptr;
 
 glib::wrapper! {
+    /// An object to receive isochronous packet for single channel.
+    ///
+    /// A [`FwIsoRxSingle`][crate::FwIsoRxSingle] receives isochronous packets for single channel by IR
+    /// context for packet-per-buffer mode in 1394 OHCI. The content of packet is
+    /// split to two parts; context header and context payload in a manner of Linux
+    /// FireWire subsystem.
+    ///
+    /// # Implements
+    ///
+    /// [`FwIsoRxSingleExt`][trait@crate::prelude::FwIsoRxSingleExt], [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoRxSingleExtManual`][trait@crate::prelude::FwIsoRxSingleExtManual], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
     #[doc(alias = "HinokoFwIsoRxSingle")]
     pub struct FwIsoRxSingle(Object<ffi::HinokoFwIsoRxSingle, ffi::HinokoFwIsoRxSingleClass>) @implements FwIsoCtx;
 
@@ -21,6 +31,11 @@ glib::wrapper! {
 impl FwIsoRxSingle {
     pub const NONE: Option<&'static FwIsoRxSingle> = None;
 
+    /// Instantiate [`FwIsoRxSingle`][crate::FwIsoRxSingle] object and return the instance.
+    ///
+    /// # Returns
+    ///
+    /// an instance of [`FwIsoRxSingle`][crate::FwIsoRxSingle].
     #[doc(alias = "hinoko_fw_iso_rx_single_new")]
     pub fn new() -> FwIsoRxSingle {
         unsafe { from_glib_full(ffi::hinoko_fw_iso_rx_single_new()) }
@@ -33,7 +48,31 @@ impl Default for FwIsoRxSingle {
     }
 }
 
+/// Trait containing the part of[`struct@FwIsoRxSingle`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle]
 pub trait FwIsoRxSingleExt: 'static {
+    /// Allocate an IR context to 1394 OHCI controller for packet-per-buffer mode. A local node of the
+    /// node corresponding to the given path is used as the controller, thus any path is accepted as
+    /// long as process has enough permission for the path.
+    ///
+    /// The header_size parameter has an effect for the content of header parameter in
+    /// `signal::FwIsoRxSingle::interrupted`. When it's greater than 8, header includes the series of two
+    /// quadlets for isochronous packet header and timestamp per isochronous packet. When it's greater
+    /// than 12, header includes the part of isochronous packet data per packet.
+    /// ## `path`
+    /// A path to any Linux FireWire character device.
+    /// ## `channel`
+    /// An isochronous channel to listen, up to 63.
+    /// ## `header_size`
+    /// The number of bytes for header of IR context, greater than 4 at least to include
+    ///      isochronous packet header in header parameter of `signal::FwIsoRxSingle::interrupted`.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_rx_single_allocate")]
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error>;
 
@@ -44,6 +83,15 @@ pub trait FwIsoRxSingleExt: 'static {
         payloads_per_buffer: u32,
     ) -> Result<(), glib::Error>;
 
+    /// Register chunk of buffer to process packet for future isochronous cycle. The caller can schedule
+    /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
+    /// `signal::FwIsoRxSingle::interrupted` signal.
+    /// ## `schedule_interrupt`
+    /// Whether to schedule hardware interrupt at isochronous cycle for the packet.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_rx_single_register_packet")]
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error>;
 }

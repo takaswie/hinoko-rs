@@ -15,6 +15,15 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    /// An object to maintain allocated isochronous resource.
+    ///
+    /// A [`FwIsoResourceAuto`][crate::FwIsoResourceAuto]is an object to maintain isochronous resource during the lifetime of
+    /// the object. The allocated isochronous resource is kept even if the generation of the bus
+    /// updates. The maintenance of allocated isochronous resource is done by Linux FireWire subsystem.
+    ///
+    /// # Implements
+    ///
+    /// [`FwIsoResourceAutoExt`][trait@crate::prelude::FwIsoResourceAutoExt], [`FwIsoResourceExt`][trait@crate::prelude::FwIsoResourceExt]
     #[doc(alias = "HinokoFwIsoResourceAuto")]
     pub struct FwIsoResourceAuto(Object<ffi::HinokoFwIsoResourceAuto, ffi::HinokoFwIsoResourceAutoClass>) @implements FwIsoResource;
 
@@ -26,6 +35,11 @@ glib::wrapper! {
 impl FwIsoResourceAuto {
     pub const NONE: Option<&'static FwIsoResourceAuto> = None;
 
+    /// Allocate and return an instance of [`FwIsoResourceAuto`][crate::FwIsoResourceAuto]object.
+    ///
+    /// # Returns
+    ///
+    /// A [`FwIsoResourceAuto`][crate::FwIsoResourceAuto]
     #[doc(alias = "hinoko_fw_iso_resource_auto_new")]
     pub fn new() -> FwIsoResourceAuto {
         unsafe { from_glib_full(ffi::hinoko_fw_iso_resource_auto_new()) }
@@ -38,17 +52,39 @@ impl Default for FwIsoResourceAuto {
     }
 }
 
+/// Trait containing all [`struct@FwIsoResourceAuto`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoResourceAuto`][struct@crate::FwIsoResourceAuto]
 pub trait FwIsoResourceAutoExt: 'static {
+    /// Initiate deallocation of isochronous resource. When the deallocation is done,
+    /// `signal::FwIsoResource::deallocated` signal is emit to notify the result, channel, and bandwidth.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finished successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_async")]
     fn deallocate_async(&self) -> Result<(), glib::Error>;
 
+    /// Initiate deallocation of isochronous resource. When the deallocation is done,
+    /// `signal::FwIsoResource::deallocated` signal is emit to notify the result, channel, and bandwidth.
+    /// ## `timeout_ms`
+    /// The timeout to wait for allocated event by milli second unit.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finished successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_sync")]
     fn deallocate_sync(&self, timeout_ms: u32) -> Result<(), glib::Error>;
 
+    /// The allocated amount of bandwidth.
     fn bandwidth(&self) -> u32;
 
+    /// The allocated channel number.
     fn channel(&self) -> u32;
 
+    /// Whether to be allocate isochronous resource or not.
     #[doc(alias = "is-allocated")]
     fn is_allocated(&self) -> bool;
 

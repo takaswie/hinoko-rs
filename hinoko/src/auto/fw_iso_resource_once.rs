@@ -10,6 +10,16 @@ use std::fmt;
 use std::ptr;
 
 glib::wrapper! {
+    /// An object to initiate requests and listen events of isochronous resource allocation/deallocation
+    /// by one shot.
+    ///
+    /// The [`FwIsoResourceOnce`][crate::FwIsoResourceOnce] is an object to initiate requests and listen events of isochronous
+    /// resource allocation/deallocation by file descriptor owned internally. The allocated resource
+    /// is left even if this object is destroyed, thus application is responsible for deallocation.
+    ///
+    /// # Implements
+    ///
+    /// [`FwIsoResourceOnceExt`][trait@crate::prelude::FwIsoResourceOnceExt], [`FwIsoResourceExt`][trait@crate::prelude::FwIsoResourceExt]
     #[doc(alias = "HinokoFwIsoResourceOnce")]
     pub struct FwIsoResourceOnce(Object<ffi::HinokoFwIsoResourceOnce, ffi::HinokoFwIsoResourceOnceClass>) @implements FwIsoResource;
 
@@ -21,6 +31,13 @@ glib::wrapper! {
 impl FwIsoResourceOnce {
     pub const NONE: Option<&'static FwIsoResourceOnce> = None;
 
+    /// Allocate and return an instance of [`FwIsoResourceOnce`][crate::FwIsoResourceOnce].
+    ///
+    /// # Returns
+    ///
+    /// A [`FwIsoResourceOnce`][crate::FwIsoResourceOnce].
+    ///
+    /// Sine: 0.7.
     #[doc(alias = "hinoko_fw_iso_resource_once_new")]
     pub fn new() -> FwIsoResourceOnce {
         unsafe { from_glib_full(ffi::hinoko_fw_iso_resource_once_new()) }
@@ -33,10 +50,38 @@ impl Default for FwIsoResourceOnce {
     }
 }
 
+/// Trait containing all [`struct@FwIsoResourceOnce`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoResourceOnce`][struct@crate::FwIsoResourceOnce]
 pub trait FwIsoResourceOnceExt: 'static {
+    /// Initiate deallocation of isochronous resource without any wait. When the
+    /// deallocation finishes, `signal::FwIsoResource::deallocated` signal is emit to notify the result,
+    /// channel, and bandwidth.
+    /// ## `channel`
+    /// The channel number to be deallocated.
+    /// ## `bandwidth`
+    /// The amount of bandwidth to be deallocated.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_once_deallocate_async")]
     fn deallocate_async(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error>;
 
+    /// Initiate deallocation of isochronous resource and wait for `signal::FwIsoResource::deallocated`
+    /// signal.
+    /// ## `channel`
+    /// The channel number to be deallocated.
+    /// ## `bandwidth`
+    /// The amount of bandwidth to be deallocated.
+    /// ## `timeout_ms`
+    /// The timeout to wait for deallocated event.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_once_deallocate_sync")]
     fn deallocate_sync(
         &self,

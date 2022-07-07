@@ -1,7 +1,26 @@
 // SPDX-License-Identifier: MIT
 use crate::*;
 
+/// Trait containing the rest of [`struct@FwIsoRxSingle`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle]
 pub trait FwIsoRxSingleExtManual {
+    /// Start IR context.
+    /// ## `cycle_match`
+    /// The isochronous cycle
+    ///      to start packet processing. The first element should be the second part of
+    ///      isochronous cycle, up to 3. The second element should be the cycle part of
+    ///      isochronous cycle, up to 7999.
+    /// ## `sync_code`
+    /// The value of sy field in isochronous packet header for packet processing, up to 15.
+    /// ## `tags`
+    /// The value of tag field in isochronous header for packet processing.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_rx_single_start")]
     fn start(
         &self,
@@ -10,10 +29,42 @@ pub trait FwIsoRxSingleExtManual {
         tags: FwIsoCtxMatchFlag,
     ) -> Result<(), Error>;
 
+    /// Retrieve payload of IR context for a handled packet corresponding to index at the event of
+    /// interrupt.
+    /// ## `index`
+    /// the index inner available packets at the event of interrupt.
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `payload`
+    /// The array with data
+    ///      frame for payload of IR context.
     #[doc(alias = "hinoko_fw_iso_rx_single_get_payload")]
     #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
 
+    /// Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
+    /// for Linux FireWire subsystem to generate the event:
+    ///
+    /// - When OHCI 1394 controller generates hardware interrupt as a result to process the
+    ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
+    /// - When the size of accumulated context header for packets since the last event reaches
+    ///   the size of memory page (usually 4,096 bytes).
+    /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
+    ///
+    /// The handler of signal can retrieve context payload of received packet by call of
+    /// [`FwIsoRxSingleExtManual::payload()`][crate::prelude::FwIsoRxSingleExtManual::payload()].
+    /// ## `sec`
+    /// sec part of isochronous cycle when interrupt occurs, up to 7.
+    /// ## `cycle`
+    /// cycle part of of isochronous cycle when interrupt occurs, up to 7999.
+    /// ## `header`
+    /// The headers of IR context
+    ///     for packets handled in the event of interrupt. The content is different
+    ///     depending on header_size parameter of [`FwIsoRxSingleExt::allocate()`][crate::prelude::FwIsoRxSingleExt::allocate()].
+    /// ## `count`
+    /// the number of packets to handle.
     #[doc(alias = "interrupted")]
     fn connect_interrupted<F: Fn(&Self, u32, u32, &[u8], u32) + 'static>(
         &self,

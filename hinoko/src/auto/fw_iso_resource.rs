@@ -16,6 +16,14 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    /// An interface object to listen events of isochronous resource allocation and deallocation.
+    ///
+    /// The [`FwIsoResource`][crate::FwIsoResource] should be implemented in GObject-derived object to listen events of
+    /// isochronous resource allocation and deallocation.
+    ///
+    /// # Implements
+    ///
+    /// [`FwIsoResourceExt`][trait@crate::prelude::FwIsoResourceExt]
     #[doc(alias = "HinokoFwIsoResource")]
     pub struct FwIsoResource(Interface<ffi::HinokoFwIsoResource, ffi::HinokoFwIsoResourceInterface>);
 
@@ -27,6 +35,16 @@ glib::wrapper! {
 impl FwIsoResource {
     pub const NONE: Option<&'static FwIsoResource> = None;
 
+    /// Calculate the amount of bandwidth expected to be consumed in allocation unit
+    /// by given parameters.
+    /// ## `bytes_per_payload`
+    /// The number of bytes in payload of isochronous packet.
+    /// ## `scode`
+    /// The speed of transmission.
+    ///
+    /// # Returns
+    ///
+    /// The amount of bandwidth expected to be consumed.
     #[doc(alias = "hinoko_fw_iso_resource_calculate_bandwidth")]
     pub fn calculate_bandwidth(bytes_per_payload: u32, scode: FwScode) -> u32 {
         unsafe {
@@ -35,10 +53,40 @@ impl FwIsoResource {
     }
 }
 
+/// Trait containing all [`struct@FwIsoResource`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoResourceAuto`][struct@crate::FwIsoResourceAuto], [`FwIsoResourceOnce`][struct@crate::FwIsoResourceOnce], [`FwIsoResource`][struct@crate::FwIsoResource]
 pub trait FwIsoResourceExt: 'static {
+    /// Initiate allocation of isochronous resource without any wait. One of the candidates is actually
+    /// allocated for channel. When the allocation finishes, `signal::FwIsoResource::allocated` signal is
+    /// emitted to notify the result, channel, and bandwidth.
+    /// ## `channel_candidates`
+    /// The array with elements for
+    ///         numeric number of isochronous channel to be allocated.
+    /// ## `bandwidth`
+    /// The amount of bandwidth to be allocated.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_allocate_async")]
     fn allocate_async(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error>;
 
+    /// Initiate allocation of isochronous resource and wait for `signal::FwIsoResource::allocated`
+    /// signal. One of the candidates is actually allocated for channel.
+    /// ## `channel_candidates`
+    /// The array with elements for
+    ///         numeric number for isochronous channel to be allocated.
+    /// ## `bandwidth`
+    /// The amount of bandwidth to be allocated.
+    /// ## `timeout_ms`
+    /// The timeout to wait for allocated event.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_allocate_sync")]
     fn allocate_sync(
         &self,
@@ -47,14 +95,42 @@ pub trait FwIsoResourceExt: 'static {
         timeout_ms: u32,
     ) -> Result<(), glib::Error>;
 
+    /// Create [`glib::Source`][crate::glib::Source] for `GLib::MainContext` to dispatch events for isochronous
+    /// resource.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finished successfully, otherwise FALSE.
+    ///
+    /// ## `source`
+    /// A [`glib::Source`][crate::glib::Source]
     #[doc(alias = "hinoko_fw_iso_resource_create_source")]
     fn create_source(&self) -> Result<glib::Source, glib::Error>;
 
+    /// Open Linux FireWire character device to delegate any request for isochronous
+    /// resource management to Linux FireWire subsystem.
+    /// ## `path`
+    /// A path of any Linux FireWire character device.
+    /// ## `open_flag`
+    /// The flag of open(2) system call. O_RDONLY is forced to fulfil
+    ///        internally.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finished successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_open")]
     fn open(&self, path: &str, open_flag: i32) -> Result<(), glib::Error>;
 
     fn generation(&self) -> u32;
 
+    /// Emitted when allocation of isochronous resource finishes.
+    /// ## `channel`
+    /// The deallocated channel number.
+    /// ## `bandwidth`
+    /// The deallocated amount of bandwidth.
+    /// ## `error`
+    /// A [`glib::Error`][crate::glib::Error]. Error can be generated
+    ///    with domain of Hinoko.FwIsoResourceError and its EVENT code.
     #[doc(alias = "allocated")]
     fn connect_allocated<F: Fn(&Self, u32, u32, Option<&glib::Error>) + 'static>(
         &self,
@@ -63,6 +139,14 @@ pub trait FwIsoResourceExt: 'static {
 
     fn emit_allocated(&self, channel: u32, bandwidth: u32, error: Option<&glib::Error>);
 
+    /// Emitted when deallocation of isochronous resource finishes.
+    /// ## `channel`
+    /// The deallocated channel number.
+    /// ## `bandwidth`
+    /// The deallocated amount of bandwidth.
+    /// ## `error`
+    /// A [`glib::Error`][crate::glib::Error]. Error can be generated
+    ///    with domain of Hinoko.FwIsoResourceError and its EVENT code.
     #[doc(alias = "deallocated")]
     fn connect_deallocated<F: Fn(&Self, u32, u32, Option<&glib::Error>) + 'static>(
         &self,

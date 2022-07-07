@@ -7,6 +7,10 @@ use glib::translate::*;
 use std::mem;
 
 glib::wrapper! {
+    /// A boxed object to represent data for cycle timer.
+    ///
+    /// A [`CycleTimer`][crate::CycleTimer] is an boxed object to represent the value of cycle timer and timestamp
+    /// referring to clock_id.
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct CycleTimer(Boxed<ffi::HinokoCycleTimer>);
 
@@ -18,11 +22,25 @@ glib::wrapper! {
 }
 
 impl CycleTimer {
+    /// Allocate and return an instance of [`CycleTimer`][crate::CycleTimer].
+    ///
+    /// # Returns
+    ///
+    /// An instance of [`CycleTimer`][crate::CycleTimer].
     #[doc(alias = "hinoko_cycle_timer_new")]
     pub fn new() -> CycleTimer {
         unsafe { from_glib_none(ffi::hinoko_cycle_timer_new()) }
     }
 
+    /// Get the ID of clock for timestamp.
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `clock_id`
+    /// The numerical ID of clock source for the reference timestamp. One of
+    ///       CLOCK_REALTIME(0), CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in
+    ///       UAPI of Linux kernel.
     #[doc(alias = "hinoko_cycle_timer_get_clock_id")]
     #[doc(alias = "get_clock_id")]
     pub fn clock_id(&mut self) -> i32 {
@@ -34,6 +52,17 @@ impl CycleTimer {
         }
     }
 
+    /// Get timestamp with enough sizee of strorage. The timestamp refers to clock_id available by
+    /// [`clock_id()`][Self::clock_id()].
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `tv_sec`
+    /// The second part of timestamp.
+    ///
+    /// ## `tv_nsec`
+    /// The nanosecond part of timestamp.
     #[doc(alias = "hinoko_cycle_timer_get_timestamp")]
     #[doc(alias = "get_timestamp")]
     pub fn timestamp(&mut self) -> (i64, i32) {

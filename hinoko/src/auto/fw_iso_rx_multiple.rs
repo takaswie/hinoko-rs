@@ -15,6 +15,14 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
+    /// An object to receive isochronous packet for several channels.
+    ///
+    /// A [`FwIsoRxMultiple`][crate::FwIsoRxMultiple] receives isochronous packets for several channels by IR context for
+    /// buffer-fill mode in 1394 OHCI.
+    ///
+    /// # Implements
+    ///
+    /// [`FwIsoRxMultipleExt`][trait@crate::prelude::FwIsoRxMultipleExt], [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoRxMultipleExtManual`][trait@crate::prelude::FwIsoRxMultipleExtManual], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
     #[doc(alias = "HinokoFwIsoRxMultiple")]
     pub struct FwIsoRxMultiple(Object<ffi::HinokoFwIsoRxMultiple, ffi::HinokoFwIsoRxMultipleClass>) @implements FwIsoCtx;
 
@@ -26,6 +34,11 @@ glib::wrapper! {
 impl FwIsoRxMultiple {
     pub const NONE: Option<&'static FwIsoRxMultiple> = None;
 
+    /// Instantiate [`FwIsoRxMultiple`][crate::FwIsoRxMultiple] object and return the instance.
+    ///
+    /// # Returns
+    ///
+    /// an instance of [`FwIsoRxMultiple`][crate::FwIsoRxMultiple].
     #[doc(alias = "hinoko_fw_iso_rx_multiple_new")]
     pub fn new() -> FwIsoRxMultiple {
         unsafe { from_glib_full(ffi::hinoko_fw_iso_rx_multiple_new()) }
@@ -38,13 +51,44 @@ impl Default for FwIsoRxMultiple {
     }
 }
 
+/// Trait containing the part of[`struct@FwIsoRxMultiple`] methods.
+///
+/// # Implementors
+///
+/// [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple]
 pub trait FwIsoRxMultipleExt: 'static {
+    /// Allocate an IR context to 1394 OHCI controller for buffer-fill mode. A local node of the node
+    /// corresponding to the given path is used as the controller, thus any path is accepted as long as
+    /// process has enough permission for the path.
+    /// ## `path`
+    /// A path to any Linux FireWire character device.
+    /// ## `channels`
+    /// an array for channels to listen
+    ///       to. The value of each element should be up to 63.
     #[doc(alias = "hinoko_fw_iso_rx_multiple_allocate")]
     fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error>;
 
+    /// Map an intermediate buffer to share payload of IR context with 1394 OHCI
+    /// controller.
+    /// ## `bytes_per_chunk`
+    /// The maximum number of bytes for payload of isochronous packet (not payload for
+    ///          isochronous context).
+    /// ## `chunks_per_buffer`
+    /// The number of chunks in buffer.
     #[doc(alias = "hinoko_fw_iso_rx_multiple_map_buffer")]
     fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error>;
 
+    /// Emitted when Linux FireWire subsystem generates interrupt event. There are two cases
+    /// for Linux FireWire subsystem to generate the event:
+    ///
+    /// - When OHCI 1394 controller generates hardware interrupt as a result to process the
+    ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
+    /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
+    ///
+    /// The handler of signal can retrieve the content of packet by call of
+    /// [`FwIsoRxMultipleExtManual::payload()`][crate::prelude::FwIsoRxMultipleExtManual::payload()].
+    /// ## `count`
+    /// The number of packets available in this interrupt.
     #[doc(alias = "interrupted")]
     fn connect_interrupted<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId;
 }

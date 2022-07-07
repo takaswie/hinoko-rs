@@ -2,6 +2,7 @@
 
 use super::*;
 
+/// Trait which should be implemented by subclass of [`FwIsoCtx`][crate::FwIsoCtx].
 pub trait FwIsoCtxImpl: ObjectImpl {
     fn create_source(&self, ctx: &Self::Type) -> Result<Source, Error>;
     fn flush_completions(&self, ctx: &Self::Type) -> Result<(), Error>;
@@ -17,6 +18,8 @@ pub trait FwIsoCtxImpl: ObjectImpl {
     fn stopped(&self, ctx: &Self::Type, error: Option<&Error>);
 }
 
+/// Trait which is automatically implemented to implementator of
+/// [`FwIsoCtxImpl`][self::FwIsoCtxImpl].
 pub trait FwIsoCtxImplExt: ObjectSubclass {
     fn parent_create_source(&self, ctx: &Self::Type) -> Result<Source, Error>;
     fn parent_flush_completions(&self, ctx: &Self::Type) -> Result<(), Error>;
