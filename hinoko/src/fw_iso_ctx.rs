@@ -2,6 +2,7 @@
 use crate::*;
 
 pub trait FwIsoCtxExtManual {
+    #[doc(alias = "hinoko_fw_iso_ctx_get_cycle_timer")]
     fn get_cycle_timer(&self, clock_id: i32, cycle_timer: &mut CycleTimer) -> Result<(), Error>;
 }
 

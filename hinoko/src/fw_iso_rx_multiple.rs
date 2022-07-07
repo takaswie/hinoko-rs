@@ -3,10 +3,12 @@ use crate::*;
 
 pub trait FwIsoRxMultipleExtManual {
     fn channels(&self) -> Option<Vec<u8>>;
+    #[doc(alias = "channels")]
     fn connect_channels_notify<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self) + 'static;
 
+    #[doc(alias = "hinoko_fw_iso_rx_multiple_start")]
     fn start(
         &self,
         cycle_match: Option<&[u16; 2]>,
@@ -15,6 +17,8 @@ pub trait FwIsoRxMultipleExtManual {
         chunks_per_irq: u32,
     ) -> Result<(), Error>;
 
+    #[doc(alias = "hinoko_fw_iso_rx_multiple_get_payload")]
+    #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
 }
 

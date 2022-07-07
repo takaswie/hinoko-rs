@@ -2,6 +2,8 @@
 use crate::*;
 
 impl CycleTimer {
+    #[doc(alias = "hinoko_cycle_timer_get_cycle_timer")]
+    #[doc(alias = "get_cycle_timer")]
     pub fn cycle_timer(&mut self) -> [u16; 3] {
         unsafe {
             let mut cycle_timer = [0; 3];

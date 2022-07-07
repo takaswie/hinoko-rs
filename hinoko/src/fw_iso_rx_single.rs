@@ -2,6 +2,7 @@
 use crate::*;
 
 pub trait FwIsoRxSingleExtManual {
+    #[doc(alias = "hinoko_fw_iso_rx_single_start")]
     fn start(
         &self,
         cycle_match: Option<&[u16; 2]>,
@@ -9,7 +10,11 @@ pub trait FwIsoRxSingleExtManual {
         tags: FwIsoCtxMatchFlag,
     ) -> Result<(), Error>;
 
+    #[doc(alias = "hinoko_fw_iso_rx_single_get_payload")]
+    #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
+
+    #[doc(alias = "interrupted")]
     fn connect_interrupted<F: Fn(&Self, u32, u32, &[u8], u32) + 'static>(
         &self,
         f: F,

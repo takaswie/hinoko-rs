@@ -2,6 +2,7 @@
 use crate::*;
 
 pub trait FwIsoTxExtManual {
+    #[doc(alias = "hinoko_fw_iso_tx_register_packet")]
     fn register_packet(
         &self,
         tags: FwIsoCtxMatchFlag,
@@ -11,8 +12,10 @@ pub trait FwIsoTxExtManual {
         schedule_interrupt: bool,
     ) -> Result<(), Error>;
 
+    #[doc(alias = "hinoko_fw_iso_tx_start")]
     fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), Error>;
 
+    #[doc(alias = "interrupted")]
     fn connect_interrupted<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self, u32, u32, &[u8], u32) + 'static;
