@@ -30,7 +30,7 @@ name = "Hinoko.CycleTimer"
 status = "generate"
 concurrency = "send"
     [[object.function]]
-    pattern = "get_cycle_timer"
+    name = "get_cycle_timer"
     ignore = true
 
 [[object]]
@@ -38,7 +38,7 @@ name = "Hinoko.FwIsoCtx"
 status = "generate"
 manual_traits = ["FwIsoCtxExtManual"]
     [[object.function]]
-    pattern = "get_cycle_timer"
+    name = "get_cycle_timer"
     ignore = true
     doc_trait_name = "FwIsoCtxExtManual"
 
@@ -47,15 +47,15 @@ name = "Hinoko.FwIsoRxSingle"
 status = "generate"
 manual_traits = ["FwIsoRxSingleExtManual"]
     [[object.function]]
-    pattern = "start"
+    name = "start"
     ignore = true
     doc_trait_name = "FwIsoRxSingleExtManual"
     [[object.function]]
-    pattern = "get_payload"
+    name = "get_payload"
     ignore = true
     doc_trait_name = "FwIsoRxSingleExtManual"
     [[object.signal]]
-    pattern = "interrupted"
+    name = "interrupted"
     ignore = true
     doc_trait_name = "FwIsoRxSingleExtManual"
 
@@ -64,15 +64,15 @@ name = "Hinoko.FwIsoRxMultiple"
 status = "generate"
 manual_traits = ["FwIsoRxMultipleExtManual"]
     [[object.property]]
-    pattern = "channels"
+    name = "channels"
     ignore = true
     doc_trait_name = "FwIsoRxMultipleExtManual"
     [[object.function]]
-    pattern = "start"
+    name = "start"
     ignore = true
     doc_trait_name = "FwIsoRxMultipleExtManual"
     [[object.function]]
-    pattern = "get_payload"
+    name = "get_payload"
     ignore = true
     doc_trait_name = "FwIsoRxMultipleExtManual"
 
@@ -85,10 +85,10 @@ manual_traits = ["FwIsoTxExtManual"]
     ignore = true
     doc_trait_name = "FwIsoTxExtManual"
     [[object.function]]
-    pattern = "start"
+    name = "start"
     ignore = true
     doc_trait_name = "FwIsoTxExtManual"
     [[object.signal]]
-    pattern = "interrupted"
+    name = "interrupted"
     ignore = true
     doc_trait_name = "FwIsoTxExtManual"
