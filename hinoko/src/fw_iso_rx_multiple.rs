@@ -2,8 +2,8 @@
 use crate::*;
 
 pub trait FwIsoRxMultipleExtManual {
-    fn get_property_channels(&self) -> Option<Vec<u8>>;
-    fn connect_property_channels_notify<F>(&self, f: F) -> SignalHandlerId
+    fn channels(&self) -> Option<Vec<u8>>;
+    fn connect_channels_notify<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self) + 'static;
 
@@ -15,11 +15,11 @@ pub trait FwIsoRxMultipleExtManual {
         chunks_per_irq: u32,
     ) -> Result<(), Error>;
 
-    fn get_payload(&self, index: u32) -> &[u8];
+    fn payload(&self, index: u32) -> &[u8];
 }
 
 impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
-    fn get_property_channels(&self) -> Option<Vec<u8>> {
+    fn channels(&self) -> Option<Vec<u8>> {
         unsafe {
             let mut value = Value::from_type(<glib::ByteArray as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
@@ -35,7 +35,7 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
         }
     }
 
-    fn connect_property_channels_notify<F>(&self, f: F) -> SignalHandlerId
+    fn connect_channels_notify<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self) + 'static,
     {
@@ -94,7 +94,7 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
         }
     }
 
-    fn get_payload(&self, index: u32) -> &[u8] {
+    fn payload(&self, index: u32) -> &[u8] {
         unsafe {
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();

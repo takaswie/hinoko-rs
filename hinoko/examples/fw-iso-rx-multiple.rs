@@ -51,7 +51,7 @@ fn main() {
         let mut frames = [0; 4];
 
         (0..count).for_each(|i| {
-            let data = ir.get_payload(i);
+            let data = ir.payload(i);
 
             frames.copy_from_slice(&data[0..4]);
             let iso_header = u32::from_le_bytes(frames);
