@@ -1,11 +1,10 @@
 [package]
 authors = ["Takashi Sakamoto <o-takashi@sakamocchi.jp>"]
 description = "API bindings for libhinoko0 library"
-edition = "2021"
+edition = "2018"
 license = "MIT"
 name = "hinoko"
 repository = "https://github.com/takaswie/hinoko-rs/"
-rust-version = "1.57"
 version = "0.1.0"
 
 [lib]

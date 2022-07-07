@@ -2,12 +2,11 @@
 authors = ["Takashi Sakamoto <o-takashi@sakamocchi.jp>"]
 build = "build.rs"
 description = "FFI bindings for libhinoko0 library"
-edition = "2021"
+edition = "2018"
 license = "MIT"
 links = "hinoko"
 name = "hinoko-sys"
 repository = "https://github.com/takaswie/hinoko-rs/"
-rust-version = "1.57"
 version = "0.1.0"
 [package.metadata.docs.rs]
 features = ["dox"]

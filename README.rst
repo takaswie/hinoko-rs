@@ -20,7 +20,6 @@ MIT License
 Dependencies
 ============
 
-* Rust version 1.57 or later (edition 2021)
 * `libhinoko <https://github.com/takaswie/libhinoko>`_
 * FFI crate (``hinoko-sys``)
 
