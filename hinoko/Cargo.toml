@@ -1,11 +1,12 @@
 [package]
+name = "hinoko"
+edition = "2018"
+version = "0.1.0"
+# For publishing.
 authors = ["Takashi Sakamoto <o-takashi@sakamocchi.jp>"]
 description = "API bindings for libhinoko0 library"
-edition = "2018"
 license = "MIT"
-name = "hinoko"
 repository = "https://github.com/takaswie/hinoko-rs/"
-version = "0.1.0"
 
 [lib]
 name = "hinoko"
