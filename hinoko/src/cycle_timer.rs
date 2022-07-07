@@ -2,7 +2,7 @@
 use crate::*;
 
 impl CycleTimer {
-    pub fn get_cycle_timer(&mut self) -> [u16; 3] {
+    pub fn cycle_timer(&mut self) -> [u16; 3] {
         unsafe {
             let mut cycle_timer = [0; 3];
 
