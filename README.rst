@@ -1,8 +1,8 @@
-====================
-Hinoko Rust bindings
-====================
+================================
+Rust bindings for hinoko library
+================================
 
-2022/05/08
+2022/07/07
 Takashi Sakamoto
 
 Introduction
@@ -11,6 +11,10 @@ Introduction
 * This repository includes FFI and API bindings for ``libhinoko0`` which provides ``Hinoko-0.0.gir``.
 
   * `<https://github.com/takaswie/libhinoko>`_
+
+* The crates are available in `crates.io <https://crates.io/>`_ as well.
+
+The latest release is version 0.0.90. This is pre-release to publish crates in crates.io.
 
 License
 =======
@@ -38,12 +42,3 @@ Examples
 ========
 
 See ``hinoko/examples`` directory
-
-How to generate FFI and API crates
-==================================
-
-::
-
-    $ ./generator.py
-
-end
