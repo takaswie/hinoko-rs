@@ -1,6 +1,6 @@
 # hinoko crate
 
-Rust API bindings and wrappers for [hinoko library](https://github.com/alsa-project/libhinoko) to
+Rust API bindings and wrappers for [hinoko library](https://github.com/takaswie/libhinoko) to
 operate Linux FireWire character device for isochronous packets and resources
 in IEEE 1394 bus.
 
@@ -29,6 +29,12 @@ The hinoko crate is released under [MIT license](https://spdx.org/licenses/MIT.h
 
 The hinoko crate depends on API crates provided by [gtk-rs project](https://gtk-rs.org/) for
 type/object system, event loop, and dispacher.
+
+## Features for documentation
+
+* dox
+
+   * Suppress linking to hinoko library when generating documentation.
 
 ## Repository
 
