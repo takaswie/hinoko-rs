@@ -30,11 +30,12 @@ The hinoko crate is released under [MIT license](https://spdx.org/licenses/MIT.h
 The hinoko crate depends on API crates provided by [gtk-rs project](https://gtk-rs.org/) for
 type/object system, event loop, and dispacher.
 
-## Features for documentation
+## Features
 
 * dox
 
-   * Suppress linking to hinoko library when generating documentation.
+   * Suppress probing hinoko library. It's automatically enabled when generating documentation
+     in docs.rs.
 
 ## Repository
 
