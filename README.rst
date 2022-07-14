@@ -16,6 +16,19 @@ Introduction
 
 The latest release is version 0.0.91. This is pre-release to publish crates in crates.io.
 
+Crates
+======
+
+API bindings for safe and high-level abstractions
+-------------------------------------------------
+
+* [hinoko crate](hinoko/README.md)
+
+`FFI bindings <https://doc.rust-lang.org/cargo/reference/build-scripts.html#-sys-packages>`_
+--------------------------------------------------------------------------------------------
+
+* [hinoko-sys crate](hinoko-sys/README.md)
+
 License
 =======
 
