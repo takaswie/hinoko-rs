@@ -94,7 +94,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
 
         unsafe {
             let mut error = std::ptr::null_mut();
-            let _ = ffi::hinoko_fw_iso_tx_register_packet(
+            let is_ok = ffi::hinoko_fw_iso_tx_register_packet(
                 self.as_ref().to_glib_none().0,
                 tags.into_glib(),
                 sy,
@@ -105,6 +105,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
                 schedule_interrupt.into_glib(),
                 &mut error,
             );
+            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
 
             if error.is_null() {
                 Ok(())
