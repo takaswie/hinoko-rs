@@ -11,7 +11,7 @@ pub trait FwIsoCtxExtManual {
     /// once any isochronous context is created.
     /// ## `clock_id`
     /// The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
-    ///       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(2) is available in UAPI of Linux kernel.
+    ///       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in UAPI of Linux kernel.
     /// ## `cycle_timer`
     /// A [`CycleTimer`][crate::CycleTimer] to store data of cycle timer.
     ///
