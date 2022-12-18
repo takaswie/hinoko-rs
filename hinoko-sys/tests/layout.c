@@ -12,6 +12,12 @@ int main() {
     printf("%s;%zu;%zu\n", "HinokoFwIsoCtxInterface", sizeof(HinokoFwIsoCtxInterface), alignof(HinokoFwIsoCtxInterface));
     printf("%s;%zu;%zu\n", "HinokoFwIsoCtxMatchFlag", sizeof(HinokoFwIsoCtxMatchFlag), alignof(HinokoFwIsoCtxMatchFlag));
     printf("%s;%zu;%zu\n", "HinokoFwIsoCtxMode", sizeof(HinokoFwIsoCtxMode), alignof(HinokoFwIsoCtxMode));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoIrMultiple", sizeof(HinokoFwIsoIrMultiple), alignof(HinokoFwIsoIrMultiple));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoIrMultipleClass", sizeof(HinokoFwIsoIrMultipleClass), alignof(HinokoFwIsoIrMultipleClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoIrSingle", sizeof(HinokoFwIsoIrSingle), alignof(HinokoFwIsoIrSingle));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoIrSingleClass", sizeof(HinokoFwIsoIrSingleClass), alignof(HinokoFwIsoIrSingleClass));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoIt", sizeof(HinokoFwIsoIt), alignof(HinokoFwIsoIt));
+    printf("%s;%zu;%zu\n", "HinokoFwIsoItClass", sizeof(HinokoFwIsoItClass), alignof(HinokoFwIsoItClass));
     printf("%s;%zu;%zu\n", "HinokoFwIsoResourceAuto", sizeof(HinokoFwIsoResourceAuto), alignof(HinokoFwIsoResourceAuto));
     printf("%s;%zu;%zu\n", "HinokoFwIsoResourceAutoClass", sizeof(HinokoFwIsoResourceAutoClass), alignof(HinokoFwIsoResourceAutoClass));
     printf("%s;%zu;%zu\n", "HinokoFwIsoResourceAutoError", sizeof(HinokoFwIsoResourceAutoError), alignof(HinokoFwIsoResourceAutoError));
@@ -19,12 +25,6 @@ int main() {
     printf("%s;%zu;%zu\n", "HinokoFwIsoResourceInterface", sizeof(HinokoFwIsoResourceInterface), alignof(HinokoFwIsoResourceInterface));
     printf("%s;%zu;%zu\n", "HinokoFwIsoResourceOnce", sizeof(HinokoFwIsoResourceOnce), alignof(HinokoFwIsoResourceOnce));
     printf("%s;%zu;%zu\n", "HinokoFwIsoResourceOnceClass", sizeof(HinokoFwIsoResourceOnceClass), alignof(HinokoFwIsoResourceOnceClass));
-    printf("%s;%zu;%zu\n", "HinokoFwIsoRxMultiple", sizeof(HinokoFwIsoRxMultiple), alignof(HinokoFwIsoRxMultiple));
-    printf("%s;%zu;%zu\n", "HinokoFwIsoRxMultipleClass", sizeof(HinokoFwIsoRxMultipleClass), alignof(HinokoFwIsoRxMultipleClass));
-    printf("%s;%zu;%zu\n", "HinokoFwIsoRxSingle", sizeof(HinokoFwIsoRxSingle), alignof(HinokoFwIsoRxSingle));
-    printf("%s;%zu;%zu\n", "HinokoFwIsoRxSingleClass", sizeof(HinokoFwIsoRxSingleClass), alignof(HinokoFwIsoRxSingleClass));
-    printf("%s;%zu;%zu\n", "HinokoFwIsoTx", sizeof(HinokoFwIsoTx), alignof(HinokoFwIsoTx));
-    printf("%s;%zu;%zu\n", "HinokoFwIsoTxClass", sizeof(HinokoFwIsoTxClass), alignof(HinokoFwIsoTxClass));
     printf("%s;%zu;%zu\n", "HinokoFwScode", sizeof(HinokoFwScode), alignof(HinokoFwScode));
     return 0;
 }

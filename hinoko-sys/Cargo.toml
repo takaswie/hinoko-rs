@@ -3,8 +3,8 @@ build = "build.rs"
 edition = "2018"
 links = "hinoko"
 name = "hinoko-sys"
-version = "0.1.0"
 # For publishing.
+version = "0.2.0"
 authors = ["Takashi Sakamoto"]
 categories = ["external-ffi-bindings", "hardware-support", "os::linux-apis"]
 description = "FFI bindings for hinoko library"
@@ -18,7 +18,7 @@ repository = "https://github.com/takaswie/hinoko-rs/"
 features = ["dox"]
 [package.metadata.system-deps.hinoko]
 name = "hinoko"
-version = "0.7.1"
+version = "0.8.0"
 
 [lib]
 name = "hinoko_sys"

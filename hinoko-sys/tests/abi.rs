@@ -242,6 +242,48 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "HinokoFwIsoIrMultiple",
+        Layout {
+            size: size_of::<HinokoFwIsoIrMultiple>(),
+            alignment: align_of::<HinokoFwIsoIrMultiple>(),
+        },
+    ),
+    (
+        "HinokoFwIsoIrMultipleClass",
+        Layout {
+            size: size_of::<HinokoFwIsoIrMultipleClass>(),
+            alignment: align_of::<HinokoFwIsoIrMultipleClass>(),
+        },
+    ),
+    (
+        "HinokoFwIsoIrSingle",
+        Layout {
+            size: size_of::<HinokoFwIsoIrSingle>(),
+            alignment: align_of::<HinokoFwIsoIrSingle>(),
+        },
+    ),
+    (
+        "HinokoFwIsoIrSingleClass",
+        Layout {
+            size: size_of::<HinokoFwIsoIrSingleClass>(),
+            alignment: align_of::<HinokoFwIsoIrSingleClass>(),
+        },
+    ),
+    (
+        "HinokoFwIsoIt",
+        Layout {
+            size: size_of::<HinokoFwIsoIt>(),
+            alignment: align_of::<HinokoFwIsoIt>(),
+        },
+    ),
+    (
+        "HinokoFwIsoItClass",
+        Layout {
+            size: size_of::<HinokoFwIsoItClass>(),
+            alignment: align_of::<HinokoFwIsoItClass>(),
+        },
+    ),
+    (
         "HinokoFwIsoResourceAuto",
         Layout {
             size: size_of::<HinokoFwIsoResourceAuto>(),
@@ -291,48 +333,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "HinokoFwIsoRxMultiple",
-        Layout {
-            size: size_of::<HinokoFwIsoRxMultiple>(),
-            alignment: align_of::<HinokoFwIsoRxMultiple>(),
-        },
-    ),
-    (
-        "HinokoFwIsoRxMultipleClass",
-        Layout {
-            size: size_of::<HinokoFwIsoRxMultipleClass>(),
-            alignment: align_of::<HinokoFwIsoRxMultipleClass>(),
-        },
-    ),
-    (
-        "HinokoFwIsoRxSingle",
-        Layout {
-            size: size_of::<HinokoFwIsoRxSingle>(),
-            alignment: align_of::<HinokoFwIsoRxSingle>(),
-        },
-    ),
-    (
-        "HinokoFwIsoRxSingleClass",
-        Layout {
-            size: size_of::<HinokoFwIsoRxSingleClass>(),
-            alignment: align_of::<HinokoFwIsoRxSingleClass>(),
-        },
-    ),
-    (
-        "HinokoFwIsoTx",
-        Layout {
-            size: size_of::<HinokoFwIsoTx>(),
-            alignment: align_of::<HinokoFwIsoTx>(),
-        },
-    ),
-    (
-        "HinokoFwIsoTxClass",
-        Layout {
-            size: size_of::<HinokoFwIsoTxClass>(),
-            alignment: align_of::<HinokoFwIsoTxClass>(),
-        },
-    ),
-    (
         "HinokoFwScode",
         Layout {
             size: size_of::<HinokoFwScode>(),
@@ -353,9 +353,9 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG1", "2"),
     ("(guint) HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2", "4"),
     ("(guint) HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3", "8"),
-    ("(gint) HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE", "2"),
-    ("(gint) HINOKO_FW_ISO_CTX_MODE_RX_SINGLE", "1"),
-    ("(gint) HINOKO_FW_ISO_CTX_MODE_TX", "0"),
+    ("(gint) HINOKO_FW_ISO_CTX_MODE_IR_MULTIPLE", "2"),
+    ("(gint) HINOKO_FW_ISO_CTX_MODE_IR_SINGLE", "1"),
+    ("(gint) HINOKO_FW_ISO_CTX_MODE_IT", "0"),
     ("(gint) HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED", "1"),
     ("(gint) HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED", "0"),
     (
