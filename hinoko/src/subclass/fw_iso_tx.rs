@@ -47,11 +47,11 @@ unsafe impl<T: FwIsoTxImpl> IsSubclassable<T> for FwIsoTx {
         Self::parent_class_init::<T>(class);
 
         let klass = class.as_mut();
-        klass.interrupted = Some(fw_iso_rx_single_interrupted::<T>);
+        klass.interrupted = Some(fw_iso_tx_interrupted::<T>);
     }
 }
 
-unsafe extern "C" fn fw_iso_rx_single_interrupted<T: FwIsoTxImpl>(
+unsafe extern "C" fn fw_iso_tx_interrupted<T: FwIsoTxImpl>(
     ctx: *mut ffi::HinokoFwIsoTx,
     sec: c_uint,
     cycle: c_uint,
