@@ -2,7 +2,7 @@
 Rust bindings for hinoko library
 ================================
 
-2022/07/14
+2022/12/18
 Takashi Sakamoto
 
 Introduction
@@ -14,7 +14,7 @@ Introduction
 
 * The crates are available in `crates.io <https://crates.io/>`_ as well.
 
-The latest release is version 0.1.0.
+The latest release is version 0.2.0.
 
 Crates
 ======
