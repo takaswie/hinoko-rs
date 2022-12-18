@@ -4,7 +4,7 @@ work_mode = "normal"
 library = "Hinoko"
 version = "0.0"
 use_gi_docgen = true
-min_cfg_version = "0.7"
+min_cfg_version = "0.8"
 single_version_file = true
 
 generate = [
@@ -43,52 +43,52 @@ manual_traits = ["FwIsoCtxExtManual"]
     doc_trait_name = "FwIsoCtxExtManual"
 
 [[object]]
-name = "Hinoko.FwIsoRxSingle"
+name = "Hinoko.FwIsoIrSingle"
 status = "generate"
-manual_traits = ["FwIsoRxSingleExtManual"]
+manual_traits = ["FwIsoIrSingleExtManual"]
     [[object.function]]
     name = "start"
     manual = true
-    doc_trait_name = "FwIsoRxSingleExtManual"
+    doc_trait_name = "FwIsoIrSingleExtManual"
     [[object.function]]
     name = "get_payload"
     manual = true
-    doc_trait_name = "FwIsoRxSingleExtManual"
+    doc_trait_name = "FwIsoIrSingleExtManual"
     [[object.signal]]
     name = "interrupted"
     manual = true
-    doc_trait_name = "FwIsoRxSingleExtManual"
+    doc_trait_name = "FwIsoIrSingleExtManual"
 
 [[object]]
-name = "Hinoko.FwIsoRxMultiple"
+name = "Hinoko.FwIsoIrMultiple"
 status = "generate"
-manual_traits = ["FwIsoRxMultipleExtManual"]
+manual_traits = ["FwIsoIrMultipleExtManual"]
     [[object.property]]
     name = "channels"
     manual = true
-    doc_trait_name = "FwIsoRxMultipleExtManual"
+    doc_trait_name = "FwIsoIrMultipleExtManual"
     [[object.function]]
     name = "start"
     manual = true
-    doc_trait_name = "FwIsoRxMultipleExtManual"
+    doc_trait_name = "FwIsoIrMultipleExtManual"
     [[object.function]]
     name = "get_payload"
     manual = true
-    doc_trait_name = "FwIsoRxMultipleExtManual"
+    doc_trait_name = "FwIsoIrMultipleExtManual"
 
 [[object]]
-name = "Hinoko.FwIsoTx"
+name = "Hinoko.FwIsoIt"
 status = "generate"
-manual_traits = ["FwIsoTxExtManual"]
+manual_traits = ["FwIsoItExtManual"]
     [[object.function]]
     name = "register_packet"
     manual = true
-    doc_trait_name = "FwIsoTxExtManual"
+    doc_trait_name = "FwIsoItExtManual"
     [[object.function]]
     name = "start"
     manual = true
-    doc_trait_name = "FwIsoTxExtManual"
+    doc_trait_name = "FwIsoItExtManual"
     [[object.signal]]
     name = "interrupted"
     manual = true
-    doc_trait_name = "FwIsoTxExtManual"
+    doc_trait_name = "FwIsoItExtManual"
