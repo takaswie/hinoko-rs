@@ -11,8 +11,8 @@ use std::ptr;
 
 glib::wrapper! {
     /// An object to initiate requests and listen events of isochronous resource allocation/deallocation
-    /// by one shot.
     ///
+    /// by one shot.
     /// The [`FwIsoResourceOnce`][crate::FwIsoResourceOnce] is an object to initiate requests and listen events of isochronous
     /// resource allocation/deallocation by file descriptor owned internally. The allocated resource
     /// is left even if this object is destroyed, thus application is responsible for deallocation.

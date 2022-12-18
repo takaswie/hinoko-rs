@@ -5,8 +5,13 @@ use crate::*;
 ///
 /// # Implementors
 ///
-/// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple], [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle], [`FwIsoTx`][struct@crate::FwIsoTx]
+/// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple], [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle], [`FwIsoIt`][struct@crate::FwIsoIt]
 pub trait FwIsoCtxExtManual {
+    #[doc(alias = "hinoko_fw_iso_ctx_get_cycle_timer")]
+    fn get_cycle_timer(&self, clock_id: i32, cycle_timer: &mut CycleTimer) -> Result<(), Error>;
+}
+
+impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
     /// Retrieve the value of cycle timer register. This method call is available
     /// once any isochronous context is created.
     /// ## `clock_id`
@@ -18,11 +23,6 @@ pub trait FwIsoCtxExtManual {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_ctx_get_cycle_timer")]
-    fn get_cycle_timer(&self, clock_id: i32, cycle_timer: &mut CycleTimer) -> Result<(), Error>;
-}
-
-impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
     fn get_cycle_timer(&self, clock_id: i32, cycle_timer: &mut CycleTimer) -> Result<(), Error> {
         unsafe {
             let mut error = std::ptr::null_mut();

@@ -156,14 +156,14 @@ impl ToValue for FwIsoCtxError {
 #[doc(alias = "HinokoFwIsoCtxMode")]
 pub enum FwIsoCtxMode {
     // The mode of IT context of 1394 OHCI.
-    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_TX")]
-    Tx,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_IT")]
+    It,
     /// The mode of IR context of 1394 OHCI with packer-per-buffer protocol
-    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_RX_SINGLE")]
-    RxSingle,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_IR_SINGLE")]
+    IrSingle,
     /// The mode of IR context of 1394 OHCI with buffer-fill protocol.
-    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE")]
-    RxMultiple,
+    #[doc(alias = "HINOKO_FW_ISO_CTX_MODE_IR_MULTIPLE")]
+    IrMultiple,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -174,9 +174,9 @@ impl fmt::Display for FwIsoCtxMode {
             f,
             "FwIsoCtxMode::{}",
             match *self {
-                Self::Tx => "Tx",
-                Self::RxSingle => "RxSingle",
-                Self::RxMultiple => "RxMultiple",
+                Self::It => "It",
+                Self::IrSingle => "IrSingle",
+                Self::IrMultiple => "IrMultiple",
                 _ => "Unknown",
             }
         )
@@ -189,9 +189,9 @@ impl IntoGlib for FwIsoCtxMode {
 
     fn into_glib(self) -> ffi::HinokoFwIsoCtxMode {
         match self {
-            Self::Tx => ffi::HINOKO_FW_ISO_CTX_MODE_TX,
-            Self::RxSingle => ffi::HINOKO_FW_ISO_CTX_MODE_RX_SINGLE,
-            Self::RxMultiple => ffi::HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE,
+            Self::It => ffi::HINOKO_FW_ISO_CTX_MODE_IT,
+            Self::IrSingle => ffi::HINOKO_FW_ISO_CTX_MODE_IR_SINGLE,
+            Self::IrMultiple => ffi::HINOKO_FW_ISO_CTX_MODE_IR_MULTIPLE,
             Self::__Unknown(value) => value,
         }
     }
@@ -201,9 +201,9 @@ impl IntoGlib for FwIsoCtxMode {
 impl FromGlib<ffi::HinokoFwIsoCtxMode> for FwIsoCtxMode {
     unsafe fn from_glib(value: ffi::HinokoFwIsoCtxMode) -> Self {
         match value {
-            ffi::HINOKO_FW_ISO_CTX_MODE_TX => Self::Tx,
-            ffi::HINOKO_FW_ISO_CTX_MODE_RX_SINGLE => Self::RxSingle,
-            ffi::HINOKO_FW_ISO_CTX_MODE_RX_MULTIPLE => Self::RxMultiple,
+            ffi::HINOKO_FW_ISO_CTX_MODE_IT => Self::It,
+            ffi::HINOKO_FW_ISO_CTX_MODE_IR_SINGLE => Self::IrSingle,
+            ffi::HINOKO_FW_ISO_CTX_MODE_IR_MULTIPLE => Self::IrMultiple,
             value => Self::__Unknown(value),
         }
     }
@@ -249,8 +249,8 @@ pub enum FwIsoResourceAutoError {
     /// The system call fails.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED")]
     Failed,
-    /// The instance is already associated to allocated isochronous resources.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_ALLOCATED")]
+    /// The instance is already associated to allocated isochronous resources.
     Allocated,
     /// The instance is not associated to allocated isochronous resources.
     #[doc(alias = "HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_NOT_ALLOCATED")]

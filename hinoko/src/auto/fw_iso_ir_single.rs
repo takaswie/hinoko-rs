@@ -12,54 +12,54 @@ use std::ptr;
 glib::wrapper! {
     /// An object to receive isochronous packet for single channel.
     ///
-    /// A [`FwIsoRxSingle`][crate::FwIsoRxSingle] receives isochronous packets for single channel by IR
+    /// A [`FwIsoIrSingle`][crate::FwIsoIrSingle] receives isochronous packets for single channel by IR
     /// context for packet-per-buffer mode in 1394 OHCI. The content of packet is
     /// split to two parts; context header and context payload in a manner of Linux
     /// FireWire subsystem.
     ///
     /// # Implements
     ///
-    /// [`FwIsoRxSingleExt`][trait@crate::prelude::FwIsoRxSingleExt], [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoRxSingleExtManual`][trait@crate::prelude::FwIsoRxSingleExtManual], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
-    #[doc(alias = "HinokoFwIsoRxSingle")]
-    pub struct FwIsoRxSingle(Object<ffi::HinokoFwIsoRxSingle, ffi::HinokoFwIsoRxSingleClass>) @implements FwIsoCtx;
+    /// [`FwIsoIrSingleExt`][trait@crate::prelude::FwIsoIrSingleExt], [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoIrSingleExtManual`][trait@crate::prelude::FwIsoIrSingleExtManual], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
+    #[doc(alias = "HinokoFwIsoIrSingle")]
+    pub struct FwIsoIrSingle(Object<ffi::HinokoFwIsoIrSingle, ffi::HinokoFwIsoIrSingleClass>) @implements FwIsoCtx;
 
     match fn {
-        type_ => || ffi::hinoko_fw_iso_rx_single_get_type(),
+        type_ => || ffi::hinoko_fw_iso_ir_single_get_type(),
     }
 }
 
-impl FwIsoRxSingle {
-    pub const NONE: Option<&'static FwIsoRxSingle> = None;
+impl FwIsoIrSingle {
+    pub const NONE: Option<&'static FwIsoIrSingle> = None;
 
-    /// Instantiate [`FwIsoRxSingle`][crate::FwIsoRxSingle] object and return the instance.
+    /// Instantiate [`FwIsoIrSingle`][crate::FwIsoIrSingle] object and return the instance.
     ///
     /// # Returns
     ///
-    /// an instance of [`FwIsoRxSingle`][crate::FwIsoRxSingle].
-    #[doc(alias = "hinoko_fw_iso_rx_single_new")]
-    pub fn new() -> FwIsoRxSingle {
-        unsafe { from_glib_full(ffi::hinoko_fw_iso_rx_single_new()) }
+    /// an instance of [`FwIsoIrSingle`][crate::FwIsoIrSingle].
+    #[doc(alias = "hinoko_fw_iso_ir_single_new")]
+    pub fn new() -> FwIsoIrSingle {
+        unsafe { from_glib_full(ffi::hinoko_fw_iso_ir_single_new()) }
     }
 }
 
-impl Default for FwIsoRxSingle {
+impl Default for FwIsoIrSingle {
     fn default() -> Self {
         Self::new()
     }
 }
 
-/// Trait containing the part of[`struct@FwIsoRxSingle`] methods.
+/// Trait containing the part of [`struct@FwIsoIrSingle`] methods.
 ///
 /// # Implementors
 ///
-/// [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle]
-pub trait FwIsoRxSingleExt: 'static {
+/// [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle]
+pub trait FwIsoIrSingleExt: 'static {
     /// Allocate an IR context to 1394 OHCI controller for packet-per-buffer mode. A local node of the
     /// node corresponding to the given path is used as the controller, thus any path is accepted as
     /// long as process has enough permission for the path.
     ///
     /// The header_size parameter has an effect for the content of header parameter in
-    /// `signal::FwIsoRxSingle::interrupted`. When it's greater than 8, header includes the series of two
+    /// `signal::FwIsoIrSingle::interrupted`. When it's greater than 8, header includes the series of two
     /// quadlets for isochronous packet header and timestamp per isochronous packet. When it's greater
     /// than 12, header includes the part of isochronous packet data per packet.
     /// ## `path`
@@ -68,15 +68,24 @@ pub trait FwIsoRxSingleExt: 'static {
     /// An isochronous channel to listen, up to 63.
     /// ## `header_size`
     /// The number of bytes for header of IR context, greater than 4 at least to include
-    ///      isochronous packet header in header parameter of `signal::FwIsoRxSingle::interrupted`.
+    ///      isochronous packet header in header parameter of `signal::FwIsoIrSingle::interrupted`.
     ///
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_rx_single_allocate")]
+    #[doc(alias = "hinoko_fw_iso_ir_single_allocate")]
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error>;
 
-    #[doc(alias = "hinoko_fw_iso_rx_single_map_buffer")]
+    /// Map intermediate buffer to share payload of IR context with 1394 OHCI controller.
+    /// ## `maximum_bytes_per_payload`
+    /// The maximum number of bytes per payload of IR context.
+    /// ## `payloads_per_buffer`
+    /// The number of payload in buffer.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
+    #[doc(alias = "hinoko_fw_iso_ir_single_map_buffer")]
     fn map_buffer(
         &self,
         maximum_bytes_per_payload: u32,
@@ -85,22 +94,22 @@ pub trait FwIsoRxSingleExt: 'static {
 
     /// Register chunk of buffer to process packet for future isochronous cycle. The caller can schedule
     /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
-    /// `signal::FwIsoRxSingle::interrupted` signal.
+    /// `signal::FwIsoIrSingle::interrupted` signal.
     /// ## `schedule_interrupt`
     /// Whether to schedule hardware interrupt at isochronous cycle for the packet.
     ///
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_rx_single_register_packet")]
+    #[doc(alias = "hinoko_fw_iso_ir_single_register_packet")]
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error>;
 }
 
-impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExt for O {
+impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_rx_single_allocate(
+            let is_ok = ffi::hinoko_fw_iso_ir_single_allocate(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
                 channel,
@@ -123,7 +132,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_rx_single_map_buffer(
+            let is_ok = ffi::hinoko_fw_iso_ir_single_map_buffer(
                 self.as_ref().to_glib_none().0,
                 maximum_bytes_per_payload,
                 payloads_per_buffer,
@@ -141,7 +150,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExt for O {
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_rx_single_register_packet(
+            let is_ok = ffi::hinoko_fw_iso_ir_single_register_packet(
                 self.as_ref().to_glib_none().0,
                 schedule_interrupt.into_glib(),
                 &mut error,
@@ -156,8 +165,8 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExt for O {
     }
 }
 
-impl fmt::Display for FwIsoRxSingle {
+impl fmt::Display for FwIsoIrSingle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoRxSingle")
+        f.write_str("FwIsoIrSingle")
     }
 }

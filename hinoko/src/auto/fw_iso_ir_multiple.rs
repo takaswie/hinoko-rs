@@ -17,46 +17,46 @@ use std::ptr;
 glib::wrapper! {
     /// An object to receive isochronous packet for several channels.
     ///
-    /// A [`FwIsoRxMultiple`][crate::FwIsoRxMultiple] receives isochronous packets for several channels by IR context for
+    /// A [`FwIsoIrMultiple`][crate::FwIsoIrMultiple] receives isochronous packets for several channels by IR context for
     /// buffer-fill mode in 1394 OHCI.
     ///
     /// # Implements
     ///
-    /// [`FwIsoRxMultipleExt`][trait@crate::prelude::FwIsoRxMultipleExt], [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoRxMultipleExtManual`][trait@crate::prelude::FwIsoRxMultipleExtManual], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
-    #[doc(alias = "HinokoFwIsoRxMultiple")]
-    pub struct FwIsoRxMultiple(Object<ffi::HinokoFwIsoRxMultiple, ffi::HinokoFwIsoRxMultipleClass>) @implements FwIsoCtx;
+    /// [`FwIsoIrMultipleExt`][trait@crate::prelude::FwIsoIrMultipleExt], [`FwIsoCtxExt`][trait@crate::prelude::FwIsoCtxExt], [`FwIsoIrMultipleExtManual`][trait@crate::prelude::FwIsoIrMultipleExtManual], [`FwIsoCtxExtManual`][trait@crate::prelude::FwIsoCtxExtManual]
+    #[doc(alias = "HinokoFwIsoIrMultiple")]
+    pub struct FwIsoIrMultiple(Object<ffi::HinokoFwIsoIrMultiple, ffi::HinokoFwIsoIrMultipleClass>) @implements FwIsoCtx;
 
     match fn {
-        type_ => || ffi::hinoko_fw_iso_rx_multiple_get_type(),
+        type_ => || ffi::hinoko_fw_iso_ir_multiple_get_type(),
     }
 }
 
-impl FwIsoRxMultiple {
-    pub const NONE: Option<&'static FwIsoRxMultiple> = None;
+impl FwIsoIrMultiple {
+    pub const NONE: Option<&'static FwIsoIrMultiple> = None;
 
-    /// Instantiate [`FwIsoRxMultiple`][crate::FwIsoRxMultiple] object and return the instance.
+    /// Instantiate [`FwIsoIrMultiple`][crate::FwIsoIrMultiple] object and return the instance.
     ///
     /// # Returns
     ///
-    /// an instance of [`FwIsoRxMultiple`][crate::FwIsoRxMultiple].
-    #[doc(alias = "hinoko_fw_iso_rx_multiple_new")]
-    pub fn new() -> FwIsoRxMultiple {
-        unsafe { from_glib_full(ffi::hinoko_fw_iso_rx_multiple_new()) }
+    /// an instance of [`FwIsoIrMultiple`][crate::FwIsoIrMultiple].
+    #[doc(alias = "hinoko_fw_iso_ir_multiple_new")]
+    pub fn new() -> FwIsoIrMultiple {
+        unsafe { from_glib_full(ffi::hinoko_fw_iso_ir_multiple_new()) }
     }
 }
 
-impl Default for FwIsoRxMultiple {
+impl Default for FwIsoIrMultiple {
     fn default() -> Self {
         Self::new()
     }
 }
 
-/// Trait containing the part of[`struct@FwIsoRxMultiple`] methods.
+/// Trait containing the part of [`struct@FwIsoIrMultiple`] methods.
 ///
 /// # Implementors
 ///
-/// [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple]
-pub trait FwIsoRxMultipleExt: 'static {
+/// [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple]
+pub trait FwIsoIrMultipleExt: 'static {
     /// Allocate an IR context to 1394 OHCI controller for buffer-fill mode. A local node of the node
     /// corresponding to the given path is used as the controller, thus any path is accepted as long as
     /// process has enough permission for the path.
@@ -65,7 +65,7 @@ pub trait FwIsoRxMultipleExt: 'static {
     /// ## `channels`
     /// an array for channels to listen
     ///       to. The value of each element should be up to 63.
-    #[doc(alias = "hinoko_fw_iso_rx_multiple_allocate")]
+    #[doc(alias = "hinoko_fw_iso_ir_multiple_allocate")]
     fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error>;
 
     /// Map an intermediate buffer to share payload of IR context with 1394 OHCI
@@ -75,7 +75,7 @@ pub trait FwIsoRxMultipleExt: 'static {
     ///          isochronous context).
     /// ## `chunks_per_buffer`
     /// The number of chunks in buffer.
-    #[doc(alias = "hinoko_fw_iso_rx_multiple_map_buffer")]
+    #[doc(alias = "hinoko_fw_iso_ir_multiple_map_buffer")]
     fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error>;
 
     /// Emitted when Linux FireWire subsystem generates interrupt event. There are two cases
@@ -86,19 +86,19 @@ pub trait FwIsoRxMultipleExt: 'static {
     /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
     ///
     /// The handler of signal can retrieve the content of packet by call of
-    /// [`FwIsoRxMultipleExtManual::payload()`][crate::prelude::FwIsoRxMultipleExtManual::payload()].
+    /// [`FwIsoIrMultipleExtManual::payload()`][crate::prelude::FwIsoIrMultipleExtManual::payload()].
     /// ## `count`
     /// The number of packets available in this interrupt.
     #[doc(alias = "interrupted")]
     fn connect_interrupted<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId;
 }
 
-impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExt for O {
+impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExt for O {
     fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error> {
         let channels_length = channels.len() as u32;
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_rx_multiple_allocate(
+            let is_ok = ffi::hinoko_fw_iso_ir_multiple_allocate(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
                 channels.to_glib_none().0,
@@ -117,7 +117,7 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExt for O {
     fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_rx_multiple_map_buffer(
+            let is_ok = ffi::hinoko_fw_iso_ir_multiple_map_buffer(
                 self.as_ref().to_glib_none().0,
                 bytes_per_chunk,
                 chunks_per_buffer,
@@ -134,16 +134,16 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExt for O {
 
     fn connect_interrupted<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn interrupted_trampoline<
-            P: IsA<FwIsoRxMultiple>,
+            P: IsA<FwIsoIrMultiple>,
             F: Fn(&P, u32) + 'static,
         >(
-            this: *mut ffi::HinokoFwIsoRxMultiple,
+            this: *mut ffi::HinokoFwIsoIrMultiple,
             count: libc::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
             f(
-                FwIsoRxMultiple::from_glib_borrow(this).unsafe_cast_ref(),
+                FwIsoIrMultiple::from_glib_borrow(this).unsafe_cast_ref(),
                 count,
             )
         }
@@ -161,8 +161,8 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExt for O {
     }
 }
 
-impl fmt::Display for FwIsoRxMultiple {
+impl fmt::Display for FwIsoIrMultiple {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoRxMultiple")
+        f.write_str("FwIsoIrMultiple")
     }
 }

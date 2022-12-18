@@ -10,8 +10,8 @@ impl CycleTimer {
     ///
     ///
     /// ## `cycle_timer`
-    /// The value of cycle timer register of 1394 OHCI, including three elements; second, cycle, and
-    /// offset.
+    /// The value of cycle timer register of 1394 OHCI, including three elements; second, cycle,
+    /// and offset.
     #[doc(alias = "hinoko_cycle_timer_get_cycle_timer")]
     #[doc(alias = "get_cycle_timer")]
     pub fn cycle_timer(&mut self) -> [u16; 3] {

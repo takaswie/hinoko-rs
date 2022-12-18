@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 use crate::*;
 
-/// Trait containing the rest of[`struct@FwIsoRxMultiple`] methods.
+/// Trait containing the rest of[`struct@FwIsoIrMultiple`] methods.
 ///
 /// # Implementors
 ///
-/// [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple]
-pub trait FwIsoRxMultipleExtManual {
+/// [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple]
+pub trait FwIsoIrMultipleExtManual {
     /// The array with elements to express isochronous channels to be listened to.
     fn channels(&self) -> Option<Vec<u8>>;
     #[doc(alias = "channels")]
@@ -27,8 +27,8 @@ pub trait FwIsoRxMultipleExtManual {
     /// ## `chunks_per_irq`
     /// The number of chunks per interval of interrupt. When 0 is given, application
     ///         should call [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] voluntarily to generate
-    ///         `signal::FwIsoRxMultiple::interrupted` event.
-    #[doc(alias = "hinoko_fw_iso_rx_multiple_start")]
+    ///         `signal::FwIsoIrMultiple::interrupted` event.
+    #[doc(alias = "hinoko_fw_iso_ir_multiple_start")]
     fn start(
         &self,
         cycle_match: Option<&[u16; 2]>,
@@ -48,12 +48,12 @@ pub trait FwIsoRxMultipleExtManual {
     /// ## `payload`
     /// The array with data frame for payload of
     ///      IR context.
-    #[doc(alias = "hinoko_fw_iso_rx_multiple_get_payload")]
+    #[doc(alias = "hinoko_fw_iso_ir_multiple_get_payload")]
     #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
 }
 
-impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
+impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExtManual for O {
     fn channels(&self) -> Option<Vec<u8>> {
         unsafe {
             let mut value = Value::from_type(<glib::ByteArray as StaticType>::static_type());
@@ -75,15 +75,15 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
         F: Fn(&Self) + 'static,
     {
         unsafe extern "C" fn notify_channels_trampoline<P, F>(
-            this: *mut ffi::HinokoFwIsoRxMultiple,
+            this: *mut ffi::HinokoFwIsoIrMultiple,
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) where
-            P: IsA<FwIsoRxMultiple>,
+            P: IsA<FwIsoIrMultiple>,
             F: Fn(&P) + 'static,
         {
             let f: &F = &*(f as *const F);
-            f(&FwIsoRxMultiple::from_glib_borrow(this).unsafe_cast_ref())
+            f(&FwIsoIrMultiple::from_glib_borrow(this).unsafe_cast_ref())
         }
         unsafe {
             let f: std::boxed::Box<F> = std::boxed::Box::new(f);
@@ -112,7 +112,7 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_rx_multiple_start(
+            ffi::hinoko_fw_iso_ir_multiple_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
                 sync,
@@ -134,7 +134,7 @@ impl<O: IsA<FwIsoRxMultiple>> FwIsoRxMultipleExtManual for O {
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();
 
-            ffi::hinoko_fw_iso_rx_multiple_get_payload(
+            ffi::hinoko_fw_iso_ir_multiple_get_payload(
                 self.as_ref().to_glib_none().0,
                 index,
                 &mut data,

@@ -7,10 +7,10 @@ use glib::translate::*;
 use std::mem;
 
 glib::wrapper! {
-    /// A boxed object to represent data for cycle timer.
+    /// A boxed object to express data of cycle timer.
     ///
-    /// A [`CycleTimer`][crate::CycleTimer] is an boxed object to represent the value of cycle timer and timestamp
-    /// referring to clock_id.
+    /// A [`CycleTimer`][crate::CycleTimer] expresses the value of cycle timer of 1394 OHCI and timestamp referring
+    /// to clock_id.
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct CycleTimer(Boxed<ffi::HinokoCycleTimer>);
 
@@ -52,7 +52,7 @@ impl CycleTimer {
         }
     }
 
-    /// Get timestamp with enough sizee of strorage. The timestamp refers to clock_id available by
+    /// Get timestamp with enough size of strorage. The timestamp refers to clock_id available by
     /// [`clock_id()`][Self::clock_id()].
     ///
     /// # Returns

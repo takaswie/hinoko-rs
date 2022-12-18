@@ -2,20 +2,17 @@
 
 use super::*;
 
-/// Trait which should be implemented by subclass of [`FwIsoRxSingle`][crate::FwIsoRxSingle].
-pub trait FwIsoRxSingleImpl: FwIsoCtxImpl {
+pub trait FwIsoItImpl: FwIsoCtxImpl {
     fn interrupted(&self, ctx: &Self::Type, sec: u32, cycle: u32, header: &[u8], count: u32) {
         self.parent_interrupted(ctx, sec, cycle, header, count)
     }
 }
 
-/// Trait which is automatically implemented to implementator of
-/// [`FwIsoRxSingleImpl`][self::FwIsoRxSingleImpl].
-pub trait FwIsoRxSingleImplExt: ObjectSubclass {
+pub trait FwIsoItImplExt: ObjectSubclass {
     fn parent_interrupted(&self, ctx: &Self::Type, sec: u32, cycle: u32, header: &[u8], count: u32);
 }
 
-impl<T: FwIsoRxSingleImpl> FwIsoRxSingleImplExt for T {
+impl<T: FwIsoItImpl> FwIsoItImplExt for T {
     fn parent_interrupted(
         &self,
         ctx: &Self::Type,
@@ -26,13 +23,13 @@ impl<T: FwIsoRxSingleImpl> FwIsoRxSingleImplExt for T {
     ) {
         unsafe {
             let data = T::type_data();
-            let parent_class = data.as_ref().parent_class() as *mut ffi::HinokoFwIsoRxSingleClass;
+            let parent_class = data.as_ref().parent_class() as *mut ffi::HinokoFwIsoItClass;
             let f = (*parent_class)
                 .interrupted
                 .expect("No parent \"interrupted\" implementation");
 
             f(
-                ctx.unsafe_cast_ref::<FwIsoRxSingle>().to_glib_none().0,
+                ctx.unsafe_cast_ref::<FwIsoIt>().to_glib_none().0,
                 sec.into(),
                 cycle.into(),
                 header.as_ptr(),
@@ -43,17 +40,17 @@ impl<T: FwIsoRxSingleImpl> FwIsoRxSingleImplExt for T {
     }
 }
 
-unsafe impl<T: FwIsoRxSingleImpl> IsSubclassable<T> for FwIsoRxSingle {
+unsafe impl<T: FwIsoItImpl> IsSubclassable<T> for FwIsoIt {
     fn class_init(class: &mut Class<Self>) {
         Self::parent_class_init::<T>(class);
 
         let klass = class.as_mut();
-        klass.interrupted = Some(fw_iso_rx_single_interrupted::<T>);
+        klass.interrupted = Some(fw_iso_it_interrupted::<T>);
     }
 }
 
-unsafe extern "C" fn fw_iso_rx_single_interrupted<T: FwIsoRxSingleImpl>(
-    ctx: *mut ffi::HinokoFwIsoRxSingle,
+unsafe extern "C" fn fw_iso_it_interrupted<T: FwIsoItImpl>(
+    ctx: *mut ffi::HinokoFwIsoIt,
     sec: c_uint,
     cycle: c_uint,
     header: *const u8,
@@ -62,7 +59,7 @@ unsafe extern "C" fn fw_iso_rx_single_interrupted<T: FwIsoRxSingleImpl>(
 ) {
     let instance = &*(ctx as *mut T::Instance);
     let imp = instance.imp();
-    let wrap: Borrowed<FwIsoRxSingle> = from_glib_borrow(ctx);
+    let wrap: Borrowed<FwIsoIt> = from_glib_borrow(ctx);
 
     imp.interrupted(
         wrap.unsafe_cast_ref(),

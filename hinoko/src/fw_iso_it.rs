@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 use crate::*;
 
-/// Trait containing the rest of[`struct@FwIsoTx`] methods.
+/// Trait containing the rest of[`struct@FwIsoIt`] methods.
 ///
 /// # Implementors
 ///
-/// [`FwIsoTx`][struct@crate::FwIsoTx]
-pub trait FwIsoTxExtManual {
+/// [`FwIsoIt`][struct@crate::FwIsoIt]
+pub trait FwIsoItExtManual {
     /// Register packet data with header and payload for IT context. The content of given header and
     /// payload is appended into data field of isochronous packet to be sent. The caller can schedule
     /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
-    /// `signal::FwIsoTx::interrupted`.
+    /// `signal::FwIsoIt::interrupted`.
     /// ## `tags`
     /// The value of tag field for isochronous packet to register.
     /// ## `sync_code`
@@ -28,7 +28,7 @@ pub trait FwIsoTxExtManual {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successful, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_tx_register_packet")]
+    #[doc(alias = "hinoko_fw_iso_it_register_packet")]
     fn register_packet(
         &self,
         tags: FwIsoCtxMatchFlag,
@@ -48,7 +48,7 @@ pub trait FwIsoTxExtManual {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successful, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_tx_start")]
+    #[doc(alias = "hinoko_fw_iso_it_start")]
     fn start(&self, cycle_match: Option<&[u16; 2]>) -> Result<(), Error>;
 
     /// Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
@@ -74,7 +74,7 @@ pub trait FwIsoTxExtManual {
         F: Fn(&Self, u32, u32, &[u8], u32) + 'static;
 }
 
-impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
+impl<O: IsA<FwIsoIt>> FwIsoItExtManual for O {
     fn register_packet(
         &self,
         tags: FwIsoCtxMatchFlag,
@@ -94,7 +94,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
 
         unsafe {
             let mut error = std::ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_tx_register_packet(
+            let is_ok = ffi::hinoko_fw_iso_it_register_packet(
                 self.as_ref().to_glib_none().0,
                 tags.into_glib(),
                 sy,
@@ -123,7 +123,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_tx_start(self.as_ref().to_glib_none().0, ptr, &mut error);
+            ffi::hinoko_fw_iso_it_start(self.as_ref().to_glib_none().0, ptr, &mut error);
 
             if error.is_null() {
                 Ok(())
@@ -138,7 +138,7 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
         F: Fn(&Self, u32, u32, &[u8], u32) + 'static,
     {
         unsafe extern "C" fn interrupted_trampoline<P, F>(
-            this: *mut ffi::HinokoFwIsoTx,
+            this: *mut ffi::HinokoFwIsoIt,
             sec: c_uint,
             cycle: c_uint,
             header: *const u8,
@@ -146,12 +146,12 @@ impl<O: IsA<FwIsoTx>> FwIsoTxExtManual for O {
             count: c_uint,
             f: glib::ffi::gpointer,
         ) where
-            P: IsA<FwIsoTx>,
+            P: IsA<FwIsoIt>,
             F: Fn(&P, u32, u32, &[u8], u32) + 'static,
         {
             let f: &F = &*(f as *const F);
             f(
-                &FwIsoTx::from_glib_borrow(this).unsafe_cast_ref(),
+                &FwIsoIt::from_glib_borrow(this).unsafe_cast_ref(),
                 sec,
                 cycle,
                 std::slice::from_raw_parts(header, header_length as usize),

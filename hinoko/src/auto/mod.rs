@@ -6,6 +6,15 @@
 mod fw_iso_ctx;
 pub use self::fw_iso_ctx::FwIsoCtx;
 
+mod fw_iso_ir_multiple;
+pub use self::fw_iso_ir_multiple::FwIsoIrMultiple;
+
+mod fw_iso_ir_single;
+pub use self::fw_iso_ir_single::FwIsoIrSingle;
+
+mod fw_iso_it;
+pub use self::fw_iso_it::FwIsoIt;
+
 mod fw_iso_resource;
 pub use self::fw_iso_resource::FwIsoResource;
 
@@ -14,15 +23,6 @@ pub use self::fw_iso_resource_auto::FwIsoResourceAuto;
 
 mod fw_iso_resource_once;
 pub use self::fw_iso_resource_once::FwIsoResourceOnce;
-
-mod fw_iso_rx_multiple;
-pub use self::fw_iso_rx_multiple::FwIsoRxMultiple;
-
-mod fw_iso_rx_single;
-pub use self::fw_iso_rx_single::FwIsoRxSingle;
-
-mod fw_iso_tx;
-pub use self::fw_iso_tx::FwIsoTx;
 
 mod cycle_timer;
 pub use self::cycle_timer::CycleTimer;
@@ -40,10 +40,10 @@ pub use self::flags::FwIsoCtxMatchFlag;
 #[doc(hidden)]
 pub mod traits {
     pub use super::fw_iso_ctx::FwIsoCtxExt;
+    pub use super::fw_iso_ir_multiple::FwIsoIrMultipleExt;
+    pub use super::fw_iso_ir_single::FwIsoIrSingleExt;
+    pub use super::fw_iso_it::FwIsoItExt;
     pub use super::fw_iso_resource::FwIsoResourceExt;
     pub use super::fw_iso_resource_auto::FwIsoResourceAutoExt;
     pub use super::fw_iso_resource_once::FwIsoResourceOnceExt;
-    pub use super::fw_iso_rx_multiple::FwIsoRxMultipleExt;
-    pub use super::fw_iso_rx_single::FwIsoRxSingleExt;
-    pub use super::fw_iso_tx::FwIsoTxExt;
 }

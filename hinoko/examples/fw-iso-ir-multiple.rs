@@ -40,7 +40,7 @@ fn main() {
         | FwIsoCtxMatchFlag::TAG1
         | FwIsoCtxMatchFlag::TAG2
         | FwIsoCtxMatchFlag::TAG3;
-    let ir = FwIsoRxMultiple::new();
+    let ir = FwIsoIrMultiple::new();
     if ir.allocate(PATH, ISOC_CHANNELS).is_err() {
         println!("Need to have access permission to {}.", PATH);
         return;

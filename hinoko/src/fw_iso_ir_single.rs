@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 use crate::*;
 
-/// Trait containing the rest of [`struct@FwIsoRxSingle`] methods.
+/// Trait containing the rest of [`struct@FwIsoIrSingle`] methods.
 ///
 /// # Implementors
 ///
-/// [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle]
-pub trait FwIsoRxSingleExtManual {
+/// [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle]
+pub trait FwIsoIrSingleExtManual {
     /// Start IR context.
     /// ## `cycle_match`
     /// The isochronous cycle
@@ -21,7 +21,7 @@ pub trait FwIsoRxSingleExtManual {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_rx_single_start")]
+    #[doc(alias = "hinoko_fw_iso_ir_single_start")]
     fn start(
         &self,
         cycle_match: Option<&[u16; 2]>,
@@ -40,7 +40,7 @@ pub trait FwIsoRxSingleExtManual {
     /// ## `payload`
     /// The array with data
     ///      frame for payload of IR context.
-    #[doc(alias = "hinoko_fw_iso_rx_single_get_payload")]
+    #[doc(alias = "hinoko_fw_iso_ir_single_get_payload")]
     #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
 
@@ -54,7 +54,7 @@ pub trait FwIsoRxSingleExtManual {
     /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
     ///
     /// The handler of signal can retrieve context payload of received packet by call of
-    /// [`FwIsoRxSingleExtManual::payload()`][crate::prelude::FwIsoRxSingleExtManual::payload()].
+    /// [`FwIsoIrSingleExtManual::payload()`][crate::prelude::FwIsoIrSingleExtManual::payload()].
     /// ## `sec`
     /// sec part of isochronous cycle when interrupt occurs, up to 7.
     /// ## `cycle`
@@ -62,7 +62,7 @@ pub trait FwIsoRxSingleExtManual {
     /// ## `header`
     /// The headers of IR context
     ///     for packets handled in the event of interrupt. The content is different
-    ///     depending on header_size parameter of [`FwIsoRxSingleExt::allocate()`][crate::prelude::FwIsoRxSingleExt::allocate()].
+    ///     depending on header_size parameter of [`FwIsoIrSingleExt::allocate()`][crate::prelude::FwIsoIrSingleExt::allocate()].
     /// ## `count`
     /// the number of packets to handle.
     #[doc(alias = "interrupted")]
@@ -72,7 +72,7 @@ pub trait FwIsoRxSingleExtManual {
     ) -> SignalHandlerId;
 }
 
-impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
+impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExtManual for O {
     fn start(
         &self,
         cycle_match: Option<&[u16; 2]>,
@@ -86,7 +86,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_rx_single_start(
+            ffi::hinoko_fw_iso_ir_single_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
                 sync,
@@ -107,7 +107,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
             let mut data = std::ptr::null_mut() as *const u8;
             let mut size = std::mem::MaybeUninit::uninit();
 
-            ffi::hinoko_fw_iso_rx_single_get_payload(
+            ffi::hinoko_fw_iso_ir_single_get_payload(
                 self.as_ref().to_glib_none().0,
                 index,
                 &mut data,
@@ -123,7 +123,7 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
         F: Fn(&Self, u32, u32, &[u8], u32) + 'static,
     {
         unsafe extern "C" fn interrupted_trampoline<P, F>(
-            this: *mut ffi::HinokoFwIsoRxSingle,
+            this: *mut ffi::HinokoFwIsoIrSingle,
             sec: c_uint,
             cycle: c_uint,
             header: *const u8,
@@ -131,12 +131,12 @@ impl<O: IsA<FwIsoRxSingle>> FwIsoRxSingleExtManual for O {
             count: c_uint,
             f: glib::ffi::gpointer,
         ) where
-            P: IsA<FwIsoRxSingle>,
+            P: IsA<FwIsoIrSingle>,
             F: Fn(&P, u32, u32, &[u8], u32) + 'static,
         {
             let f: &F = &*(f as *const F);
             f(
-                &FwIsoRxSingle::from_glib_borrow(this).unsafe_cast_ref(),
+                &FwIsoIrSingle::from_glib_borrow(this).unsafe_cast_ref(),
                 sec,
                 cycle,
                 std::slice::from_raw_parts(header, header_length as usize),

@@ -35,11 +35,11 @@ impl FwIsoCtx {
     pub const NONE: Option<&'static FwIsoCtx> = None;
 }
 
-/// Trait containing the part of[`struct@FwIsoCtx`] methods.
+/// Trait containing the part of [`struct@FwIsoCtx`] methods.
 ///
 /// # Implementors
 ///
-/// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoRxMultiple`][struct@crate::FwIsoRxMultiple], [`FwIsoRxSingle`][struct@crate::FwIsoRxSingle], [`FwIsoTx`][struct@crate::FwIsoTx]
+/// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple], [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle], [`FwIsoIt`][struct@crate::FwIsoIt]
 pub trait FwIsoCtxExt: 'static {
     /// Create [`glib::Source`][crate::glib::Source] for `GLib::MainContext` to dispatch events for isochronous
     /// context.
