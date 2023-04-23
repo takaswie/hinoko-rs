@@ -1,8 +1,8 @@
 # hinoko crate
 
-Rust API bindings and wrappers for [hinoko library](https://github.com/takaswie/libhinoko) to
-operate Linux FireWire character device for isochronous packets and resources
-in IEEE 1394 bus.
+Rust API bindings and wrappers for
+[hinoko library](https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/) to operate OHCI 1394
+hardware via Linux FireWire character device for isochronous communication in IEEE 1394 bus.
 
 The hinoko library version 0.8.0 is the minimum supported version for underlying library.
 
@@ -34,17 +34,18 @@ type/object system, event loop, and dispacher.
 
 * dox
 
-   * Suppress probing hinoko library. It's automatically enabled when generating documentation
-     in docs.rs.
+   * Suppress detection of installed hinoko library. It's automatically enabled when generating
+     documentation in docs.rs.
 
 ## Repository
 
-The hinoko-sys crate is maintained by Takashi Sakamoto.
-The remote repository is located in <https://github.com/takaswie/hinoko-rs/>.
+The hinoko crate is maintained by Takashi Sakamoto for upstream of Linux FireWire subsystem.
+The remote repository locates in <https://git.kernel.org/pub/scm/libs/ieee1394/hinoko-rs.git/>.
 
 ## Support
 
-If finding issue, please file it in <https://github.com/takaswie/hinoko-rs/>.
+If finding issue, please file it in <https://github.com/takaswie/hinoko-rs/> which is the mirror of
+upstream for user support and continuous integration.
 
 ## Sample programs
 Some programs are available under `examples` directory.

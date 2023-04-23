@@ -2,7 +2,7 @@
 Rust bindings for hinoko library
 ================================
 
-2022/12/18
+2023/04/23
 Takashi Sakamoto
 
 Introduction
@@ -10,7 +10,7 @@ Introduction
 
 * This repository includes FFI and API bindings for ``libhinoko0`` which provides ``Hinoko-0.0.gir``.
 
-  * `<https://github.com/takaswie/libhinoko>`_
+  * `<https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/>`_
 
 * The crates are available in `crates.io <https://crates.io/>`_ as well.
 
@@ -22,12 +22,12 @@ Crates
 API bindings for safe and high-level abstractions
 -------------------------------------------------
 
-* [hinoko crate](hinoko/README.md)
+* `hinoko crate <hinoko/README.md>`_
 
 `FFI bindings <https://doc.rust-lang.org/cargo/reference/build-scripts.html#-sys-packages>`_
 --------------------------------------------------------------------------------------------
 
-* [hinoko-sys crate](hinoko-sys/README.md)
+* `hinoko-sys crate <hinoko-sys/README.md>`_
 
 License
 =======
@@ -37,7 +37,7 @@ MIT License
 Dependencies
 ============
 
-* `libhinoko <https://github.com/takaswie/libhinoko>`_
+* `libhinoko <https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/>`_
 * FFI crate (``hinoko-sys``)
 
   * ``libc`` >= 0.2

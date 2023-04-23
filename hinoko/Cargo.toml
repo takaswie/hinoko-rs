@@ -11,7 +11,7 @@ exclude = ["Gir.toml"]
 homepage = "https://alsa-project.github.io/gobject-introspection-docs/"
 keywords = ["ieee1394", "firewire", "linux", "glib"]
 license = "MIT"
-repository = "https://github.com/takaswie/hinoko-rs/"
+repository = "https://git.kernel.org/pub/scm/libs/ieee1394/hinoko-rs.git/"
 [package.metadata.docs.rs]
 features = ["dox"]
 
