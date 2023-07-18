@@ -6,11 +6,11 @@ use super::*;
 pub trait FwIsoCtxImpl: ObjectImpl {
     fn create_source(&self, ctx: &Self::Type) -> Result<Source, Error>;
     fn flush_completions(&self, ctx: &Self::Type) -> Result<(), Error>;
-    fn get_cycle_timer(
+    fn read_cycle_time(
         &self,
         ctx: &Self::Type,
         clock_id: i32,
-        cycle_timer: &mut CycleTimer,
+        cycle_time: &mut CycleTime,
     ) -> Result<(), Error>;
     fn release(&self, ctx: &Self::Type);
     fn stop(&self, ctx: &Self::Type);
@@ -23,11 +23,11 @@ pub trait FwIsoCtxImpl: ObjectImpl {
 pub trait FwIsoCtxImplExt: ObjectSubclass {
     fn parent_create_source(&self, ctx: &Self::Type) -> Result<Source, Error>;
     fn parent_flush_completions(&self, ctx: &Self::Type) -> Result<(), Error>;
-    fn parent_get_cycle_timer(
+    fn parent_read_cycle_time(
         &self,
         ctx: &Self::Type,
         clock_id: i32,
-        cycle_timer: &mut CycleTimer,
+        cycle_time: &mut CycleTime,
     ) -> Result<(), Error>;
     fn parent_release(&self, ctx: &Self::Type);
     fn parent_stop(&self, ctx: &Self::Type);
@@ -82,24 +82,24 @@ impl<T: FwIsoCtxImpl> FwIsoCtxImplExt for T {
         }
     }
 
-    fn parent_get_cycle_timer(
+    fn parent_read_cycle_time(
         &self,
         ctx: &Self::Type,
         clock_id: i32,
-        cycle_timer: &mut CycleTimer,
+        cycle_time: &mut CycleTime,
     ) -> Result<(), Error> {
         unsafe {
             let data = T::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::HinokoFwIsoCtxInterface;
             let f = (*parent_class)
-                .get_cycle_timer
+                .read_cycle_time
                 .expect("No parent \"flush_completions\" implementation");
 
             let mut error = std::ptr::null_mut();
             let is_ok = f(
                 ctx.unsafe_cast_ref::<FwIsoCtx>().to_glib_none().0,
                 clock_id.into(),
-                &mut cycle_timer.to_glib_none_mut().0,
+                &mut cycle_time.to_glib_none_mut().0,
                 &mut error,
             );
             assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
@@ -168,7 +168,7 @@ unsafe impl<T: FwIsoCtxImpl> IsImplementable<T> for FwIsoCtx {
         let iface = iface.as_mut();
         iface.create_source = Some(fw_iso_ctx_create_source::<T>);
         iface.flush_completions = Some(fw_iso_ctx_flush_completions::<T>);
-        iface.get_cycle_timer = Some(fw_iso_ctx_get_cycle_timer::<T>);
+        iface.read_cycle_time = Some(fw_iso_ctx_read_cycle_time::<T>);
         iface.release = Some(fw_iso_ctx_release::<T>);
         iface.stop = Some(fw_iso_ctx_stop::<T>);
         iface.unmap_buffer = Some(fw_iso_ctx_unmap_buffer::<T>);
@@ -218,20 +218,20 @@ unsafe extern "C" fn fw_iso_ctx_flush_completions<T: FwIsoCtxImpl>(
     }
 }
 
-unsafe extern "C" fn fw_iso_ctx_get_cycle_timer<T: FwIsoCtxImpl>(
+unsafe extern "C" fn fw_iso_ctx_read_cycle_time<T: FwIsoCtxImpl>(
     ctx: *mut ffi::HinokoFwIsoCtx,
     clock_id: c_int,
-    cycle_timer: *const *mut ffi::HinokoCycleTimer,
+    cycle_time: *const *mut hinawa::ffi::HinawaCycleTime,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
     let instance = &*(ctx as *mut T::Instance);
     let imp = instance.imp();
     let wrap: Borrowed<FwIsoCtx> = from_glib_borrow(ctx);
 
-    match imp.get_cycle_timer(
+    match imp.read_cycle_time(
         wrap.unsafe_cast_ref(),
         clock_id.into(),
-        &mut from_glib_none(*cycle_timer),
+        &mut from_glib_none(*cycle_time),
     ) {
         Ok(_) => glib::ffi::GTRUE,
         Err(err) => {
@@ -339,11 +339,11 @@ mod test {
                 Ok(())
             }
 
-            fn get_cycle_timer(
+            fn read_cycle_time(
                 &self,
                 _ctx: &Self::Type,
                 _clock_id: i32,
-                _cycle_timer: &mut CycleTimer,
+                _cycle_time: &mut CycleTime,
             ) -> Result<(), Error> {
                 Ok(())
             }
@@ -383,8 +383,8 @@ mod test {
         assert_eq!(ctx.stop(), (()));
         assert_eq!(ctx.unmap_buffer(), (()));
 
-        let mut cycle_timer = CycleTimer::new();
-        assert_eq!(ctx.get_cycle_timer(0, &mut cycle_timer), Ok(()));
+        let mut cycle_time = CycleTime::new();
+        assert_eq!(ctx.read_cycle_time(0, &mut cycle_time), Ok(()));
 
         assert_eq!(ctx.bytes_per_chunk(), 1);
         assert_eq!(ctx.chunks_per_buffer(), 2);

@@ -7,30 +7,30 @@ use crate::*;
 ///
 /// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple], [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle], [`FwIsoIt`][struct@crate::FwIsoIt]
 pub trait FwIsoCtxExtManual {
-    #[doc(alias = "hinoko_fw_iso_ctx_get_cycle_timer")]
-    fn get_cycle_timer(&self, clock_id: i32, cycle_timer: &mut CycleTimer) -> Result<(), Error>;
-}
-
-impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
     /// Retrieve the value of cycle timer register. This method call is available
     /// once any isochronous context is created.
     /// ## `clock_id`
     /// The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
     ///       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in UAPI of Linux kernel.
-    /// ## `cycle_timer`
-    /// A [`CycleTimer`][crate::CycleTimer] to store data of cycle timer.
+    /// ## `cycle_time`
+    /// A [`hinawa::CycleTime`][hinawa::CycleTime] to store data of cycle timer.
     ///
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    fn get_cycle_timer(&self, clock_id: i32, cycle_timer: &mut CycleTimer) -> Result<(), Error> {
+    #[doc(alias = "hinoko_fw_iso_ctx_read_cycle_time")]
+    fn read_cycle_time(&self, clock_id: i32, cycle_time: &mut CycleTime) -> Result<(), Error>;
+}
+
+impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
+    fn read_cycle_time(&self, clock_id: i32, cycle_time: &mut CycleTime) -> Result<(), Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_ctx_get_cycle_timer(
+            ffi::hinoko_fw_iso_ctx_read_cycle_time(
                 self.as_ref().to_glib_none().0,
                 clock_id,
-                &mut cycle_timer.to_glib_none_mut().0,
+                &mut cycle_time.to_glib_none_mut().0,
                 &mut error,
             );
 

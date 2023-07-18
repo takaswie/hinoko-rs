@@ -24,9 +24,6 @@ pub use self::fw_iso_resource_auto::FwIsoResourceAuto;
 mod fw_iso_resource_once;
 pub use self::fw_iso_resource_once::FwIsoResourceOnce;
 
-mod cycle_timer;
-pub use self::cycle_timer::CycleTimer;
-
 mod enums;
 pub use self::enums::FwIsoCtxError;
 pub use self::enums::FwIsoCtxMode;
