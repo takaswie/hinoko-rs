@@ -65,19 +65,6 @@ pub const HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2: HinokoFwIsoCtxMatchFlag = 4;
 pub const HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3: HinokoFwIsoCtxMatchFlag = 8;
 
 // Records
-#[repr(C)]
-pub struct HinokoCycleTimer {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for HinokoCycleTimer {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoCycleTimer @ {:p}", self))
-            .finish()
-    }
-}
-
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct HinokoFwIsoCtxInterface {
@@ -85,11 +72,11 @@ pub struct HinokoFwIsoCtxInterface {
     pub stop: Option<unsafe extern "C" fn(*mut HinokoFwIsoCtx)>,
     pub unmap_buffer: Option<unsafe extern "C" fn(*mut HinokoFwIsoCtx)>,
     pub release: Option<unsafe extern "C" fn(*mut HinokoFwIsoCtx)>,
-    pub get_cycle_timer: Option<
+    pub read_cycle_time: Option<
         unsafe extern "C" fn(
             *mut HinokoFwIsoCtx,
             c_int,
-            *const *mut HinokoCycleTimer,
+            *const *mut hinawa::HinawaCycleTime,
             *mut *mut glib::GError,
         ) -> gboolean,
     >,
@@ -112,7 +99,7 @@ impl ::std::fmt::Debug for HinokoFwIsoCtxInterface {
             .field("stop", &self.stop)
             .field("unmap_buffer", &self.unmap_buffer)
             .field("release", &self.release)
-            .field("get_cycle_timer", &self.get_cycle_timer)
+            .field("read_cycle_time", &self.read_cycle_time)
             .field("flush_completions", &self.flush_completions)
             .field("create_source", &self.create_source)
             .field("stopped", &self.stopped)
@@ -379,22 +366,6 @@ extern "C" {
     pub fn hinoko_fw_iso_ctx_match_flag_get_type() -> GType;
 
     //=========================================================================
-    // HinokoCycleTimer
-    //=========================================================================
-    pub fn hinoko_cycle_timer_get_type() -> GType;
-    pub fn hinoko_cycle_timer_new() -> *mut HinokoCycleTimer;
-    pub fn hinoko_cycle_timer_get_clock_id(self_: *mut HinokoCycleTimer, clock_id: *mut c_int);
-    pub fn hinoko_cycle_timer_get_cycle_timer(
-        self_: *mut HinokoCycleTimer,
-        cycle_timer: *mut [u16; 3],
-    );
-    pub fn hinoko_cycle_timer_get_timestamp(
-        self_: *mut HinokoCycleTimer,
-        tv_sec: *mut i64,
-        tv_nsec: *mut i32,
-    );
-
-    //=========================================================================
     // HinokoFwIsoIrMultiple
     //=========================================================================
     pub fn hinoko_fw_iso_ir_multiple_get_type() -> GType;
@@ -547,10 +518,10 @@ extern "C" {
         self_: *mut HinokoFwIsoCtx,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    pub fn hinoko_fw_iso_ctx_get_cycle_timer(
+    pub fn hinoko_fw_iso_ctx_read_cycle_time(
         self_: *mut HinokoFwIsoCtx,
         clock_id: c_int,
-        cycle_timer: *const *mut HinokoCycleTimer,
+        cycle_time: *const *mut hinawa::HinawaCycleTime,
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn hinoko_fw_iso_ctx_release(self_: *mut HinokoFwIsoCtx);
