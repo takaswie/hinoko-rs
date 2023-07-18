@@ -2,7 +2,7 @@
 Rust bindings for hinoko library
 ================================
 
-2023/04/23
+2023/07/18
 Takashi Sakamoto
 
 Introduction
@@ -14,7 +14,7 @@ Introduction
 
 * The crates are available in `crates.io <https://crates.io/>`_ as well.
 
-The latest release is version 0.2.0.
+The latest release is version 0.3.0.
 
 Crates
 ======
@@ -43,12 +43,14 @@ Dependencies
   * ``libc`` >= 0.2
   * ``glib-sys`` >= 0.15
   * ``gobject-sys`` >= 0.15
+  * ``hinawa-sys`` >= 0.8
 
 * API crate (``hinoko``)
 
   * ``libc`` >= 0.2
   * ``bitflags`` >= 1.0
   * ``glib`` >= 0.15
+  * ``hinawa`` >= 0.8
   * FFI crate (``hinoko-sys``)
 
 Examples
