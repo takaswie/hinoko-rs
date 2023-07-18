@@ -38,10 +38,14 @@ version = "0.15"
 package = "gobject-sys"
 version = "0.15"
 
+[dependencies.hinawa]
+package = "hinawa-sys"
+version = "0.8.0"
+
 [dev-dependencies]
 shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
 # To suppress linking to C library to generate documentation.
-dox = []
+dox = ["hinawa/dox"]

@@ -3,9 +3,10 @@ girs_directories = ["../gir-files", ".."]
 work_mode = "sys"
 library = "Hinoko"
 version = "0.0"
-min_cfg_version = "0.8"
+min_cfg_version = "0.9"
 single_version_file = "."
 external_libraries = [
   "GLib",
   "GObject",
+  "Hinawa",
 ]

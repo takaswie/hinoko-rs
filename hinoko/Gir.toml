@@ -4,7 +4,7 @@ work_mode = "normal"
 library = "Hinoko"
 version = "0.0"
 use_gi_docgen = true
-min_cfg_version = "0.8"
+min_cfg_version = "0.9"
 single_version_file = true
 
 generate = [
@@ -23,22 +23,15 @@ manual = [
     "GLib.Error",
     "GLib.Source",
     "GLib.ByteArray",
+    "Hinawa.CycleTime",
 ]
-
-[[object]]
-name = "Hinoko.CycleTimer"
-status = "generate"
-concurrency = "send"
-    [[object.function]]
-    name = "get_cycle_timer"
-    manual = true
 
 [[object]]
 name = "Hinoko.FwIsoCtx"
 status = "generate"
 manual_traits = ["FwIsoCtxExtManual"]
     [[object.function]]
-    name = "get_cycle_timer"
+    name = "read_cycle_time"
     manual = true
     doc_trait_name = "FwIsoCtxExtManual"
 
