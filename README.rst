@@ -2,19 +2,19 @@
 Rust bindings for hinoko library
 ================================
 
-2023/07/18
+2023/10/30
 Takashi Sakamoto
 
 Introduction
 ============
 
-* This repository includes FFI and API bindings for ``libhinoko0`` which provides ``Hinoko-0.0.gir``.
+* This repository includes FFI and API bindings for ``libhinoko1`` which provides ``Hinoko-1.0.gir``.
 
   * `<https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/>`_
 
 * The crates are available in `crates.io <https://crates.io/>`_ as well.
 
-The latest release is version 0.3.0.
+The latest release is version 0.4.0.
 
 Crates
 ======

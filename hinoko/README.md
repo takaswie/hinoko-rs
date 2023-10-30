@@ -16,7 +16,7 @@ Add the following line to your Cargo.toml file:
 
 ```toml
 [dependencies]
-hinoko = "0.3.0"
+hinoko = "0.4"
 ```
 
 The API documentation is available in <https://docs.rs/hinoko/>.
