@@ -43,7 +43,7 @@ Dependencies
   * ``libc`` >= 0.2
   * ``glib-sys`` >= 0.15
   * ``gobject-sys`` >= 0.15
-  * ``hinawa-sys`` >= 0.8
+  * ``hinawa-sys`` >= 0.9
 
 * API crate (``hinoko``)
 

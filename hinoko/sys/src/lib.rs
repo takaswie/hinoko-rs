@@ -76,7 +76,7 @@ pub struct HinokoFwIsoCtxInterface {
         unsafe extern "C" fn(
             *mut HinokoFwIsoCtx,
             c_int,
-            *const *mut hinawa::HinawaCycleTime,
+            *mut *mut hinawa::HinawaCycleTime,
             *mut *mut glib::GError,
         ) -> gboolean,
     >,
@@ -184,7 +184,7 @@ pub struct HinokoFwIsoResourceInterface {
             *mut *mut glib::GError,
         ) -> gboolean,
     >,
-    pub allocate_async: Option<
+    pub allocate: Option<
         unsafe extern "C" fn(
             *mut HinokoFwIsoResource,
             *const u8,
@@ -211,7 +211,7 @@ impl ::std::fmt::Debug for HinokoFwIsoResourceInterface {
         f.debug_struct(&format!("HinokoFwIsoResourceInterface @ {:p}", self))
             .field("parent_iface", &self.parent_iface)
             .field("open", &self.open)
-            .field("allocate_async", &self.allocate_async)
+            .field("allocate", &self.allocate)
             .field("create_source", &self.create_source)
             .field("allocated", &self.allocated)
             .field("deallocated", &self.deallocated)
@@ -476,11 +476,11 @@ extern "C" {
     //=========================================================================
     pub fn hinoko_fw_iso_resource_auto_get_type() -> GType;
     pub fn hinoko_fw_iso_resource_auto_new() -> *mut HinokoFwIsoResourceAuto;
-    pub fn hinoko_fw_iso_resource_auto_deallocate_async(
+    pub fn hinoko_fw_iso_resource_auto_deallocate(
         self_: *mut HinokoFwIsoResourceAuto,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    pub fn hinoko_fw_iso_resource_auto_deallocate_sync(
+    pub fn hinoko_fw_iso_resource_auto_deallocate_wait(
         self_: *mut HinokoFwIsoResourceAuto,
         timeout_ms: c_uint,
         error: *mut *mut glib::GError,
@@ -491,13 +491,13 @@ extern "C" {
     //=========================================================================
     pub fn hinoko_fw_iso_resource_once_get_type() -> GType;
     pub fn hinoko_fw_iso_resource_once_new() -> *mut HinokoFwIsoResourceOnce;
-    pub fn hinoko_fw_iso_resource_once_deallocate_async(
+    pub fn hinoko_fw_iso_resource_once_deallocate(
         self_: *mut HinokoFwIsoResourceOnce,
         channel: c_uint,
         bandwidth: c_uint,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    pub fn hinoko_fw_iso_resource_once_deallocate_sync(
+    pub fn hinoko_fw_iso_resource_once_deallocate_wait(
         self_: *mut HinokoFwIsoResourceOnce,
         channel: c_uint,
         bandwidth: c_uint,
@@ -521,7 +521,7 @@ extern "C" {
     pub fn hinoko_fw_iso_ctx_read_cycle_time(
         self_: *mut HinokoFwIsoCtx,
         clock_id: c_int,
-        cycle_time: *const *mut hinawa::HinawaCycleTime,
+        cycle_time: *mut *mut hinawa::HinawaCycleTime,
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn hinoko_fw_iso_ctx_release(self_: *mut HinokoFwIsoCtx);
@@ -536,14 +536,14 @@ extern "C" {
         bytes_per_payload: c_uint,
         scode: HinokoFwScode,
     ) -> c_uint;
-    pub fn hinoko_fw_iso_resource_allocate_async(
+    pub fn hinoko_fw_iso_resource_allocate(
         self_: *mut HinokoFwIsoResource,
         channel_candidates: *const u8,
         channel_candidates_count: size_t,
         bandwidth: c_uint,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    pub fn hinoko_fw_iso_resource_allocate_sync(
+    pub fn hinoko_fw_iso_resource_allocate_wait(
         self_: *mut HinokoFwIsoResource,
         channel_candidates: *const u8,
         channel_candidates_count: size_t,
