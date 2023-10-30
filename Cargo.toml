@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "hinoko-sys",
+    "hinoko/sys",
     "hinoko",
 ]
 
