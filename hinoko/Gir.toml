@@ -2,9 +2,9 @@
 girs_directories = ["../gir-files", ".."]
 work_mode = "normal"
 library = "Hinoko"
-version = "0.0"
+version = "1.0"
 use_gi_docgen = true
-min_cfg_version = "0.9"
+min_cfg_version = "1.0"
 single_version_file = true
 
 generate = [

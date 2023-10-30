@@ -8,12 +8,12 @@ and/or use gtk-doc annotations.  -->
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
-  <include name="Hinawa" version="3.0"/>
+  <include name="Hinawa" version="4.0"/>
   <package name="hinoko"/>
   <c:include name="hinoko.h"/>
   <namespace name="Hinoko"
-             version="0.0"
-             shared-library="libhinoko.so.0"
+             version="1.0"
+             shared-library="libhinoko.so.1"
              c:identifier-prefixes="Hinoko"
              c:symbol-prefixes="hinoko_">
     <interface name="FwIsoCtx"
@@ -24,30 +24,30 @@ and/or use gtk-doc annotations.  -->
                glib:type-struct="FwIsoCtxInterface">
       <doc xml:space="preserve"
            filename="src/fw_iso_ctx.c"
-           line="6">An basic interface to operate isochronous context on 1394 OHCI controller.
-A [iface@FwIsoCtx] is an basic interface to use UAPI of Linux FireWire subsystem to operate
-1394 OHCI controller.</doc>
+           line="6">A set of basic interfaces to operate isochronous context on 1394 OHCI hardware.
+[iface@FwIsoCtx] includes interfaces to operate 1394 OHCI hardware for isochronous communication
+by any kind of contexts.</doc>
       <source-position filename="src/fw_iso_ctx.h" line="108"/>
       <virtual-method name="create_source"
                       invoker="create_source"
-                      version="0.7."
+                      version="0.7"
                       throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="137">Create [struct@GLib.Source] for [struct@GLib.MainContext] to dispatch events for isochronous
+             line="136">Create [struct@GLib.Source] for [struct@GLib.MainContext] to dispatch events for isochronous
 context.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="98"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="146">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="145">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="139">A [iface@FwIsoCtx].</doc>
+                 line="138">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
           <parameter name="source"
@@ -56,62 +56,62 @@ context.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="140">A [struct@GLib.Source].</doc>
+                 line="139">A [struct@GLib.Source].</doc>
             <type name="GLib.Source" c:type="GSource**"/>
           </parameter>
         </parameters>
       </virtual-method>
       <virtual-method name="flush_completions"
                       invoker="flush_completions"
-                      version="0.7."
+                      version="0.7"
                       throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="206">Flush isochronous context until recent isochronous cycle. The call of function forces the
+             line="205">Flush isochronous context until recent isochronous cycle. The call of function forces the
 context to queue any type of interrupt event for the recent isochronous cycle. Application can
 process the content of isochronous packet without waiting for actual hardware interrupt.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="83"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="215">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="214">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="208">A [iface@FwIsoCtx].</doc>
+                 line="207">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </virtual-method>
       <virtual-method name="read_cycle_time"
                       invoker="read_cycle_time"
-                      version="0.9."
+                      version="1.0."
                       throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="112">Retrieve the value of cycle time register. This method call is available once any isochronous
+             line="111">Retrieve the value of cycle time register. This method call is available once any isochronous
 context is created.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="66"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="123">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="122">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="114">A [iface@FwIsoCtx].</doc>
+                 line="113">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
           <parameter name="clock_id" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="115">The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
+                 line="114">The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in UAPI of Linux kernel.</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
@@ -121,15 +121,15 @@ context is created.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="117">A [struct@Hinawa.CycleTime] to store data of cycle time.</doc>
-            <type name="Hinawa.CycleTime" c:type="HinawaCycleTime* const*"/>
+                 line="116">A [struct@Hinawa.CycleTime] to store data of cycle time.</doc>
+            <type name="Hinawa.CycleTime" c:type="HinawaCycleTime**"/>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="release" invoker="release" version="0.7.">
+      <virtual-method name="release" invoker="release" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="190">Release the contest from 1394 OHCI controller.</doc>
+             line="189">Release the contest from 1394 OHCI hardware.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="49"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -138,15 +138,15 @@ context is created.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="192">A [iface@FwIsoCtx].</doc>
+                 line="191">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="stop" invoker="stop" version="0.7.">
+      <virtual-method name="stop" invoker="stop" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="159">Stop isochronous context.</doc>
+             line="158">Stop isochronous context.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="28"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -155,7 +155,7 @@ context is created.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="161">A [iface@FwIsoCtx].</doc>
+                 line="160">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
@@ -186,12 +186,10 @@ context is created.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="unmap_buffer"
-                      invoker="unmap_buffer"
-                      version="0.7.">
+      <virtual-method name="unmap_buffer" invoker="unmap_buffer" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="174">Unmap intermediate buffer shared with 1394 OHCI controller for the context.</doc>
+             line="173">Unmap intermediate buffer shared with 1394 OHCI hardware for the context.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="39"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -200,31 +198,31 @@ context is created.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="176">A [iface@FwIsoCtx].</doc>
+                 line="175">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </virtual-method>
       <method name="create_source"
               c:identifier="hinoko_fw_iso_ctx_create_source"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="137">Create [struct@GLib.Source] for [struct@GLib.MainContext] to dispatch events for isochronous
+             line="136">Create [struct@GLib.Source] for [struct@GLib.MainContext] to dispatch events for isochronous
 context.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="119"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="146">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="145">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="139">A [iface@FwIsoCtx].</doc>
+                 line="138">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
           <parameter name="source"
@@ -233,62 +231,62 @@ context.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="140">A [struct@GLib.Source].</doc>
+                 line="139">A [struct@GLib.Source].</doc>
             <type name="GLib.Source" c:type="GSource**"/>
           </parameter>
         </parameters>
       </method>
       <method name="flush_completions"
               c:identifier="hinoko_fw_iso_ctx_flush_completions"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="206">Flush isochronous context until recent isochronous cycle. The call of function forces the
+             line="205">Flush isochronous context until recent isochronous cycle. The call of function forces the
 context to queue any type of interrupt event for the recent isochronous cycle. Application can
 process the content of isochronous packet without waiting for actual hardware interrupt.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="121"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="215">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="214">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="208">A [iface@FwIsoCtx].</doc>
+                 line="207">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </method>
       <method name="read_cycle_time"
               c:identifier="hinoko_fw_iso_ctx_read_cycle_time"
-              version="0.9."
+              version="1.0."
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="112">Retrieve the value of cycle time register. This method call is available once any isochronous
+             line="111">Retrieve the value of cycle time register. This method call is available once any isochronous
 context is created.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="116"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="123">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="122">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="114">A [iface@FwIsoCtx].</doc>
+                 line="113">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
           <parameter name="clock_id" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="115">The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
+                 line="114">The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in UAPI of Linux kernel.</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
@@ -298,17 +296,17 @@ context is created.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="117">A [struct@Hinawa.CycleTime] to store data of cycle time.</doc>
-            <type name="Hinawa.CycleTime" c:type="HinawaCycleTime* const*"/>
+                 line="116">A [struct@Hinawa.CycleTime] to store data of cycle time.</doc>
+            <type name="Hinawa.CycleTime" c:type="HinawaCycleTime**"/>
           </parameter>
         </parameters>
       </method>
       <method name="release"
               c:identifier="hinoko_fw_iso_ctx_release"
-              version="0.7.">
+              version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="190">Release the contest from 1394 OHCI controller.</doc>
+             line="189">Release the contest from 1394 OHCI hardware.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="114"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -317,15 +315,15 @@ context is created.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="192">A [iface@FwIsoCtx].</doc>
+                 line="191">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="stop" c:identifier="hinoko_fw_iso_ctx_stop" version="0.7.">
+      <method name="stop" c:identifier="hinoko_fw_iso_ctx_stop" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="159">Stop isochronous context.</doc>
+             line="158">Stop isochronous context.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="110"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -334,17 +332,17 @@ context is created.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="161">A [iface@FwIsoCtx].</doc>
+                 line="160">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </method>
       <method name="unmap_buffer"
               c:identifier="hinoko_fw_iso_ctx_unmap_buffer"
-              version="0.7.">
+              version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="174">Unmap intermediate buffer shared with 1394 OHCI controller for the context.</doc>
+             line="173">Unmap intermediate buffer shared with 1394 OHCI hardware for the context.</doc>
         <source-position filename="src/fw_iso_ctx.h" line="112"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -353,33 +351,33 @@ context is created.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="176">A [iface@FwIsoCtx].</doc>
+                 line="175">A [iface@FwIsoCtx].</doc>
             <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
           </instance-parameter>
         </parameters>
       </method>
       <property name="bytes-per-chunk"
-                version="0.7."
+                version="0.7"
                 transfer-ownership="none"
                 default-value="0">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="68">The number of bytes per chunk in buffer.</doc>
+             line="67">The number of bytes per chunk in buffer.</doc>
         <type name="guint" c:type="guint"/>
       </property>
       <property name="chunks-per-buffer"
-                version="0.7."
+                version="0.7"
                 transfer-ownership="none"
                 default-value="0">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="81">The number of chunks per buffer.</doc>
+             line="80">The number of chunks per buffer.</doc>
         <type name="guint" c:type="guint"/>
       </property>
-      <glib:signal name="stopped" when="last" action="1" version="0.7.">
+      <glib:signal name="stopped" when="last" action="1" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="94">Emitted when isochronous context is stopped.</doc>
+             line="93">Emitted when isochronous context is stopped.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -390,7 +388,7 @@ context is created.</doc>
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="97">A [struct@GLib.Error].</doc>
+                 line="96">A [struct@GLib.Error].</doc>
             <type name="GLib.Error"/>
           </parameter>
         </parameters>
@@ -403,7 +401,7 @@ context is created.</doc>
                  glib:error-domain="hinoko-fw-iso-ctx-error-quark">
       <doc xml:space="preserve"
            filename="src/hinoko_enum_types.h"
-           line="96">A set of error code for [iface@FwIsoCtx].</doc>
+           line="96">A set of error code for operations in [iface@FwIsoCtx].</doc>
       <member name="failed"
               value="0"
               c:identifier="HINOKO_FW_ISO_CTX_ERROR_FAILED"
@@ -474,12 +472,11 @@ context is created.</doc>
       <function name="quark" c:identifier="hinoko_fw_iso_ctx_error_quark">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="16">Return the [alias@GLib.Quark] for error domain of [struct@GLib.Error] which has code in
-Hinoko.FwIsoCtxError.</doc>
+             line="16">Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code in [error@FwIsoCtxError].</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ctx.c"
-               line="22">A [alias@GLib.Quark].</doc>
+               line="21">A [alias@GLib.Quark].</doc>
           <type name="GLib.Quark" c:type="GQuark"/>
         </return-value>
       </function>
@@ -501,7 +498,7 @@ Hinoko.FwIsoCtxError.</doc>
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="161">A [iface@FwIsoCtx].</doc>
+                   line="160">A [iface@FwIsoCtx].</doc>
               <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
             </parameter>
           </parameters>
@@ -517,7 +514,7 @@ Hinoko.FwIsoCtxError.</doc>
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="176">A [iface@FwIsoCtx].</doc>
+                   line="175">A [iface@FwIsoCtx].</doc>
               <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
             </parameter>
           </parameters>
@@ -533,7 +530,7 @@ Hinoko.FwIsoCtxError.</doc>
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="192">A [iface@FwIsoCtx].</doc>
+                   line="191">A [iface@FwIsoCtx].</doc>
               <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
             </parameter>
           </parameters>
@@ -545,20 +542,20 @@ Hinoko.FwIsoCtxError.</doc>
           <return-value transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="123">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+                 line="122">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="114">A [iface@FwIsoCtx].</doc>
+                   line="113">A [iface@FwIsoCtx].</doc>
               <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
             </parameter>
             <parameter name="clock_id" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="115">The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
+                   line="114">The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in UAPI of Linux kernel.</doc>
               <type name="gint" c:type="gint"/>
             </parameter>
@@ -568,8 +565,8 @@ Hinoko.FwIsoCtxError.</doc>
                        transfer-ownership="full">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="117">A [struct@Hinawa.CycleTime] to store data of cycle time.</doc>
-              <type name="Hinawa.CycleTime" c:type="HinawaCycleTime* const*"/>
+                   line="116">A [struct@Hinawa.CycleTime] to store data of cycle time.</doc>
+              <type name="Hinawa.CycleTime" c:type="HinawaCycleTime**"/>
             </parameter>
           </parameters>
         </callback>
@@ -580,14 +577,14 @@ Hinoko.FwIsoCtxError.</doc>
           <return-value transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="215">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+                 line="214">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="208">A [iface@FwIsoCtx].</doc>
+                   line="207">A [iface@FwIsoCtx].</doc>
               <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
             </parameter>
           </parameters>
@@ -599,14 +596,14 @@ Hinoko.FwIsoCtxError.</doc>
           <return-value transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ctx.c"
-                 line="146">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+                 line="145">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="139">A [iface@FwIsoCtx].</doc>
+                   line="138">A [iface@FwIsoCtx].</doc>
               <type name="FwIsoCtx" c:type="HinokoFwIsoCtx*"/>
             </parameter>
             <parameter name="source"
@@ -615,7 +612,7 @@ Hinoko.FwIsoCtxError.</doc>
                        transfer-ownership="full">
               <doc xml:space="preserve"
                    filename="src/fw_iso_ctx.c"
-                   line="140">A [struct@GLib.Source].</doc>
+                   line="139">A [struct@GLib.Source].</doc>
               <type name="GLib.Source" c:type="GSource**"/>
             </parameter>
           </parameters>
@@ -738,8 +735,8 @@ Hinoko.FwIsoCtxError.</doc>
       <doc xml:space="preserve"
            filename="src/fw_iso_ir_multiple.c"
            line="4">An object to receive isochronous packet for several channels.
-A [class@FwIsoIrMultiple] receives isochronous packets for several channels by IR context for
-buffer-fill mode in 1394 OHCI.</doc>
+[class@FwIsoIrMultiple] receives isochronous packets for several channels by buffer-fill mode of
+IR context in 1394 OHCI.</doc>
       <source-position filename="src/fw_iso_ir_multiple.h" line="25"/>
       <implements name="FwIsoCtx"/>
       <constructor name="new" c:identifier="hinoko_fw_iso_ir_multiple_new">
@@ -782,8 +779,8 @@ buffer-fill mode in 1394 OHCI.</doc>
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_multiple.c"
-             line="343">Allocate an IR context to 1394 OHCI controller for buffer-fill mode. A local node of the node
-corresponding to the given path is used as the controller, thus any path is accepted as long as
+             line="343">Allocate an IR context to 1394 OHCI hardware for buffer-fill mode. A local node of the node
+corresponding to the given path is used as the hardware, thus any path is accepted as long as
 process has enough permission for the path.</doc>
         <source-position filename="src/fw_iso_ir_multiple.h" line="29"/>
         <return-value transfer-ownership="none">
@@ -821,10 +818,10 @@ process has enough permission for the path.</doc>
       </method>
       <method name="get_payload"
               c:identifier="hinoko_fw_iso_ir_multiple_get_payload"
-              version="0.7.">
+              version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_multiple.c"
-             line="490">Retrieve data for packet indicated by the index parameter. The data has isochronous packet header
+             line="489">Retrieve data for packet indicated by the index parameter. The data has isochronous packet header
 in its first quadlet, timestamp in its last quadlet. The rest is data of isochronous packet.</doc>
         <source-position filename="src/fw_iso_ir_multiple.h" line="40"/>
         <return-value transfer-ownership="none">
@@ -834,13 +831,13 @@ in its first quadlet, timestamp in its last quadlet. The rest is data of isochro
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="492">A [class@FwIsoIrMultiple].</doc>
+                 line="491">A [class@FwIsoIrMultiple].</doc>
             <type name="FwIsoIrMultiple" c:type="HinokoFwIsoIrMultiple*"/>
           </instance-parameter>
           <parameter name="index" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="493">the index of packet available in this interrupt.</doc>
+                 line="492">the index of packet available in this interrupt.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="payload"
@@ -849,10 +846,10 @@ in its first quadlet, timestamp in its last quadlet. The rest is data of isochro
                      transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="494">The array with data frame for payload of
+                 line="493">The array with data frame for payload of
      IR context.</doc>
             <array length="2" zero-terminated="0" c:type="const guint8**">
-              <type name="guint8" c:type="guint8*"/>
+              <type name="guint8" c:type="guint8"/>
             </array>
           </parameter>
           <parameter name="length"
@@ -861,7 +858,7 @@ in its first quadlet, timestamp in its last quadlet. The rest is data of isochro
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="496">The number of bytes in the above @payload.</doc>
+                 line="495">The number of bytes in the above @payload.</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
         </parameters>
@@ -871,8 +868,7 @@ in its first quadlet, timestamp in its last quadlet. The rest is data of isochro
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_multiple.c"
-             line="402">Map an intermediate buffer to share payload of IR context with 1394 OHCI
-controller.</doc>
+             line="402">Map an intermediate buffer to share payload of IR context with 1394 OHCI hardware.</doc>
         <source-position filename="src/fw_iso_ir_multiple.h" line="33"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
@@ -904,7 +900,7 @@ controller.</doc>
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_multiple.c"
-             line="441">Start IR context.</doc>
+             line="440">Start IR context.</doc>
         <source-position filename="src/fw_iso_ir_multiple.h" line="36"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
@@ -913,7 +909,7 @@ controller.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="443">A [class@FwIsoIrMultiple].</doc>
+                 line="442">A [class@FwIsoIrMultiple].</doc>
             <type name="FwIsoIrMultiple" c:type="HinokoFwIsoIrMultiple*"/>
           </instance-parameter>
           <parameter name="cycle_match"
@@ -922,7 +918,7 @@ controller.</doc>
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="444">The isochronous cycle
+                 line="443">The isochronous cycle
 	 to start packet processing. The first element should be the second part of
 	 isochronous cycle, up to 3. The second element should be the cycle part of
 	 isochronous cycle, up to 7999.</doc>
@@ -933,19 +929,19 @@ controller.</doc>
           <parameter name="sync_code" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="448">The value of sy field in isochronous packet header for packet processing, up to 15.</doc>
+                 line="447">The value of sy field in isochronous packet header for packet processing, up to 15.</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
           <parameter name="tags" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="449">The value of tag field in isochronous header for packet processing.</doc>
+                 line="448">The value of tag field in isochronous header for packet processing.</doc>
             <type name="FwIsoCtxMatchFlag" c:type="HinokoFwIsoCtxMatchFlag"/>
           </parameter>
           <parameter name="chunks_per_irq" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_multiple.c"
-                 line="450">The number of chunks per interval of interrupt. When 0 is given, application
+                 line="449">The number of chunks per interval of interrupt. When 0 is given, application
 	    should call [method@FwIsoCtx.flush_completions] voluntarily to generate
 	    [signal@FwIsoIrMultiple::interrupted] event.</doc>
             <type name="guint" c:type="guint"/>
@@ -969,7 +965,7 @@ controller.</doc>
              line="91">Emitted when Linux FireWire subsystem generates interrupt event. There are two cases
 for Linux FireWire subsystem to generate the event:
 
-- When OHCI 1394 controller generates hardware interrupt as a result to process the
+- When 1394 OHCI hardware generates hardware interrupt as a result to process the
   isochronous packet for the buffer chunk marked to generate hardware interrupt.
 - When application calls [method@FwIsoCtx.flush_completions] explicitly.
 
@@ -1028,21 +1024,20 @@ The handler of signal can retrieve the content of packet by call of
       <doc xml:space="preserve"
            filename="src/fw_iso_ir_single.c"
            line="4">An object to receive isochronous packet for single channel.
-A [class@FwIsoIrSingle] receives isochronous packets for single channel by IR
-context for packet-per-buffer mode in 1394 OHCI. The content of packet is
-split to two parts; context header and context payload in a manner of Linux
-FireWire subsystem.</doc>
+[class@FwIsoIrSingle] receives isochronous packets for single channel by packet-per-buffer
+mode of IR context in 1394 OHCI. The content of packet is split to two parts; context header and
+context payload in a manner of Linux FireWire subsystem.</doc>
       <source-position filename="src/fw_iso_ir_single.h" line="33"/>
       <implements name="FwIsoCtx"/>
       <constructor name="new" c:identifier="hinoko_fw_iso_ir_single_new">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="227">Instantiate [class@FwIsoIrSingle] object and return the instance.</doc>
+             line="226">Instantiate [class@FwIsoIrSingle] object and return the instance.</doc>
         <source-position filename="src/fw_iso_ir_single.h" line="35"/>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="src/fw_iso_ir_single.c"
-               line="232">an instance of [class@FwIsoIrSingle].</doc>
+               line="231">an instance of [class@FwIsoIrSingle].</doc>
           <type name="FwIsoIrSingle" c:type="HinokoFwIsoIrSingle*"/>
         </return-value>
       </constructor>
@@ -1099,12 +1094,12 @@ FireWire subsystem.</doc>
       </virtual-method>
       <method name="allocate"
               c:identifier="hinoko_fw_iso_ir_single_allocate"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="239">Allocate an IR context to 1394 OHCI controller for packet-per-buffer mode. A local node of the
-node corresponding to the given path is used as the controller, thus any path is accepted as
+             line="238">Allocate an IR context to 1394 OHCI hardware for packet-per-buffer mode. A local node of the
+node corresponding to the given path is used as the hardware, thus any path is accepted as
 long as process has enough permission for the path.
 
 The header_size parameter has an effect for the content of header parameter in
@@ -1115,32 +1110,32 @@ than 12, header includes the part of isochronous packet data per packet.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ir_single.c"
-               line="257">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="256">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="241">A [class@FwIsoIrSingle].</doc>
+                 line="240">A [class@FwIsoIrSingle].</doc>
             <type name="FwIsoIrSingle" c:type="HinokoFwIsoIrSingle*"/>
           </instance-parameter>
           <parameter name="path" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="242">A path to any Linux FireWire character device.</doc>
+                 line="241">A path to any Linux FireWire character device.</doc>
             <type name="utf8" c:type="const char*"/>
           </parameter>
           <parameter name="channel" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="243">An isochronous channel to listen, up to 63.</doc>
+                 line="242">An isochronous channel to listen, up to 63.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="header_size" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="244">The number of bytes for header of IR context, greater than 4 at least to include
+                 line="243">The number of bytes for header of IR context, greater than 4 at least to include
 	 isochronous packet header in header parameter of [signal@FwIsoIrSingle::interrupted].</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
@@ -1148,10 +1143,10 @@ than 12, header includes the part of isochronous packet data per packet.</doc>
       </method>
       <method name="get_payload"
               c:identifier="hinoko_fw_iso_ir_single_get_payload"
-              version="0.7.">
+              version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="373">Retrieve payload of IR context for a handled packet corresponding to index at the event of
+             line="372">Retrieve payload of IR context for a handled packet corresponding to index at the event of
 interrupt.</doc>
         <source-position filename="src/fw_iso_ir_single.h" line="51"/>
         <return-value transfer-ownership="none">
@@ -1161,13 +1156,13 @@ interrupt.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="375">A [class@FwIsoIrSingle].</doc>
+                 line="374">A [class@FwIsoIrSingle].</doc>
             <type name="FwIsoIrSingle" c:type="HinokoFwIsoIrSingle*"/>
           </instance-parameter>
           <parameter name="index" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="376">the index inner available packets at the event of interrupt.</doc>
+                 line="375">the index inner available packets at the event of interrupt.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="payload"
@@ -1176,7 +1171,7 @@ interrupt.</doc>
                      transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="377">The array with data
+                 line="376">The array with data
      frame for payload of IR context.</doc>
             <array length="2" zero-terminated="0" c:type="const guint8**">
               <type name="guint8"/>
@@ -1188,97 +1183,97 @@ interrupt.</doc>
                      transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="379">The number of bytes in the above payload.</doc>
+                 line="378">The number of bytes in the above payload.</doc>
             <type name="guint" c:type="guint*"/>
           </parameter>
         </parameters>
       </method>
       <method name="map_buffer"
               c:identifier="hinoko_fw_iso_ir_single_map_buffer"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="282">Map intermediate buffer to share payload of IR context with 1394 OHCI controller.</doc>
+             line="281">Map intermediate buffer to share payload of IR context with 1394 OHCI hardware.</doc>
         <source-position filename="src/fw_iso_ir_single.h" line="40"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ir_single.c"
-               line="291">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="290">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="284">A [class@FwIsoIrSingle].</doc>
+                 line="283">A [class@FwIsoIrSingle].</doc>
             <type name="FwIsoIrSingle" c:type="HinokoFwIsoIrSingle*"/>
           </instance-parameter>
           <parameter name="maximum_bytes_per_payload"
                      transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="285">The maximum number of bytes per payload of IR context.</doc>
+                 line="284">The maximum number of bytes per payload of IR context.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="payloads_per_buffer" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="286">The number of payload in buffer.</doc>
+                 line="285">The number of payload in buffer.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </method>
       <method name="register_packet"
               c:identifier="hinoko_fw_iso_ir_single_register_packet"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="310">Register chunk of buffer to process packet for future isochronous cycle. The caller can schedule
+             line="309">Register chunk of buffer to process packet for future isochronous cycle. The caller can schedule
 hardware interrupt to generate interrupt event. In detail, please refer to documentation about
 [signal@FwIsoIrSingle::interrupted] signal.</doc>
         <source-position filename="src/fw_iso_ir_single.h" line="44"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ir_single.c"
-               line="320">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="319">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="312">A [class@FwIsoIrSingle].</doc>
+                 line="311">A [class@FwIsoIrSingle].</doc>
             <type name="FwIsoIrSingle" c:type="HinokoFwIsoIrSingle*"/>
           </instance-parameter>
           <parameter name="schedule_interrupt" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="313">Whether to schedule hardware interrupt at isochronous cycle for the packet.</doc>
+                 line="312">Whether to schedule hardware interrupt at isochronous cycle for the packet.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
       </method>
       <method name="start"
               c:identifier="hinoko_fw_iso_ir_single_start"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="336">Start IR context.</doc>
+             line="335">Start IR context.</doc>
         <source-position filename="src/fw_iso_ir_single.h" line="47"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_ir_single.c"
-               line="349">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
+               line="348">TRUE if the overall operation finishes successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="338">A [class@FwIsoIrSingle].</doc>
+                 line="337">A [class@FwIsoIrSingle].</doc>
             <type name="FwIsoIrSingle" c:type="HinokoFwIsoIrSingle*"/>
           </instance-parameter>
           <parameter name="cycle_match"
@@ -1287,7 +1282,7 @@ hardware interrupt to generate interrupt event. In detail, please refer to docum
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="339">The isochronous cycle
+                 line="338">The isochronous cycle
 	 to start packet processing. The first element should be the second part of
 	 isochronous cycle, up to 3. The second element should be the cycle part of
 	 isochronous cycle, up to 7999.</doc>
@@ -1298,13 +1293,13 @@ hardware interrupt to generate interrupt event. In detail, please refer to docum
           <parameter name="sync_code" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="343">The value of sy field in isochronous packet header for packet processing, up to 15.</doc>
+                 line="342">The value of sy field in isochronous packet header for packet processing, up to 15.</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
           <parameter name="tags" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="344">The value of tag field in isochronous header for packet processing.</doc>
+                 line="343">The value of tag field in isochronous header for packet processing.</doc>
             <type name="FwIsoCtxMatchFlag" c:type="HinokoFwIsoCtxMatchFlag"/>
           </parameter>
         </parameters>
@@ -1315,10 +1310,10 @@ hardware interrupt to generate interrupt event. In detail, please refer to docum
       <glib:signal name="interrupted" when="last">
         <doc xml:space="preserve"
              filename="src/fw_iso_ir_single.c"
-             line="59">Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
+             line="58">Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
 for Linux FireWire subsystem to generate the event:
 
-- When OHCI 1394 controller generates hardware interrupt as a result to process the
+- When 1394 OHCI hardware generates hardware interrupt as a result to process the
   isochronous packet for the buffer chunk marked to generate hardware interrupt.
 - When the size of accumulated context header for packets since the last event reaches
   the size of memory page (usually 4,096 bytes).
@@ -1333,19 +1328,19 @@ The handler of signal can retrieve context payload of received packet by call of
           <parameter name="sec" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="62">sec part of isochronous cycle when interrupt occurs, up to 7.</doc>
+                 line="61">sec part of isochronous cycle when interrupt occurs, up to 7.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="cycle" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="63">cycle part of of isochronous cycle when interrupt occurs, up to 7999.</doc>
+                 line="62">cycle part of of isochronous cycle when interrupt occurs, up to 7999.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="header" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="64">The headers of IR context
+                 line="63">The headers of IR context
     for packets handled in the event of interrupt. The content is different
     depending on header_size parameter of [method@FwIsoIrSingle.allocate].</doc>
             <array length="3" zero-terminated="0" c:type="gpointer">
@@ -1355,13 +1350,13 @@ The handler of signal can retrieve context payload of received packet by call of
           <parameter name="header_length" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="67">the number of bytes for @header.</doc>
+                 line="66">the number of bytes for @header.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
           <parameter name="count" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_ir_single.c"
-                 line="68">the number of packets to handle.</doc>
+                 line="67">the number of packets to handle.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
@@ -1435,7 +1430,7 @@ The handler of signal can retrieve context payload of received packet by call of
       <doc xml:space="preserve"
            filename="src/fw_iso_it.c"
            line="4">An object to transmit isochronous packet for single channel.
-A [class@FwIsoIt] transmits isochronous packets for single channel by IT context in 1394 OHCI.
+[class@FwIsoIt] transmits isochronous packets for single channel by IT context in 1394 OHCI.
 The content of packet is split to two parts; context header and context payload in a manner of
 Linux FireWire subsystem.</doc>
       <source-position filename="src/fw_iso_it.h" line="31"/>
@@ -1504,12 +1499,12 @@ Linux FireWire subsystem.</doc>
       </virtual-method>
       <method name="allocate"
               c:identifier="hinoko_fw_iso_it_allocate"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_it.c"
-             line="222">Allocate an IT context to 1394 OHCI controller. A local node of the node corresponding to the
-given path is used as the controller, thus any path is accepted as long as process has enough
+             line="222">Allocate an IT context to 1394 OHCI hardware. A local node of the node corresponding to the
+given path is used as the hardware, thus any path is accepted as long as process has enough
 permission for the path.</doc>
         <source-position filename="src/fw_iso_it.h" line="35"/>
         <return-value transfer-ownership="none">
@@ -1553,11 +1548,11 @@ permission for the path.</doc>
       </method>
       <method name="map_buffer"
               c:identifier="hinoko_fw_iso_it_map_buffer"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_it.c"
-             line="253">Map intermediate buffer to share payload of IT context with 1394 OHCI controller.</doc>
+             line="253">Map intermediate buffer to share payload of IT context with 1394 OHCI hardware.</doc>
         <source-position filename="src/fw_iso_it.h" line="38"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
@@ -1589,7 +1584,7 @@ permission for the path.</doc>
       </method>
       <method name="register_packet"
               c:identifier="hinoko_fw_iso_it_register_packet"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_it.c"
@@ -1670,7 +1665,7 @@ hardware interrupt to generate interrupt event. In detail, please refer to docum
       </method>
       <method name="start"
               c:identifier="hinoko_fw_iso_it_start"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_it.c"
@@ -1714,7 +1709,7 @@ hardware interrupt to generate interrupt event. In detail, please refer to docum
              line="53">Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
 for Linux FireWire subsystem to generate the event:
 
-- When OHCI 1394 controller generates hardware interrupt as a result of processing the
+- When 1394 OHCI hardware generates hardware interrupt as a result of processing the
   isochronous packet for the buffer chunk marked to generate hardware interrupt.
 - When the number of isochronous packets sent since the last interrupt event reaches
   one quarter of memory page size (usually 4,096 / 4 = 1,024 packets).
@@ -1819,15 +1814,15 @@ for Linux FireWire subsystem to generate the event:
     <interface name="FwIsoResource"
                c:symbol-prefix="fw_iso_resource"
                c:type="HinokoFwIsoResource"
-               version="0.7."
+               version="0.7"
                glib:type-name="HinokoFwIsoResource"
                glib:get-type="hinoko_fw_iso_resource_get_type"
                glib:type-struct="FwIsoResourceInterface">
       <doc xml:space="preserve"
            filename="src/fw_iso_resource.c"
-           line="4">An interface object to listen events of isochronous resource allocation and deallocation.
-The [iface@FwIsoResource] should be implemented in GObject-derived object to listen events of
-isochronous resource allocation and deallocation.</doc>
+           line="4">A set of basic interfaces to listen to events about isochronous resource.
+[iface@FwIsoResource] includes interfaces to listen to events about allocation and
+deallocation of isochronous resource.</doc>
       <source-position filename="src/fw_iso_resource.h" line="101"/>
       <function name="calculate_bandwidth"
                 c:identifier="hinoko_fw_iso_resource_calculate_bandwidth">
@@ -1857,9 +1852,9 @@ by given parameters.</doc>
           </parameter>
         </parameters>
       </function>
-      <virtual-method name="allocate_async"
-                      invoker="allocate_async"
-                      version="0.7."
+      <virtual-method name="allocate"
+                      invoker="allocate"
+                      version="1.0"
                       throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
@@ -1903,7 +1898,7 @@ emitted to notify the result, channel, and bandwidth.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="allocated" version="0.7.">
+      <virtual-method name="allocated" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.h"
              line="72">Closure for the [signal@FwIsoResource::allocated] signal.</doc>
@@ -1937,14 +1932,14 @@ emitted to notify the result, channel, and bandwidth.</doc>
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource.h"
                  line="77">A [struct@GLib.Error]. Error can be generated
-   with domain of Hinoko.FwIsoResourceError and its EVENT code.</doc>
+   with domain of [error@FwIsoResourceError] and its EVENT code.</doc>
             <type name="GLib.Error" c:type="const GError*"/>
           </parameter>
         </parameters>
       </virtual-method>
       <virtual-method name="create_source"
                       invoker="create_source"
-                      version="0.7."
+                      version="0.7"
                       throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
@@ -1975,7 +1970,7 @@ resource.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="deallocated" version="0.7.">
+      <virtual-method name="deallocated" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.h"
              line="87">Closure for the [signal@FwIsoResource::deallocated] signal.</doc>
@@ -2009,12 +2004,12 @@ resource.</doc>
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource.h"
                  line="92">A [struct@GLib.Error]. Error can be generated
-   with domain of Hinoko.FwIsoResourceError and its EVENT code.</doc>
+   with domain of [error@FwIsoResourceError] and its EVENT code.</doc>
             <type name="GLib.Error" c:type="const GError*"/>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="open" invoker="open" version="0.7." throws="1">
+      <virtual-method name="open" invoker="open" version="0.7" throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
              line="121">Open Linux FireWire character device to delegate any request for isochronous
@@ -2048,9 +2043,9 @@ resource management to Linux FireWire subsystem.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <method name="allocate_async"
-              c:identifier="hinoko_fw_iso_resource_allocate_async"
-              version="0.7."
+      <method name="allocate"
+              c:identifier="hinoko_fw_iso_resource_allocate"
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
@@ -2094,9 +2089,9 @@ emitted to notify the result, channel, and bandwidth.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="allocate_sync"
-              c:identifier="hinoko_fw_iso_resource_allocate_sync"
-              version="0.7."
+      <method name="allocate_wait"
+              c:identifier="hinoko_fw_iso_resource_allocate_wait"
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
@@ -2147,7 +2142,7 @@ signal. One of the candidates is actually allocated for channel.</doc>
       </method>
       <method name="create_source"
               c:identifier="hinoko_fw_iso_resource_create_source"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
@@ -2180,7 +2175,7 @@ resource.</doc>
       </method>
       <method name="open"
               c:identifier="hinoko_fw_iso_resource_open"
-              version="0.7."
+              version="0.7"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
@@ -2218,7 +2213,7 @@ resource management to Linux FireWire subsystem.</doc>
       <property name="generation" transfer-ownership="none" default-value="0">
         <type name="guint" c:type="guint"/>
       </property>
-      <glib:signal name="allocated" when="last" action="1" version="0.7.">
+      <glib:signal name="allocated" when="last" action="1" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
              line="78">Emitted when allocation of isochronous resource finishes.</doc>
@@ -2245,12 +2240,12 @@ resource management to Linux FireWire subsystem.</doc>
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource.c"
                  line="83">A [struct@GLib.Error]. Error can be generated
-   with domain of Hinoko.FwIsoResourceError and its EVENT code.</doc>
+   with domain of [error@FwIsoResourceError] and its EVENT code.</doc>
             <type name="GLib.Error"/>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="deallocated" when="last" action="1" version="0.7.">
+      <glib:signal name="deallocated" when="last" action="1" version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
              line="99">Emitted when deallocation of isochronous resource finishes.</doc>
@@ -2277,7 +2272,7 @@ resource management to Linux FireWire subsystem.</doc>
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource.c"
                  line="104">A [struct@GLib.Error]. Error can be generated
-   with domain of Hinoko.FwIsoResourceError and its EVENT code.</doc>
+   with domain of [error@FwIsoResourceError] and its EVENT code.</doc>
             <type name="GLib.Error"/>
           </parameter>
         </parameters>
@@ -2293,7 +2288,7 @@ resource management to Linux FireWire subsystem.</doc>
       <doc xml:space="preserve"
            filename="src/fw_iso_resource_auto.c"
            line="4">An object to maintain allocated isochronous resource.
-A [class@FwIsoResourceAuto]is an object to maintain isochronous resource during the lifetime of
+[class@FwIsoResourceAuto]is an object to maintain isochronous resource during the lifetime of
 the object. The allocated isochronous resource is kept even if the generation of the bus
 updates. The maintenance of allocated isochronous resource is done by Linux FireWire subsystem.</doc>
       <source-position filename="src/fw_iso_resource_auto.h" line="20"/>
@@ -2301,71 +2296,71 @@ updates. The maintenance of allocated isochronous resource is done by Linux Fire
       <constructor name="new" c:identifier="hinoko_fw_iso_resource_auto_new">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_auto.c"
-             line="350">Allocate and return an instance of [class@FwIsoResourceAuto]object.</doc>
+             line="349">Allocate and return an instance of [class@FwIsoResourceAuto]object.</doc>
         <source-position filename="src/fw_iso_resource_auto.h" line="22"/>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="src/fw_iso_resource_auto.c"
-               line="355">A [class@FwIsoResourceAuto]</doc>
+               line="354">A [class@FwIsoResourceAuto]</doc>
           <type name="FwIsoResourceAuto" c:type="HinokoFwIsoResourceAuto*"/>
         </return-value>
       </constructor>
-      <method name="deallocate_async"
-              c:identifier="hinoko_fw_iso_resource_auto_deallocate_async"
-              version="0.7."
+      <method name="deallocate"
+              c:identifier="hinoko_fw_iso_resource_auto_deallocate"
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_auto.c"
-             line="362">Initiate deallocation of isochronous resource. When the deallocation is done,
+             line="361">Initiate deallocation of isochronous resource. When the deallocation is done,
 [signal@FwIsoResource::deallocated] signal is emit to notify the result, channel, and bandwidth.</doc>
         <source-position filename="src/fw_iso_resource_auto.h" line="24"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_resource_auto.c"
-               line="371">TRUE if the overall operation finished successfully, otherwise FALSE.</doc>
+               line="370">TRUE if the overall operation finished successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource_auto.c"
-                 line="364">A [class@FwIsoResourceAuto]</doc>
+                 line="363">A [class@FwIsoResourceAuto]</doc>
             <type name="FwIsoResourceAuto" c:type="HinokoFwIsoResourceAuto*"/>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="deallocate_sync"
-              c:identifier="hinoko_fw_iso_resource_auto_deallocate_sync"
-              version="0.7."
+      <method name="deallocate_wait"
+              c:identifier="hinoko_fw_iso_resource_auto_deallocate_wait"
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_auto.c"
-             line="414">Initiate deallocation of isochronous resource. When the deallocation is done,
+             line="412">Initiate deallocation of isochronous resource. When the deallocation is done,
 [signal@FwIsoResource::deallocated] signal is emit to notify the result, channel, and bandwidth.</doc>
-        <source-position filename="src/fw_iso_resource_auto.h" line="26"/>
+        <source-position filename="src/fw_iso_resource_auto.h" line="25"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_resource_auto.c"
-               line="424">TRUE if the overall operation finished successfully, otherwise FALSE.</doc>
+               line="422">TRUE if the overall operation finished successfully, otherwise FALSE.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource_auto.c"
-                 line="416">A [class@FwIsoResourceAuto]</doc>
+                 line="414">A [class@FwIsoResourceAuto]</doc>
             <type name="FwIsoResourceAuto" c:type="HinokoFwIsoResourceAuto*"/>
           </instance-parameter>
           <parameter name="timeout_ms" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="src/fw_iso_resource_auto.c"
-                 line="417">The timeout to wait for allocated event by milli second unit.</doc>
+                 line="415">The timeout to wait for allocated event by milli second unit.</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
         </parameters>
       </method>
       <property name="bandwidth"
-                version="0.7."
+                version="0.7"
                 transfer-ownership="none"
                 default-value="0">
         <doc xml:space="preserve"
@@ -2374,7 +2369,7 @@ updates. The maintenance of allocated isochronous resource is done by Linux Fire
         <type name="guint" c:type="guint"/>
       </property>
       <property name="channel"
-                version="0.7."
+                version="0.7"
                 transfer-ownership="none"
                 default-value="0">
         <doc xml:space="preserve"
@@ -2383,7 +2378,7 @@ updates. The maintenance of allocated isochronous resource is done by Linux Fire
         <type name="guint" c:type="guint"/>
       </property>
       <property name="is-allocated"
-                version="0.7."
+                version="0.7"
                 transfer-ownership="none"
                 default-value="FALSE">
         <doc xml:space="preserve"
@@ -2410,7 +2405,7 @@ updates. The maintenance of allocated isochronous resource is done by Linux Fire
                  glib:error-domain="hinoko-fw-iso-resource-auto-error-quark">
       <doc xml:space="preserve"
            filename="src/hinoko_enum_types.h"
-           line="80">A set of error code for [class@FwIsoResourceAuto].</doc>
+           line="80">A set of error code for operations in [class@FwIsoResourceAuto].</doc>
       <member name="failed"
               value="0"
               c:identifier="HINOKO_FW_ISO_RESOURCE_AUTO_ERROR_FAILED"
@@ -2445,7 +2440,7 @@ updates. The maintenance of allocated isochronous resource is done by Linux Fire
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_auto.c"
              line="29">Return the [alias@GLib.Quark] for error domain of [struct@GLib.Error] which has code in
-Hinoko.FwIsoResourceAutoError.</doc>
+[error@FwIsoResourceAutoError].</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_resource_auto.c"
@@ -2461,7 +2456,7 @@ Hinoko.FwIsoResourceAutoError.</doc>
                  glib:error-domain="hinoko-fw-iso-resource-error-quark">
       <doc xml:space="preserve"
            filename="src/hinoko_enum_types.h"
-           line="60">A set of error code for [iface@FwIsoResource].</doc>
+           line="60">A set of error code for operations in [iface@FwIsoResource].</doc>
       <member name="failed"
               value="0"
               c:identifier="HINOKO_FW_ISO_RESOURCE_ERROR_FAILED"
@@ -2512,8 +2507,8 @@ Hinoko.FwIsoResourceAutoError.</doc>
       <function name="quark" c:identifier="hinoko_fw_iso_resource_error_quark">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
-             line="16">Return the [alias@GLib.Quark] for error domain of [struct@GLib.Error] which has code in
-Hinoko.FwIsoResourceError.</doc>
+             line="16">Return the [alias@GLib.Quark] for [struct@GLib.Error] with which has code in
+[error@FwIsoResourceError].</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="src/fw_iso_resource.c"
@@ -2561,8 +2556,8 @@ Hinoko.FwIsoResourceError.</doc>
           </parameters>
         </callback>
       </field>
-      <field name="allocate_async">
-        <callback name="allocate_async" throws="1">
+      <field name="allocate">
+        <callback name="allocate" throws="1">
           <source-position filename="src/fw_iso_resource.h" line="54"/>
           <return-value transfer-ownership="none">
             <doc xml:space="preserve"
@@ -2662,7 +2657,7 @@ Hinoko.FwIsoResourceError.</doc>
               <doc xml:space="preserve"
                    filename="src/fw_iso_resource.h"
                    line="77">A [struct@GLib.Error]. Error can be generated
-   with domain of Hinoko.FwIsoResourceError and its EVENT code.</doc>
+   with domain of [error@FwIsoResourceError] and its EVENT code.</doc>
               <type name="GLib.Error" c:type="const GError*"/>
             </parameter>
           </parameters>
@@ -2700,7 +2695,7 @@ Hinoko.FwIsoResourceError.</doc>
               <doc xml:space="preserve"
                    filename="src/fw_iso_resource.h"
                    line="92">A [struct@GLib.Error]. Error can be generated
-   with domain of Hinoko.FwIsoResourceError and its EVENT code.</doc>
+   with domain of [error@FwIsoResourceError] and its EVENT code.</doc>
               <type name="GLib.Error" c:type="const GError*"/>
             </parameter>
           </parameters>
@@ -2737,9 +2732,9 @@ Sine: 0.7.</doc>
           <type name="FwIsoResourceOnce" c:type="HinokoFwIsoResourceOnce*"/>
         </return-value>
       </constructor>
-      <method name="deallocate_async"
-              c:identifier="hinoko_fw_iso_resource_once_deallocate_async"
-              version="0.7."
+      <method name="deallocate"
+              c:identifier="hinoko_fw_iso_resource_once_deallocate"
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_once.c"
@@ -2774,9 +2769,9 @@ channel, and bandwidth.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="deallocate_sync"
-              c:identifier="hinoko_fw_iso_resource_once_deallocate_sync"
-              version="0.7."
+      <method name="deallocate_wait"
+              c:identifier="hinoko_fw_iso_resource_once_deallocate_wait"
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_once.c"
@@ -2895,12 +2890,11 @@ signal.</doc>
               moved-to="FwIsoCtxError.quark">
       <doc xml:space="preserve"
            filename="src/fw_iso_ctx.c"
-           line="16">Return the [alias@GLib.Quark] for error domain of [struct@GLib.Error] which has code in
-Hinoko.FwIsoCtxError.</doc>
+           line="16">Return the [alias@GLib.Quark] for [struct@GLib.Error] which has code in [error@FwIsoCtxError].</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
-             line="22">A [alias@GLib.Quark].</doc>
+             line="21">A [alias@GLib.Quark].</doc>
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
     </function>
@@ -2910,7 +2904,7 @@ Hinoko.FwIsoCtxError.</doc>
       <doc xml:space="preserve"
            filename="src/fw_iso_resource_auto.c"
            line="29">Return the [alias@GLib.Quark] for error domain of [struct@GLib.Error] which has code in
-Hinoko.FwIsoResourceAutoError.</doc>
+[error@FwIsoResourceAutoError].</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_auto.c"
@@ -2952,8 +2946,8 @@ by given parameters.</doc>
               moved-to="FwIsoResourceError.quark">
       <doc xml:space="preserve"
            filename="src/fw_iso_resource.c"
-           line="16">Return the [alias@GLib.Quark] for error domain of [struct@GLib.Error] which has code in
-Hinoko.FwIsoResourceError.</doc>
+           line="16">Return the [alias@GLib.Quark] for [struct@GLib.Error] with which has code in
+[error@FwIsoResourceError].</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource.c"
