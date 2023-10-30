@@ -7,13 +7,13 @@ use crate::*;
 ///
 /// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple], [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle], [`FwIsoIt`][struct@crate::FwIsoIt]
 pub trait FwIsoCtxExtManual {
-    /// Retrieve the value of cycle timer register. This method call is available
-    /// once any isochronous context is created.
+    /// Retrieve the value of cycle time register. This method call is available once any isochronous
+    /// context is created.
     /// ## `clock_id`
     /// The numeric ID of clock source for the reference timestamp. One CLOCK_REALTIME(0),
     ///       CLOCK_MONOTONIC(1), and CLOCK_MONOTONIC_RAW(4) is available in UAPI of Linux kernel.
     /// ## `cycle_time`
-    /// A [`hinawa::CycleTime`][hinawa::CycleTime] to store data of cycle timer.
+    /// A [`hinawa::CycleTime`][hinawa::CycleTime] to store data of cycle time.
     ///
     /// # Returns
     ///

@@ -17,8 +17,8 @@ use std::ptr;
 glib::wrapper! {
     /// An object to receive isochronous packet for several channels.
     ///
-    /// A [`FwIsoIrMultiple`][crate::FwIsoIrMultiple] receives isochronous packets for several channels by IR context for
-    /// buffer-fill mode in 1394 OHCI.
+    /// [`FwIsoIrMultiple`][crate::FwIsoIrMultiple] receives isochronous packets for several channels by buffer-fill mode of
+    /// IR context in 1394 OHCI.
     ///
     /// # Implements
     ///
@@ -57,8 +57,8 @@ impl Default for FwIsoIrMultiple {
 ///
 /// [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple]
 pub trait FwIsoIrMultipleExt: 'static {
-    /// Allocate an IR context to 1394 OHCI controller for buffer-fill mode. A local node of the node
-    /// corresponding to the given path is used as the controller, thus any path is accepted as long as
+    /// Allocate an IR context to 1394 OHCI hardware for buffer-fill mode. A local node of the node
+    /// corresponding to the given path is used as the hardware, thus any path is accepted as long as
     /// process has enough permission for the path.
     /// ## `path`
     /// A path to any Linux FireWire character device.
@@ -68,8 +68,7 @@ pub trait FwIsoIrMultipleExt: 'static {
     #[doc(alias = "hinoko_fw_iso_ir_multiple_allocate")]
     fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error>;
 
-    /// Map an intermediate buffer to share payload of IR context with 1394 OHCI
-    /// controller.
+    /// Map an intermediate buffer to share payload of IR context with 1394 OHCI hardware.
     /// ## `bytes_per_chunk`
     /// The maximum number of bytes for payload of isochronous packet (not payload for
     ///          isochronous context).
@@ -81,7 +80,7 @@ pub trait FwIsoIrMultipleExt: 'static {
     /// Emitted when Linux FireWire subsystem generates interrupt event. There are two cases
     /// for Linux FireWire subsystem to generate the event:
     ///
-    /// - When OHCI 1394 controller generates hardware interrupt as a result to process the
+    /// - When 1394 OHCI hardware generates hardware interrupt as a result to process the
     ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
     /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
     ///

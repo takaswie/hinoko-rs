@@ -16,10 +16,10 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
-    /// An interface object to listen events of isochronous resource allocation and deallocation.
+    /// A set of basic interfaces to listen to events about isochronous resource.
     ///
-    /// The [`FwIsoResource`][crate::FwIsoResource] should be implemented in GObject-derived object to listen events of
-    /// isochronous resource allocation and deallocation.
+    /// [`FwIsoResource`][crate::FwIsoResource] includes interfaces to listen to events about allocation and
+    /// deallocation of isochronous resource.
     ///
     /// # Implements
     ///
@@ -71,8 +71,8 @@ pub trait FwIsoResourceExt: 'static {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_allocate_async")]
-    fn allocate_async(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error>;
+    #[doc(alias = "hinoko_fw_iso_resource_allocate")]
+    fn allocate(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error>;
 
     /// Initiate allocation of isochronous resource and wait for `signal::FwIsoResource::allocated`
     /// signal. One of the candidates is actually allocated for channel.
@@ -87,8 +87,8 @@ pub trait FwIsoResourceExt: 'static {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_allocate_sync")]
-    fn allocate_sync(
+    #[doc(alias = "hinoko_fw_iso_resource_allocate_wait")]
+    fn allocate_wait(
         &self,
         channel_candidates: &[u8],
         bandwidth: u32,
@@ -130,7 +130,7 @@ pub trait FwIsoResourceExt: 'static {
     /// The deallocated amount of bandwidth.
     /// ## `error`
     /// A [`glib::Error`][crate::glib::Error]. Error can be generated
-    ///    with domain of Hinoko.FwIsoResourceError and its EVENT code.
+    ///    with domain of [`FwIsoResourceError`][crate::FwIsoResourceError] and its EVENT code.
     #[doc(alias = "allocated")]
     fn connect_allocated<F: Fn(&Self, u32, u32, Option<&glib::Error>) + 'static>(
         &self,
@@ -146,7 +146,7 @@ pub trait FwIsoResourceExt: 'static {
     /// The deallocated amount of bandwidth.
     /// ## `error`
     /// A [`glib::Error`][crate::glib::Error]. Error can be generated
-    ///    with domain of Hinoko.FwIsoResourceError and its EVENT code.
+    ///    with domain of [`FwIsoResourceError`][crate::FwIsoResourceError] and its EVENT code.
     #[doc(alias = "deallocated")]
     fn connect_deallocated<F: Fn(&Self, u32, u32, Option<&glib::Error>) + 'static>(
         &self,
@@ -160,11 +160,11 @@ pub trait FwIsoResourceExt: 'static {
 }
 
 impl<O: IsA<FwIsoResource>> FwIsoResourceExt for O {
-    fn allocate_async(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error> {
+    fn allocate(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error> {
         let channel_candidates_count = channel_candidates.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_allocate_async(
+            let is_ok = ffi::hinoko_fw_iso_resource_allocate(
                 self.as_ref().to_glib_none().0,
                 channel_candidates.to_glib_none().0,
                 channel_candidates_count,
@@ -180,7 +180,7 @@ impl<O: IsA<FwIsoResource>> FwIsoResourceExt for O {
         }
     }
 
-    fn allocate_sync(
+    fn allocate_wait(
         &self,
         channel_candidates: &[u8],
         bandwidth: u32,
@@ -189,7 +189,7 @@ impl<O: IsA<FwIsoResource>> FwIsoResourceExt for O {
         let channel_candidates_count = channel_candidates.len() as usize;
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_allocate_sync(
+            let is_ok = ffi::hinoko_fw_iso_resource_allocate_wait(
                 self.as_ref().to_glib_none().0,
                 channel_candidates.to_glib_none().0,
                 channel_candidates_count,

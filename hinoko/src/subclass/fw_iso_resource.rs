@@ -6,7 +6,7 @@ use super::*;
 pub trait FwIsoResourceImpl: ObjectImpl {
     fn open(&self, resource: &Self::Type, path: &str, open_flag: i32) -> Result<(), Error>;
     fn create_source(&self, resource: &Self::Type) -> Result<Source, Error>;
-    fn allocate_async(
+    fn allocate(
         &self,
         resource: &Self::Type,
         channel_candidates: &[u8],
@@ -27,7 +27,7 @@ pub trait FwIsoResourceImpl: ObjectImpl {
 pub trait FwIsoResourceImplExt: ObjectSubclass {
     fn parent_open(&self, resource: &Self::Type, path: &str, open_flag: i32) -> Result<(), Error>;
     fn parent_create_source(&self, resource: &Self::Type) -> Result<Source, Error>;
-    fn parent_allocate_async(
+    fn parent_allocate(
         &self,
         resource: &Self::Type,
         channel_candidates: &[u8],
@@ -75,7 +75,7 @@ impl<T: FwIsoResourceImpl> FwIsoResourceImplExt for T {
         }
     }
 
-    fn parent_allocate_async(
+    fn parent_allocate(
         &self,
         resource: &Self::Type,
         channel_candidates: &[u8],
@@ -86,8 +86,8 @@ impl<T: FwIsoResourceImpl> FwIsoResourceImplExt for T {
             let parent_class =
                 data.as_ref().parent_class() as *mut ffi::HinokoFwIsoResourceInterface;
             let f = (*parent_class)
-                .allocate_async
-                .expect("No parent \"allocate_async\" implementation");
+                .allocate
+                .expect("No parent \"allocate\" implementation");
 
             let mut error = std::ptr::null_mut();
             let is_ok = f(
@@ -182,7 +182,7 @@ unsafe impl<T: FwIsoResourceImpl> IsImplementable<T> for FwIsoResource {
         let iface = iface.as_mut();
         iface.open = Some(fw_iso_resource_open::<T>);
         iface.create_source = Some(fw_iso_resource_create_source::<T>);
-        iface.allocate_async = Some(fw_iso_resource_allocate_async::<T>);
+        iface.allocate = Some(fw_iso_resource_allocate::<T>);
         iface.allocated = Some(fw_iso_resource_allocated::<T>);
         iface.deallocated = Some(fw_iso_resource_deallocated::<T>);
     }
@@ -236,7 +236,7 @@ unsafe extern "C" fn fw_iso_resource_create_source<T: FwIsoResourceImpl>(
     }
 }
 
-unsafe extern "C" fn fw_iso_resource_allocate_async<T: FwIsoResourceImpl>(
+unsafe extern "C" fn fw_iso_resource_allocate<T: FwIsoResourceImpl>(
     resource: *mut ffi::HinokoFwIsoResource,
     channel_candidates: *const u8,
     channel_candidates_count: size_t,
@@ -247,7 +247,7 @@ unsafe extern "C" fn fw_iso_resource_allocate_async<T: FwIsoResourceImpl>(
     let imp = instance.imp();
     let wrap: Borrowed<FwIsoResource> = from_glib_borrow(resource);
 
-    match imp.allocate_async(
+    match imp.allocate(
         wrap.unsafe_cast_ref(),
         std::slice::from_raw_parts(channel_candidates, channel_candidates_count),
         bandwidth.into(),
@@ -354,7 +354,7 @@ mod test {
                 Err(Error::new(FwIsoResourceError::Failed, "expected failure"))
             }
 
-            fn allocate_async(
+            fn allocate(
                 &self,
                 _resource: &Self::Type,
                 _channel_candidates: &[u8],

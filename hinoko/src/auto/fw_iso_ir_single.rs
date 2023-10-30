@@ -12,10 +12,9 @@ use std::ptr;
 glib::wrapper! {
     /// An object to receive isochronous packet for single channel.
     ///
-    /// A [`FwIsoIrSingle`][crate::FwIsoIrSingle] receives isochronous packets for single channel by IR
-    /// context for packet-per-buffer mode in 1394 OHCI. The content of packet is
-    /// split to two parts; context header and context payload in a manner of Linux
-    /// FireWire subsystem.
+    /// [`FwIsoIrSingle`][crate::FwIsoIrSingle] receives isochronous packets for single channel by packet-per-buffer
+    /// mode of IR context in 1394 OHCI. The content of packet is split to two parts; context header and
+    /// context payload in a manner of Linux FireWire subsystem.
     ///
     /// # Implements
     ///
@@ -54,8 +53,8 @@ impl Default for FwIsoIrSingle {
 ///
 /// [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle]
 pub trait FwIsoIrSingleExt: 'static {
-    /// Allocate an IR context to 1394 OHCI controller for packet-per-buffer mode. A local node of the
-    /// node corresponding to the given path is used as the controller, thus any path is accepted as
+    /// Allocate an IR context to 1394 OHCI hardware for packet-per-buffer mode. A local node of the
+    /// node corresponding to the given path is used as the hardware, thus any path is accepted as
     /// long as process has enough permission for the path.
     ///
     /// The header_size parameter has an effect for the content of header parameter in
@@ -76,7 +75,7 @@ pub trait FwIsoIrSingleExt: 'static {
     #[doc(alias = "hinoko_fw_iso_ir_single_allocate")]
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error>;
 
-    /// Map intermediate buffer to share payload of IR context with 1394 OHCI controller.
+    /// Map intermediate buffer to share payload of IR context with 1394 OHCI hardware.
     /// ## `maximum_bytes_per_payload`
     /// The maximum number of bytes per payload of IR context.
     /// ## `payloads_per_buffer`

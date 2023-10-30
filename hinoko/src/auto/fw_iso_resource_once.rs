@@ -11,8 +11,8 @@ use std::ptr;
 
 glib::wrapper! {
     /// An object to initiate requests and listen events of isochronous resource allocation/deallocation
-    ///
     /// by one shot.
+    ///
     /// The [`FwIsoResourceOnce`][crate::FwIsoResourceOnce] is an object to initiate requests and listen events of isochronous
     /// resource allocation/deallocation by file descriptor owned internally. The allocated resource
     /// is left even if this object is destroyed, thus application is responsible for deallocation.
@@ -67,8 +67,8 @@ pub trait FwIsoResourceOnceExt: 'static {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_once_deallocate_async")]
-    fn deallocate_async(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error>;
+    #[doc(alias = "hinoko_fw_iso_resource_once_deallocate")]
+    fn deallocate(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error>;
 
     /// Initiate deallocation of isochronous resource and wait for `signal::FwIsoResource::deallocated`
     /// signal.
@@ -82,8 +82,8 @@ pub trait FwIsoResourceOnceExt: 'static {
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_once_deallocate_sync")]
-    fn deallocate_sync(
+    #[doc(alias = "hinoko_fw_iso_resource_once_deallocate_wait")]
+    fn deallocate_wait(
         &self,
         channel: u32,
         bandwidth: u32,
@@ -92,10 +92,10 @@ pub trait FwIsoResourceOnceExt: 'static {
 }
 
 impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {
-    fn deallocate_async(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error> {
+    fn deallocate(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate_async(
+            let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate(
                 self.as_ref().to_glib_none().0,
                 channel,
                 bandwidth,
@@ -110,7 +110,7 @@ impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {
         }
     }
 
-    fn deallocate_sync(
+    fn deallocate_wait(
         &self,
         channel: u32,
         bandwidth: u32,
@@ -118,7 +118,7 @@ impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate_sync(
+            let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate_wait(
                 self.as_ref().to_glib_none().0,
                 channel,
                 bandwidth,

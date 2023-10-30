@@ -13,7 +13,7 @@ use std::ptr;
 glib::wrapper! {
     /// An object to transmit isochronous packet for single channel.
     ///
-    /// A [`FwIsoIt`][crate::FwIsoIt] transmits isochronous packets for single channel by IT context in 1394 OHCI.
+    /// [`FwIsoIt`][crate::FwIsoIt] transmits isochronous packets for single channel by IT context in 1394 OHCI.
     /// The content of packet is split to two parts; context header and context payload in a manner of
     /// Linux FireWire subsystem.
     ///
@@ -54,8 +54,8 @@ impl Default for FwIsoIt {
 ///
 /// [`FwIsoIt`][struct@crate::FwIsoIt]
 pub trait FwIsoItExt: 'static {
-    /// Allocate an IT context to 1394 OHCI controller. A local node of the node corresponding to the
-    /// given path is used as the controller, thus any path is accepted as long as process has enough
+    /// Allocate an IT context to 1394 OHCI hardware. A local node of the node corresponding to the
+    /// given path is used as the hardware, thus any path is accepted as long as process has enough
     /// permission for the path.
     /// ## `path`
     /// A path to any Linux FireWire character device.
@@ -78,7 +78,7 @@ pub trait FwIsoItExt: 'static {
         header_size: u32,
     ) -> Result<(), glib::Error>;
 
-    /// Map intermediate buffer to share payload of IT context with 1394 OHCI controller.
+    /// Map intermediate buffer to share payload of IT context with 1394 OHCI hardware.
     /// ## `maximum_bytes_per_payload`
     /// The number of bytes for payload of IT context.
     /// ## `payloads_per_buffer`

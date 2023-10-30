@@ -15,10 +15,10 @@ use std::mem::transmute;
 use std::ptr;
 
 glib::wrapper! {
-    /// An basic interface to operate isochronous context on 1394 OHCI controller.
+    /// A set of basic interfaces to operate isochronous context on 1394 OHCI hardware.
     ///
-    /// A [`FwIsoCtx`][crate::FwIsoCtx] is an basic interface to use UAPI of Linux FireWire subsystem to operate
-    /// 1394 OHCI controller.
+    /// [`FwIsoCtx`][crate::FwIsoCtx] includes interfaces to operate 1394 OHCI hardware for isochronous communication
+    /// by any kind of contexts.
     ///
     /// # Implements
     ///
@@ -63,7 +63,7 @@ pub trait FwIsoCtxExt: 'static {
     #[doc(alias = "hinoko_fw_iso_ctx_flush_completions")]
     fn flush_completions(&self) -> Result<(), glib::Error>;
 
-    /// Release the contest from 1394 OHCI controller.
+    /// Release the contest from 1394 OHCI hardware.
     #[doc(alias = "hinoko_fw_iso_ctx_release")]
     fn release(&self);
 
@@ -71,7 +71,7 @@ pub trait FwIsoCtxExt: 'static {
     #[doc(alias = "hinoko_fw_iso_ctx_stop")]
     fn stop(&self);
 
-    /// Unmap intermediate buffer shared with 1394 OHCI controller for the context.
+    /// Unmap intermediate buffer shared with 1394 OHCI hardware for the context.
     #[doc(alias = "hinoko_fw_iso_ctx_unmap_buffer")]
     fn unmap_buffer(&self);
 

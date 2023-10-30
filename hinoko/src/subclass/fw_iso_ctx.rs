@@ -221,7 +221,7 @@ unsafe extern "C" fn fw_iso_ctx_flush_completions<T: FwIsoCtxImpl>(
 unsafe extern "C" fn fw_iso_ctx_read_cycle_time<T: FwIsoCtxImpl>(
     ctx: *mut ffi::HinokoFwIsoCtx,
     clock_id: c_int,
-    cycle_time: *const *mut hinawa::ffi::HinawaCycleTime,
+    cycle_time: *mut *mut hinawa::ffi::HinawaCycleTime,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
     let instance = &*(ctx as *mut T::Instance);

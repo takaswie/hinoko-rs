@@ -54,7 +54,7 @@ pub trait FwIsoItExtManual {
     /// Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
     /// for Linux FireWire subsystem to generate the event:
     ///
-    /// - When OHCI 1394 controller generates hardware interrupt as a result of processing the
+    /// - When 1394 OHCI hardware generates hardware interrupt as a result of processing the
     ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
     /// - When the number of isochronous packets sent since the last interrupt event reaches
     ///   one quarter of memory page size (usually 4,096 / 4 = 1,024 packets).

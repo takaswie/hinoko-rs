@@ -12,7 +12,7 @@ use glib::StaticType;
 use glib::Type;
 use std::fmt;
 
-/// A set of error code for [`FwIsoCtx`][crate::FwIsoCtx].
+/// A set of error code for operations in [`FwIsoCtx`][crate::FwIsoCtx].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoCtxError")]
@@ -241,7 +241,7 @@ impl ToValue for FwIsoCtxMode {
     }
 }
 
-/// A set of error code for [`FwIsoResourceAuto`][crate::FwIsoResourceAuto].
+/// A set of error code for operations in [`FwIsoResourceAuto`][crate::FwIsoResourceAuto].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoResourceAutoError")]
@@ -351,7 +351,7 @@ impl ToValue for FwIsoResourceAutoError {
     }
 }
 
-/// A set of error code for [`FwIsoResource`][crate::FwIsoResource].
+/// A set of error code for operations in [`FwIsoResource`][crate::FwIsoResource].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "HinokoFwIsoResourceError")]

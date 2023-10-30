@@ -17,7 +17,7 @@ use std::ptr;
 glib::wrapper! {
     /// An object to maintain allocated isochronous resource.
     ///
-    /// A [`FwIsoResourceAuto`][crate::FwIsoResourceAuto]is an object to maintain isochronous resource during the lifetime of
+    /// [`FwIsoResourceAuto`][crate::FwIsoResourceAuto]is an object to maintain isochronous resource during the lifetime of
     /// the object. The allocated isochronous resource is kept even if the generation of the bus
     /// updates. The maintenance of allocated isochronous resource is done by Linux FireWire subsystem.
     ///
@@ -64,8 +64,8 @@ pub trait FwIsoResourceAutoExt: 'static {
     /// # Returns
     ///
     /// TRUE if the overall operation finished successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_async")]
-    fn deallocate_async(&self) -> Result<(), glib::Error>;
+    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate")]
+    fn deallocate(&self) -> Result<(), glib::Error>;
 
     /// Initiate deallocation of isochronous resource. When the deallocation is done,
     /// `signal::FwIsoResource::deallocated` signal is emit to notify the result, channel, and bandwidth.
@@ -75,8 +75,8 @@ pub trait FwIsoResourceAutoExt: 'static {
     /// # Returns
     ///
     /// TRUE if the overall operation finished successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_sync")]
-    fn deallocate_sync(&self, timeout_ms: u32) -> Result<(), glib::Error>;
+    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_wait")]
+    fn deallocate_wait(&self, timeout_ms: u32) -> Result<(), glib::Error>;
 
     /// The allocated amount of bandwidth.
     fn bandwidth(&self) -> u32;
@@ -99,10 +99,10 @@ pub trait FwIsoResourceAutoExt: 'static {
 }
 
 impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
-    fn deallocate_async(&self) -> Result<(), glib::Error> {
+    fn deallocate(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_auto_deallocate_async(
+            let is_ok = ffi::hinoko_fw_iso_resource_auto_deallocate(
                 self.as_ref().to_glib_none().0,
                 &mut error,
             );
@@ -115,10 +115,10 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         }
     }
 
-    fn deallocate_sync(&self, timeout_ms: u32) -> Result<(), glib::Error> {
+    fn deallocate_wait(&self, timeout_ms: u32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_auto_deallocate_sync(
+            let is_ok = ffi::hinoko_fw_iso_resource_auto_deallocate_wait(
                 self.as_ref().to_glib_none().0,
                 timeout_ms,
                 &mut error,

@@ -1,7 +1,7 @@
 # hinoko crate
 
 Rust API bindings and wrappers for
-[hinoko library](https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/) to operate OHCI 1394
+[hinoko library](https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/) to operate 1394 OHCI
 hardware via Linux FireWire character device for isochronous communication in IEEE 1394 bus.
 
 The hinoko library version 1.0 is the minimum supported version for underlying library.

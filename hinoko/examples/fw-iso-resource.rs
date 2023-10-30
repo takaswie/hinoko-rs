@@ -43,9 +43,9 @@ fn main() {
 
     let bandwidth = FwIsoResource::calculate_bandwidth(120, FwScode::S400);
 
-    res.allocate_sync(&[CHANNEL.into()], bandwidth, TIMEOUT)
+    res.allocate_wait(&[CHANNEL.into()], bandwidth, TIMEOUT)
         .unwrap();
-    res.deallocate_sync(CHANNEL.into(), bandwidth, TIMEOUT)
+    res.deallocate_wait(CHANNEL.into(), bandwidth, TIMEOUT)
         .unwrap();
 
     src.destroy();
@@ -62,8 +62,8 @@ fn main() {
     let src = res.create_source().unwrap();
     let (dispatcher_cntr, th) = launch_dispatcher(&src);
 
-    res.allocate_sync(&[CHANNEL], bandwidth, TIMEOUT).unwrap();
-    res.deallocate_sync(TIMEOUT).unwrap();
+    res.allocate_wait(&[CHANNEL], bandwidth, TIMEOUT).unwrap();
+    res.deallocate_wait(TIMEOUT).unwrap();
 
     src.destroy();
     dispatcher_cntr.quit();
