@@ -27,13 +27,13 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
         unsafe {
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_ctx_read_cycle_time(
+            let is_ok = ffi::hinoko_fw_iso_ctx_read_cycle_time(
                 self.as_ref().to_glib_none().0,
                 clock_id,
                 &mut cycle_time.to_glib_none_mut().0,
                 &mut error,
             );
-
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

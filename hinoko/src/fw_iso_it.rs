@@ -105,8 +105,7 @@ impl<O: IsA<FwIsoIt>> FwIsoItExtManual for O {
                 schedule_interrupt.into_glib(),
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -123,8 +122,9 @@ impl<O: IsA<FwIsoIt>> FwIsoItExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_it_start(self.as_ref().to_glib_none().0, ptr, &mut error);
-
+            let is_ok =
+                ffi::hinoko_fw_iso_it_start(self.as_ref().to_glib_none().0, ptr, &mut error);
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

@@ -22,8 +22,7 @@ pub trait FwIsoResourceImpl: ObjectImpl {
     );
 }
 
-/// Trait which is automatically implemented to implementator of
-/// [`FwIsoResourceImpl`][self::FwIsoResourceImpl].
+/// Trait which is automatically implemented to implementator of [`FwIsoResourceImpl`][self::FwIsoResourceImpl].
 pub trait FwIsoResourceImplExt: ObjectSubclass {
     fn parent_open(&self, resource: &Self::Type, path: &str, open_flag: i32) -> Result<(), Error>;
     fn parent_create_source(&self, resource: &Self::Type) -> Result<Source, Error>;
@@ -66,7 +65,7 @@ impl<T: FwIsoResourceImpl> FwIsoResourceImplExt for T {
                 open_flag.into(),
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -97,7 +96,7 @@ impl<T: FwIsoResourceImpl> FwIsoResourceImplExt for T {
                 bandwidth,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -121,7 +120,7 @@ impl<T: FwIsoResourceImpl> FwIsoResourceImplExt for T {
                 &mut source,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(from_glib_full(source))
             } else {
@@ -206,7 +205,7 @@ unsafe extern "C" fn fw_iso_resource_open<T: FwIsoResourceImpl>(
         Ok(_) => glib::ffi::GTRUE,
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             glib::ffi::GFALSE
         }
@@ -229,7 +228,7 @@ unsafe extern "C" fn fw_iso_resource_create_source<T: FwIsoResourceImpl>(
         }
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             glib::ffi::GFALSE
         }
@@ -255,7 +254,7 @@ unsafe extern "C" fn fw_iso_resource_allocate<T: FwIsoResourceImpl>(
         Ok(_) => glib::ffi::GTRUE,
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             glib::ffi::GFALSE
         }
@@ -301,13 +300,20 @@ unsafe extern "C" fn fw_iso_resource_deallocated<T: FwIsoResourceImpl>(
 #[cfg(test)]
 mod test {
     use crate::{prelude::*, subclass::prelude::*, *};
-    use glib::{subclass::prelude::*, Error, ParamSpec, ParamSpecOverride, Source, ToValue, Value};
+    use glib::{subclass::prelude::*, Error, ObjectExt, Properties, Source};
 
-    pub mod imp {
+    const GENERATION: u32 = 1111;
+
+    mod imp {
         use super::*;
+        use std::cell::RefCell;
 
-        #[derive(Default)]
-        pub struct FwIsoResourceTest;
+        #[derive(Properties)]
+        #[properties(wrapper_type = super::FwIsoResourceTest)]
+        pub struct FwIsoResourceTest {
+            #[property(override_interface = FwIsoResource, get)]
+            generation: RefCell<u32>,
+        }
 
         #[glib::object_subclass]
         impl ObjectSubclass for FwIsoResourceTest {
@@ -316,29 +322,14 @@ mod test {
             type Interfaces = (FwIsoResource,);
 
             fn new() -> Self {
-                Default::default()
-            }
-        }
-
-        impl ObjectImpl for FwIsoResourceTest {
-            fn properties() -> &'static [ParamSpec] {
-                use once_cell::sync::Lazy;
-                static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
-                    vec![ParamSpecOverride::for_interface::<FwIsoResource>(
-                        "generation",
-                    )]
-                });
-
-                PROPERTIES.as_ref()
-            }
-
-            fn property(&self, _obj: &Self::Type, _id: usize, pspec: &ParamSpec) -> Value {
-                match pspec.name() {
-                    "generation" => 1111u32.to_value(),
-                    _ => unimplemented!(),
+                Self {
+                    generation: RefCell::new(GENERATION),
                 }
             }
         }
+
+        #[glib::derived_properties]
+        impl ObjectImpl for FwIsoResourceTest {}
 
         impl FwIsoResourceImpl for FwIsoResourceTest {
             fn open(
@@ -394,23 +385,15 @@ mod test {
             @implements FwIsoResource;
     }
 
-    #[allow(clippy::new_without_default)]
-    impl FwIsoResourceTest {
-        pub fn new() -> Self {
-            glib::Object::new(&[])
-                .expect("Failed creation/initialization of FwIsoResourceTest object")
-        }
-    }
-
     #[test]
     fn fw_iso_ctx_iface() {
-        let ctx = FwIsoResourceTest::new();
+        let resource: FwIsoResourceTest = glib::object::Object::new();
 
-        assert_eq!(ctx.generation(), 1111);
+        assert_eq!(resource.generation(), GENERATION);
 
-        assert_eq!(ctx.open("blank", 0), Ok(()));
-        assert!(ctx.create_source().is_err());
-        ctx.emit_allocated(10, 20, None);
-        ctx.emit_deallocated(30, 40, None);
+        assert_eq!(resource.open("blank", 0), Ok(()));
+        assert!(resource.create_source().is_err());
+        resource.emit_allocated(10, 20, None);
+        resource.emit_deallocated(30, 40, None);
     }
 }

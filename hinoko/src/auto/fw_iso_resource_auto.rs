@@ -4,15 +4,12 @@
 // DO NOT EDIT
 
 use crate::FwIsoResource;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
-use std::ptr;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
 
 glib::wrapper! {
     /// An object to maintain allocated isochronous resource.
@@ -20,6 +17,32 @@ glib::wrapper! {
     /// [`FwIsoResourceAuto`][crate::FwIsoResourceAuto]is an object to maintain isochronous resource during the lifetime of
     /// the object. The allocated isochronous resource is kept even if the generation of the bus
     /// updates. The maintenance of allocated isochronous resource is done by Linux FireWire subsystem.
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `bandwidth`
+    ///  The allocated amount of bandwidth.
+    ///
+    /// Readable
+    ///
+    ///
+    /// #### `channel`
+    ///  The allocated channel number.
+    ///
+    /// Readable
+    ///
+    ///
+    /// #### `is-allocated`
+    ///  Whether to be allocate isochronous resource or not.
+    ///
+    /// Readable
+    /// <details><summary><h4>FwIsoResource</h4></summary>
+    ///
+    ///
+    /// #### `generation`
+    ///  Readable
+    /// </details>
     ///
     /// # Implements
     ///
@@ -52,53 +75,24 @@ impl Default for FwIsoResourceAuto {
     }
 }
 
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FwIsoResourceAuto>> Sealed for T {}
+}
+
 /// Trait containing all [`struct@FwIsoResourceAuto`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoResourceAuto`][struct@crate::FwIsoResourceAuto]
-pub trait FwIsoResourceAutoExt: 'static {
+pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'static {
     /// Initiate deallocation of isochronous resource. When the deallocation is done,
-    /// `signal::FwIsoResource::deallocated` signal is emit to notify the result, channel, and bandwidth.
+    /// [`deallocated`][struct@crate::FwIsoResource#deallocated] signal is emit to notify the result, channel, and bandwidth.
     ///
     /// # Returns
     ///
     /// TRUE if the overall operation finished successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate")]
-    fn deallocate(&self) -> Result<(), glib::Error>;
-
-    /// Initiate deallocation of isochronous resource. When the deallocation is done,
-    /// `signal::FwIsoResource::deallocated` signal is emit to notify the result, channel, and bandwidth.
-    /// ## `timeout_ms`
-    /// The timeout to wait for allocated event by milli second unit.
-    ///
-    /// # Returns
-    ///
-    /// TRUE if the overall operation finished successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_wait")]
-    fn deallocate_wait(&self, timeout_ms: u32) -> Result<(), glib::Error>;
-
-    /// The allocated amount of bandwidth.
-    fn bandwidth(&self) -> u32;
-
-    /// The allocated channel number.
-    fn channel(&self) -> u32;
-
-    /// Whether to be allocate isochronous resource or not.
-    #[doc(alias = "is-allocated")]
-    fn is_allocated(&self) -> bool;
-
-    #[doc(alias = "bandwidth")]
-    fn connect_bandwidth_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "channel")]
-    fn connect_channel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "is-allocated")]
-    fn connect_is_allocated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
     fn deallocate(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -106,7 +100,7 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
                 self.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -115,6 +109,15 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         }
     }
 
+    /// Initiate deallocation of isochronous resource. When the deallocation is done,
+    /// [`deallocated`][struct@crate::FwIsoResource#deallocated] signal is emit to notify the result, channel, and bandwidth.
+    /// ## `timeout_ms`
+    /// The timeout to wait for allocated event by milli second unit.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finished successfully, otherwise FALSE.
+    #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_wait")]
     fn deallocate_wait(&self, timeout_ms: u32) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -123,7 +126,7 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
                 timeout_ms,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -132,18 +135,23 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         }
     }
 
+    /// The allocated amount of bandwidth.
     fn bandwidth(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "bandwidth")
+        ObjectExt::property(self.as_ref(), "bandwidth")
     }
 
+    /// The allocated channel number.
     fn channel(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "channel")
+        ObjectExt::property(self.as_ref(), "channel")
     }
 
+    /// Whether to be allocate isochronous resource or not.
+    #[doc(alias = "is-allocated")]
     fn is_allocated(&self) -> bool {
-        glib::ObjectExt::property(self.as_ref(), "is-allocated")
+        ObjectExt::property(self.as_ref(), "is-allocated")
     }
 
+    #[doc(alias = "bandwidth")]
     fn connect_bandwidth_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_bandwidth_trampoline<
             P: IsA<FwIsoResourceAuto>,
@@ -169,6 +177,7 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         }
     }
 
+    #[doc(alias = "channel")]
     fn connect_channel_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_channel_trampoline<
             P: IsA<FwIsoResourceAuto>,
@@ -194,6 +203,7 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         }
     }
 
+    #[doc(alias = "is-allocated")]
     fn connect_is_allocated_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_is_allocated_trampoline<
             P: IsA<FwIsoResourceAuto>,
@@ -219,6 +229,8 @@ impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {
         }
     }
 }
+
+impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {}
 
 impl fmt::Display for FwIsoResourceAuto {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

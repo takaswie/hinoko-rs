@@ -4,13 +4,15 @@ use super::*;
 
 /// Trait which should be implemented by subclass of [`FwIsoIrMultiple`][crate::FwIsoIrMultiple].
 pub trait FwIsoIrMultipleImpl: FwIsoCtxImpl {
+    /// Class closure for the [`interrupted`][struct@crate::FwIsoIrMultiple#interrupted].
+    /// ## `count`
+    /// The number of packets available in this interrupt.
     fn interrupted(&self, ctx: &Self::Type, count: u32) {
         self.parent_interrupted(ctx, count)
     }
 }
 
-/// Trait which is automatically implemented to implementator of
-/// [`FwIsoIrMultipleImpl`][self::FwIsoIrMultipleImpl].
+/// Trait which is automatically implemented to implementator of [`FwIsoIrMultipleImpl`][self::FwIsoIrMultipleImpl].
 pub trait FwIsoIrMultipleImplExt: ObjectSubclass {
     fn parent_interrupted(&self, ctx: &Self::Type, count: u32);
 }

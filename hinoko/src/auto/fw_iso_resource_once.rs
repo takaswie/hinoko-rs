@@ -4,10 +4,8 @@
 // DO NOT EDIT
 
 use crate::FwIsoResource;
-use glib::object::IsA;
-use glib::translate::*;
-use std::fmt;
-use std::ptr;
+use glib::{prelude::*, translate::*};
+use std::{fmt, ptr};
 
 glib::wrapper! {
     /// An object to initiate requests and listen events of isochronous resource allocation/deallocation
@@ -36,8 +34,6 @@ impl FwIsoResourceOnce {
     /// # Returns
     ///
     /// A [`FwIsoResourceOnce`][crate::FwIsoResourceOnce].
-    ///
-    /// Sine: 0.7.
     #[doc(alias = "hinoko_fw_iso_resource_once_new")]
     pub fn new() -> FwIsoResourceOnce {
         unsafe { from_glib_full(ffi::hinoko_fw_iso_resource_once_new()) }
@@ -50,14 +46,19 @@ impl Default for FwIsoResourceOnce {
     }
 }
 
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FwIsoResourceOnce>> Sealed for T {}
+}
+
 /// Trait containing all [`struct@FwIsoResourceOnce`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoResourceOnce`][struct@crate::FwIsoResourceOnce]
-pub trait FwIsoResourceOnceExt: 'static {
+pub trait FwIsoResourceOnceExt: IsA<FwIsoResourceOnce> + sealed::Sealed + 'static {
     /// Initiate deallocation of isochronous resource without any wait. When the
-    /// deallocation finishes, `signal::FwIsoResource::deallocated` signal is emit to notify the result,
+    /// deallocation finishes, [`deallocated`][struct@crate::FwIsoResource#deallocated] signal is emit to notify the result,
     /// channel, and bandwidth.
     /// ## `channel`
     /// The channel number to be deallocated.
@@ -68,9 +69,25 @@ pub trait FwIsoResourceOnceExt: 'static {
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_resource_once_deallocate")]
-    fn deallocate(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error>;
+    fn deallocate(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate(
+                self.as_ref().to_glib_none().0,
+                channel,
+                bandwidth,
+                &mut error,
+            );
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
-    /// Initiate deallocation of isochronous resource and wait for `signal::FwIsoResource::deallocated`
+    /// Initiate deallocation of isochronous resource and wait for [`deallocated`][struct@crate::FwIsoResource#deallocated]
     /// signal.
     /// ## `channel`
     /// The channel number to be deallocated.
@@ -88,33 +105,6 @@ pub trait FwIsoResourceOnceExt: 'static {
         channel: u32,
         bandwidth: u32,
         timeout_ms: u32,
-    ) -> Result<(), glib::Error>;
-}
-
-impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {
-    fn deallocate(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error> {
-        unsafe {
-            let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate(
-                self.as_ref().to_glib_none().0,
-                channel,
-                bandwidth,
-                &mut error,
-            );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
-    fn deallocate_wait(
-        &self,
-        channel: u32,
-        bandwidth: u32,
-        timeout_ms: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -125,7 +115,7 @@ impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {
                 timeout_ms,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -134,6 +124,8 @@ impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {
         }
     }
 }
+
+impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {}
 
 impl fmt::Display for FwIsoResourceOnce {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

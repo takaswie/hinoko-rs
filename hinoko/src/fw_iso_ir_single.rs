@@ -41,7 +41,6 @@ pub trait FwIsoIrSingleExtManual {
     /// The array with data
     ///      frame for payload of IR context.
     #[doc(alias = "hinoko_fw_iso_ir_single_get_payload")]
-    #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
 
     /// Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
@@ -86,14 +85,14 @@ impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_ir_single_start(
+            let is_ok = ffi::hinoko_fw_iso_ir_single_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
                 sync,
                 tags.into_glib(),
                 &mut error,
             );
-
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

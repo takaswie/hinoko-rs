@@ -4,21 +4,64 @@
 // DO NOT EDIT
 
 use crate::FwIsoCtx;
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
-use std::ptr;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
 
 glib::wrapper! {
     /// An object to receive isochronous packet for several channels.
     ///
     /// [`FwIsoIrMultiple`][crate::FwIsoIrMultiple] receives isochronous packets for several channels by buffer-fill mode of
     /// IR context in 1394 OHCI.
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `channels`
+    ///  The array with elements to express isochronous channels to be listened to.
+    ///
+    /// Readable
+    /// <details><summary><h4>FwIsoCtx</h4></summary>
+    ///
+    ///
+    /// #### `bytes-per-chunk`
+    ///  The number of bytes per chunk in buffer.
+    ///
+    /// Readable
+    ///
+    ///
+    /// #### `chunks-per-buffer`
+    ///  The number of chunks per buffer.
+    ///
+    /// Readable
+    /// </details>
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `interrupted`
+    ///  Emitted when Linux FireWire subsystem generates interrupt event. There are two cases
+    /// for Linux FireWire subsystem to generate the event:
+    ///
+    /// - When 1394 OHCI hardware generates hardware interrupt as a result to process the
+    ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
+    /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
+    ///
+    /// The handler of signal can retrieve the content of packet by call of
+    /// [`FwIsoIrMultipleExtManual::payload()`][crate::prelude::FwIsoIrMultipleExtManual::payload()].
+    ///
+    ///
+    /// <details><summary><h4>FwIsoCtx</h4></summary>
+    ///
+    ///
+    /// #### `stopped`
+    ///  Emitted when isochronous context is stopped.
+    ///
+    /// Action
+    /// </details>
     ///
     /// # Implements
     ///
@@ -51,12 +94,17 @@ impl Default for FwIsoIrMultiple {
     }
 }
 
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FwIsoIrMultiple>> Sealed for T {}
+}
+
 /// Trait containing the part of [`struct@FwIsoIrMultiple`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple]
-pub trait FwIsoIrMultipleExt: 'static {
+pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
     /// Allocate an IR context to 1394 OHCI hardware for buffer-fill mode. A local node of the node
     /// corresponding to the given path is used as the hardware, thus any path is accepted as long as
     /// process has enough permission for the path.
@@ -66,7 +114,25 @@ pub trait FwIsoIrMultipleExt: 'static {
     /// an array for channels to listen
     ///       to. The value of each element should be up to 63.
     #[doc(alias = "hinoko_fw_iso_ir_multiple_allocate")]
-    fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error>;
+    fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error> {
+        let channels_length = channels.len() as _;
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::hinoko_fw_iso_ir_multiple_allocate(
+                self.as_ref().to_glib_none().0,
+                path.to_glib_none().0,
+                channels.to_glib_none().0,
+                channels_length,
+                &mut error,
+            );
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
     /// Map an intermediate buffer to share payload of IR context with 1394 OHCI hardware.
     /// ## `bytes_per_chunk`
@@ -75,7 +141,23 @@ pub trait FwIsoIrMultipleExt: 'static {
     /// ## `chunks_per_buffer`
     /// The number of chunks in buffer.
     #[doc(alias = "hinoko_fw_iso_ir_multiple_map_buffer")]
-    fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error>;
+    fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::hinoko_fw_iso_ir_multiple_map_buffer(
+                self.as_ref().to_glib_none().0,
+                bytes_per_chunk,
+                chunks_per_buffer,
+                &mut error,
+            );
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
     /// Emitted when Linux FireWire subsystem generates interrupt event. There are two cases
     /// for Linux FireWire subsystem to generate the event:
@@ -89,48 +171,6 @@ pub trait FwIsoIrMultipleExt: 'static {
     /// ## `count`
     /// The number of packets available in this interrupt.
     #[doc(alias = "interrupted")]
-    fn connect_interrupted<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExt for O {
-    fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error> {
-        let channels_length = channels.len() as u32;
-        unsafe {
-            let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_ir_multiple_allocate(
-                self.as_ref().to_glib_none().0,
-                path.to_glib_none().0,
-                channels.to_glib_none().0,
-                channels_length,
-                &mut error,
-            );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
-    fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error> {
-        unsafe {
-            let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_ir_multiple_map_buffer(
-                self.as_ref().to_glib_none().0,
-                bytes_per_chunk,
-                chunks_per_buffer,
-                &mut error,
-            );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
     fn connect_interrupted<F: Fn(&Self, u32) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn interrupted_trampoline<
             P: IsA<FwIsoIrMultiple>,
@@ -159,6 +199,8 @@ impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExt for O {
         }
     }
 }
+
+impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExt for O {}
 
 impl fmt::Display for FwIsoIrMultiple {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

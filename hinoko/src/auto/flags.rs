@@ -3,30 +3,26 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use bitflags::bitflags;
-use glib::translate::*;
-use glib::value::FromValue;
-use glib::value::ToValue;
-use glib::StaticType;
-use glib::Type;
+use glib::{bitflags::bitflags, prelude::*, translate::*};
 use std::fmt;
 
 bitflags! {
     /// A set of tag field of isochronous packet on IEEE 1394 bus.
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "HinokoFwIsoCtxMatchFlag")]
     pub struct FwIsoCtxMatchFlag: u32 {
         /// The value of tag0 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG0")]
-        const TAG0 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG0 as u32;
+        const TAG0 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG0 as _;
         /// The value of tag1 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG1")]
-        const TAG1 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG1 as u32;
+        const TAG1 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG1 as _;
         /// The value of tag2 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2")]
-        const TAG2 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2 as u32;
+        const TAG2 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG2 as _;
         /// The value of tag3 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3")]
-        const TAG3 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3 as u32;
+        const TAG3 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3 as _;
     }
 }
 
@@ -40,6 +36,7 @@ impl fmt::Display for FwIsoCtxMatchFlag {
 impl IntoGlib for FwIsoCtxMatchFlag {
     type GlibType = ffi::HinokoFwIsoCtxMatchFlag;
 
+    #[inline]
     fn into_glib(self) -> ffi::HinokoFwIsoCtxMatchFlag {
         self.bits()
     }
@@ -47,14 +44,27 @@ impl IntoGlib for FwIsoCtxMatchFlag {
 
 #[doc(hidden)]
 impl FromGlib<ffi::HinokoFwIsoCtxMatchFlag> for FwIsoCtxMatchFlag {
+    #[inline]
     unsafe fn from_glib(value: ffi::HinokoFwIsoCtxMatchFlag) -> Self {
         Self::from_bits_truncate(value)
     }
 }
 
 impl StaticType for FwIsoCtxMatchFlag {
-    fn static_type() -> Type {
+    #[inline]
+    #[doc(alias = "hinoko_fw_iso_ctx_match_flag_get_type")]
+    fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::hinoko_fw_iso_ctx_match_flag_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for FwIsoCtxMatchFlag {
+    type ParamSpec = glib::ParamSpecFlags;
+    type SetValue = Self;
+    type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder
     }
 }
 
@@ -62,15 +72,17 @@ impl glib::value::ValueType for FwIsoCtxMatchFlag {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for FwIsoCtxMatchFlag {
+unsafe impl<'a> glib::value::FromValue<'a> for FwIsoCtxMatchFlag {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
+    #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
         from_glib(glib::gobject_ffi::g_value_get_flags(value.to_glib_none().0))
     }
 }
 
 impl ToValue for FwIsoCtxMatchFlag {
+    #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Self>();
         unsafe {
@@ -79,7 +91,15 @@ impl ToValue for FwIsoCtxMatchFlag {
         value
     }
 
+    #[inline]
     fn value_type(&self) -> glib::Type {
         Self::static_type()
+    }
+}
+
+impl From<FwIsoCtxMatchFlag> for glib::Value {
+    #[inline]
+    fn from(v: FwIsoCtxMatchFlag) -> Self {
+        ToValue::to_value(&v)
     }
 }

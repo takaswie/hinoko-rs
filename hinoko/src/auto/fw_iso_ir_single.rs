@@ -4,10 +4,8 @@
 // DO NOT EDIT
 
 use crate::FwIsoCtx;
-use glib::object::IsA;
-use glib::translate::*;
-use std::fmt;
-use std::ptr;
+use glib::{prelude::*, translate::*};
+use std::{fmt, ptr};
 
 glib::wrapper! {
     /// An object to receive isochronous packet for single channel.
@@ -15,6 +13,32 @@ glib::wrapper! {
     /// [`FwIsoIrSingle`][crate::FwIsoIrSingle] receives isochronous packets for single channel by packet-per-buffer
     /// mode of IR context in 1394 OHCI. The content of packet is split to two parts; context header and
     /// context payload in a manner of Linux FireWire subsystem.
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `interrupted`
+    ///  Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
+    /// for Linux FireWire subsystem to generate the event:
+    ///
+    /// - When 1394 OHCI hardware generates hardware interrupt as a result to process the
+    ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
+    /// - When the size of accumulated context header for packets since the last event reaches
+    ///   the size of memory page (usually 4,096 bytes).
+    /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
+    ///
+    /// The handler of signal can retrieve context payload of received packet by call of
+    /// [`FwIsoIrSingleExtManual::payload()`][crate::prelude::FwIsoIrSingleExtManual::payload()].
+    ///
+    ///
+    /// <details><summary><h4>FwIsoCtx</h4></summary>
+    ///
+    ///
+    /// #### `stopped`
+    ///  Emitted when isochronous context is stopped.
+    ///
+    /// Action
+    /// </details>
     ///
     /// # Implements
     ///
@@ -47,18 +71,23 @@ impl Default for FwIsoIrSingle {
     }
 }
 
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FwIsoIrSingle>> Sealed for T {}
+}
+
 /// Trait containing the part of [`struct@FwIsoIrSingle`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle]
-pub trait FwIsoIrSingleExt: 'static {
+pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + sealed::Sealed + 'static {
     /// Allocate an IR context to 1394 OHCI hardware for packet-per-buffer mode. A local node of the
     /// node corresponding to the given path is used as the hardware, thus any path is accepted as
     /// long as process has enough permission for the path.
     ///
     /// The header_size parameter has an effect for the content of header parameter in
-    /// `signal::FwIsoIrSingle::interrupted`. When it's greater than 8, header includes the series of two
+    /// [`interrupted`][struct@crate::FwIsoIrSingle#interrupted]. When it's greater than 8, header includes the series of two
     /// quadlets for isochronous packet header and timestamp per isochronous packet. When it's greater
     /// than 12, header includes the part of isochronous packet data per packet.
     /// ## `path`
@@ -67,13 +96,30 @@ pub trait FwIsoIrSingleExt: 'static {
     /// An isochronous channel to listen, up to 63.
     /// ## `header_size`
     /// The number of bytes for header of IR context, greater than 4 at least to include
-    ///      isochronous packet header in header parameter of `signal::FwIsoIrSingle::interrupted`.
+    ///      isochronous packet header in header parameter of [`interrupted`][struct@crate::FwIsoIrSingle#interrupted].
     ///
     /// # Returns
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_ir_single_allocate")]
-    fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error>;
+    fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::hinoko_fw_iso_ir_single_allocate(
+                self.as_ref().to_glib_none().0,
+                path.to_glib_none().0,
+                channel,
+                header_size,
+                &mut error,
+            );
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
     /// Map intermediate buffer to share payload of IR context with 1394 OHCI hardware.
     /// ## `maximum_bytes_per_payload`
@@ -89,45 +135,6 @@ pub trait FwIsoIrSingleExt: 'static {
         &self,
         maximum_bytes_per_payload: u32,
         payloads_per_buffer: u32,
-    ) -> Result<(), glib::Error>;
-
-    /// Register chunk of buffer to process packet for future isochronous cycle. The caller can schedule
-    /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
-    /// `signal::FwIsoIrSingle::interrupted` signal.
-    /// ## `schedule_interrupt`
-    /// Whether to schedule hardware interrupt at isochronous cycle for the packet.
-    ///
-    /// # Returns
-    ///
-    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_ir_single_register_packet")]
-    fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error>;
-}
-
-impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {
-    fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error> {
-        unsafe {
-            let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_ir_single_allocate(
-                self.as_ref().to_glib_none().0,
-                path.to_glib_none().0,
-                channel,
-                header_size,
-                &mut error,
-            );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
-    fn map_buffer(
-        &self,
-        maximum_bytes_per_payload: u32,
-        payloads_per_buffer: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -137,7 +144,7 @@ impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {
                 payloads_per_buffer,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -146,6 +153,16 @@ impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {
         }
     }
 
+    /// Register chunk of buffer to process packet for future isochronous cycle. The caller can schedule
+    /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
+    /// [`interrupted`][struct@crate::FwIsoIrSingle#interrupted] signal.
+    /// ## `schedule_interrupt`
+    /// Whether to schedule hardware interrupt at isochronous cycle for the packet.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
+    #[doc(alias = "hinoko_fw_iso_ir_single_register_packet")]
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -154,7 +171,7 @@ impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {
                 schedule_interrupt.into_glib(),
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -163,6 +180,8 @@ impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {
         }
     }
 }
+
+impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {}
 
 impl fmt::Display for FwIsoIrSingle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

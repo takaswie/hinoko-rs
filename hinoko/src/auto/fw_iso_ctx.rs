@@ -3,22 +3,40 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use glib::object::Cast;
-use glib::object::IsA;
-use glib::object::ObjectExt;
-use glib::signal::connect_raw;
-use glib::signal::SignalHandlerId;
-use glib::translate::*;
-use std::boxed::Box as Box_;
-use std::fmt;
-use std::mem::transmute;
-use std::ptr;
+use glib::{
+    prelude::*,
+    signal::{connect_raw, SignalHandlerId},
+    translate::*,
+};
+use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
 
 glib::wrapper! {
     /// A set of basic interfaces to operate isochronous context on 1394 OHCI hardware.
     ///
     /// [`FwIsoCtx`][crate::FwIsoCtx] includes interfaces to operate 1394 OHCI hardware for isochronous communication
     /// by any kind of contexts.
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `bytes-per-chunk`
+    ///  The number of bytes per chunk in buffer.
+    ///
+    /// Readable
+    ///
+    ///
+    /// #### `chunks-per-buffer`
+    ///  The number of chunks per buffer.
+    ///
+    /// Readable
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `stopped`
+    ///  Emitted when isochronous context is stopped.
+    ///
+    /// Action
     ///
     /// # Implements
     ///
@@ -35,12 +53,17 @@ impl FwIsoCtx {
     pub const NONE: Option<&'static FwIsoCtx> = None;
 }
 
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FwIsoCtx>> Sealed for T {}
+}
+
 /// Trait containing the part of [`struct@FwIsoCtx`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple], [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle], [`FwIsoIt`][struct@crate::FwIsoIt]
-pub trait FwIsoCtxExt: 'static {
+pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
     /// Create [`glib::Source`][crate::glib::Source] for `GLib::MainContext` to dispatch events for isochronous
     /// context.
     ///
@@ -51,57 +74,6 @@ pub trait FwIsoCtxExt: 'static {
     /// ## `source`
     /// A [`glib::Source`][crate::glib::Source].
     #[doc(alias = "hinoko_fw_iso_ctx_create_source")]
-    fn create_source(&self) -> Result<glib::Source, glib::Error>;
-
-    /// Flush isochronous context until recent isochronous cycle. The call of function forces the
-    /// context to queue any type of interrupt event for the recent isochronous cycle. Application can
-    /// process the content of isochronous packet without waiting for actual hardware interrupt.
-    ///
-    /// # Returns
-    ///
-    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
-    #[doc(alias = "hinoko_fw_iso_ctx_flush_completions")]
-    fn flush_completions(&self) -> Result<(), glib::Error>;
-
-    /// Release the contest from 1394 OHCI hardware.
-    #[doc(alias = "hinoko_fw_iso_ctx_release")]
-    fn release(&self);
-
-    /// Stop isochronous context.
-    #[doc(alias = "hinoko_fw_iso_ctx_stop")]
-    fn stop(&self);
-
-    /// Unmap intermediate buffer shared with 1394 OHCI hardware for the context.
-    #[doc(alias = "hinoko_fw_iso_ctx_unmap_buffer")]
-    fn unmap_buffer(&self);
-
-    /// The number of bytes per chunk in buffer.
-    #[doc(alias = "bytes-per-chunk")]
-    fn bytes_per_chunk(&self) -> u32;
-
-    /// The number of chunks per buffer.
-    #[doc(alias = "chunks-per-buffer")]
-    fn chunks_per_buffer(&self) -> u32;
-
-    /// Emitted when isochronous context is stopped.
-    /// ## `error`
-    /// A [`glib::Error`][crate::glib::Error].
-    #[doc(alias = "stopped")]
-    fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId;
-
-    fn emit_stopped(&self, error: Option<&glib::Error>);
-
-    #[doc(alias = "bytes-per-chunk")]
-    fn connect_bytes_per_chunk_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-
-    #[doc(alias = "chunks-per-buffer")]
-    fn connect_chunks_per_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId;
-}
-
-impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
     fn create_source(&self) -> Result<glib::Source, glib::Error> {
         unsafe {
             let mut source = ptr::null_mut();
@@ -111,7 +83,7 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
                 &mut source,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(from_glib_full(source))
             } else {
@@ -120,6 +92,14 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
         }
     }
 
+    /// Flush isochronous context until recent isochronous cycle. The call of function forces the
+    /// context to queue any type of interrupt event for the recent isochronous cycle. Application can
+    /// process the content of isochronous packet without waiting for actual hardware interrupt.
+    ///
+    /// # Returns
+    ///
+    /// TRUE if the overall operation finishes successfully, otherwise FALSE.
+    #[doc(alias = "hinoko_fw_iso_ctx_flush_completions")]
     fn flush_completions(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -127,7 +107,7 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
                 self.as_ref().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -136,32 +116,46 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
         }
     }
 
+    /// Release the contest from 1394 OHCI hardware.
+    #[doc(alias = "hinoko_fw_iso_ctx_release")]
     fn release(&self) {
         unsafe {
             ffi::hinoko_fw_iso_ctx_release(self.as_ref().to_glib_none().0);
         }
     }
 
+    /// Stop isochronous context.
+    #[doc(alias = "hinoko_fw_iso_ctx_stop")]
     fn stop(&self) {
         unsafe {
             ffi::hinoko_fw_iso_ctx_stop(self.as_ref().to_glib_none().0);
         }
     }
 
+    /// Unmap intermediate buffer shared with 1394 OHCI hardware for the context.
+    #[doc(alias = "hinoko_fw_iso_ctx_unmap_buffer")]
     fn unmap_buffer(&self) {
         unsafe {
             ffi::hinoko_fw_iso_ctx_unmap_buffer(self.as_ref().to_glib_none().0);
         }
     }
 
+    /// The number of bytes per chunk in buffer.
+    #[doc(alias = "bytes-per-chunk")]
     fn bytes_per_chunk(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "bytes-per-chunk")
+        ObjectExt::property(self.as_ref(), "bytes-per-chunk")
     }
 
+    /// The number of chunks per buffer.
+    #[doc(alias = "chunks-per-buffer")]
     fn chunks_per_buffer(&self) -> u32 {
-        glib::ObjectExt::property(self.as_ref(), "chunks-per-buffer")
+        ObjectExt::property(self.as_ref(), "chunks-per-buffer")
     }
 
+    /// Emitted when isochronous context is stopped.
+    /// ## `error`
+    /// A [`glib::Error`][crate::glib::Error].
+    #[doc(alias = "stopped")]
     fn connect_stopped<F: Fn(&Self, Option<&glib::Error>) + 'static>(
         &self,
         f: F,
@@ -199,6 +193,7 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
         self.emit_by_name::<()>("stopped", &[&error]);
     }
 
+    #[doc(alias = "bytes-per-chunk")]
     fn connect_bytes_per_chunk_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_bytes_per_chunk_trampoline<
             P: IsA<FwIsoCtx>,
@@ -224,6 +219,7 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
         }
     }
 
+    #[doc(alias = "chunks-per-buffer")]
     fn connect_chunks_per_buffer_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_chunks_per_buffer_trampoline<
             P: IsA<FwIsoCtx>,
@@ -249,6 +245,8 @@ impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {
         }
     }
 }
+
+impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {}
 
 impl fmt::Display for FwIsoCtx {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

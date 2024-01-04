@@ -18,8 +18,7 @@ pub trait FwIsoCtxImpl: ObjectImpl {
     fn stopped(&self, ctx: &Self::Type, error: Option<&Error>);
 }
 
-/// Trait which is automatically implemented to implementator of
-/// [`FwIsoCtxImpl`][self::FwIsoCtxImpl].
+/// Trait which is automatically implemented to implementator of [`FwIsoCtxImpl`][self::FwIsoCtxImpl].
 pub trait FwIsoCtxImplExt: ObjectSubclass {
     fn parent_create_source(&self, ctx: &Self::Type) -> Result<Source, Error>;
     fn parent_flush_completions(&self, ctx: &Self::Type) -> Result<(), Error>;
@@ -51,7 +50,7 @@ impl<T: FwIsoCtxImpl> FwIsoCtxImplExt for T {
                 &mut source,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(from_glib_full(source))
             } else {
@@ -73,7 +72,7 @@ impl<T: FwIsoCtxImpl> FwIsoCtxImplExt for T {
                 ctx.unsafe_cast_ref::<FwIsoCtx>().to_glib_none().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -102,7 +101,7 @@ impl<T: FwIsoCtxImpl> FwIsoCtxImplExt for T {
                 &mut cycle_time.to_glib_none_mut().0,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -192,7 +191,7 @@ unsafe extern "C" fn fw_iso_ctx_create_source<T: FwIsoCtxImpl>(
         }
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             glib::ffi::GFALSE
         }
@@ -211,7 +210,7 @@ unsafe extern "C" fn fw_iso_ctx_flush_completions<T: FwIsoCtxImpl>(
         Ok(_) => glib::ffi::GTRUE,
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             glib::ffi::GFALSE
         }
@@ -236,7 +235,7 @@ unsafe extern "C" fn fw_iso_ctx_read_cycle_time<T: FwIsoCtxImpl>(
         Ok(_) => glib::ffi::GTRUE,
         Err(err) => {
             if !error.is_null() {
-                *error = err.into_raw();
+                *error = err.into_glib_ptr();
             }
             glib::ffi::GFALSE
         }
@@ -284,17 +283,22 @@ unsafe extern "C" fn fw_iso_ctx_stopped<T: FwIsoCtxImpl>(
 #[cfg(test)]
 mod test {
     use crate::{prelude::*, subclass::prelude::*, *};
-    use glib::{subclass::prelude::*, Error, ParamSpec, ParamSpecOverride, Source, ToValue, Value};
+    use glib::{subclass::prelude::*, Error, ObjectExt, Properties, Source};
 
-    pub mod imp {
+    const BYTES_PER_CHUNK: u32 = 512;
+    const CHUNKS_PER_BUFFER: u32 = 16;
+
+    mod imp {
         use super::*;
+        use std::cell::RefCell;
 
-        pub struct FwIsoCtxTest;
-
-        impl Default for FwIsoCtxTest {
-            fn default() -> Self {
-                Self {}
-            }
+        #[derive(Properties)]
+        #[properties(wrapper_type = super::FwIsoCtxTest)]
+        pub struct FwIsoCtxTest {
+            #[property(override_interface = FwIsoCtx, get)]
+            bytes_per_chunk: RefCell<u32>,
+            #[property(override_interface = FwIsoCtx, get)]
+            chunks_per_buffer: RefCell<u32>,
         }
 
         #[glib::object_subclass]
@@ -304,31 +308,15 @@ mod test {
             type Interfaces = (FwIsoCtx,);
 
             fn new() -> Self {
-                Default::default()
-            }
-        }
-
-        impl ObjectImpl for FwIsoCtxTest {
-            fn properties() -> &'static [ParamSpec] {
-                use once_cell::sync::Lazy;
-                static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
-                    vec![
-                        ParamSpecOverride::for_interface::<FwIsoCtx>("bytes-per-chunk"),
-                        ParamSpecOverride::for_interface::<FwIsoCtx>("chunks-per-buffer"),
-                    ]
-                });
-
-                PROPERTIES.as_ref()
-            }
-
-            fn property(&self, _obj: &Self::Type, _id: usize, pspec: &ParamSpec) -> Value {
-                match pspec.name() {
-                    "bytes-per-chunk" => 1u32.to_value(),
-                    "chunks-per-buffer" => 2u32.to_value(),
-                    _ => unimplemented!(),
+                Self {
+                    bytes_per_chunk: RefCell::new(BYTES_PER_CHUNK),
+                    chunks_per_buffer: RefCell::new(CHUNKS_PER_BUFFER),
                 }
             }
         }
+
+        #[glib::derived_properties]
+        impl ObjectImpl for FwIsoCtxTest {}
 
         impl FwIsoCtxImpl for FwIsoCtxTest {
             fn create_source(&self, _ctx: &Self::Type) -> Result<Source, Error> {
@@ -365,16 +353,9 @@ mod test {
             @implements FwIsoCtx;
     }
 
-    #[allow(clippy::new_without_default)]
-    impl FwIsoCtxTest {
-        pub fn new() -> Self {
-            glib::Object::new(&[]).expect("Failed creation/initialization of FwIsoCtxTest object")
-        }
-    }
-
     #[test]
     fn fw_iso_ctx_iface() {
-        let ctx = FwIsoCtxTest::new();
+        let ctx: FwIsoCtxTest = glib::object::Object::new();
 
         assert!(ctx.create_source().is_err());
 
@@ -386,8 +367,8 @@ mod test {
         let mut cycle_time = CycleTime::new();
         assert_eq!(ctx.read_cycle_time(0, &mut cycle_time), Ok(()));
 
-        assert_eq!(ctx.bytes_per_chunk(), 1);
-        assert_eq!(ctx.chunks_per_buffer(), 2);
+        assert_eq!(ctx.bytes_per_chunk(), BYTES_PER_CHUNK);
+        assert_eq!(ctx.chunks_per_buffer(), CHUNKS_PER_BUFFER);
 
         ctx.emit_stopped(None);
     }

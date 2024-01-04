@@ -15,6 +15,7 @@ mod fw_iso_ir_single;
 // For subclass of [`FwIsoIt`][crate::FwIsoIt] .
 mod fw_iso_it;
 
+/// For convenience to provide traits and their blanket implementations to write subclass.
 pub mod prelude {
     pub use super::{
         fw_iso_ctx::*, fw_iso_ir_multiple::*, fw_iso_ir_single::*, fw_iso_it::*, fw_iso_resource::*,

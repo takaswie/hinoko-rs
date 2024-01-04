@@ -9,7 +9,7 @@ use crate::*;
 pub trait FwIsoIrMultipleExtManual {
     /// The array with elements to express isochronous channels to be listened to.
     fn channels(&self) -> Option<Vec<u8>>;
-    #[doc(alias = "channels")]
+
     fn connect_channels_notify<F>(&self, f: F) -> SignalHandlerId
     where
         F: Fn(&Self) + 'static;
@@ -49,7 +49,6 @@ pub trait FwIsoIrMultipleExtManual {
     /// The array with data frame for payload of
     ///      IR context.
     #[doc(alias = "hinoko_fw_iso_ir_multiple_get_payload")]
-    #[doc(alias = "get_payload")]
     fn payload(&self, index: u32) -> &[u8];
 }
 
@@ -112,7 +111,7 @@ impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExtManual for O {
             };
             let mut error = std::ptr::null_mut();
 
-            ffi::hinoko_fw_iso_ir_multiple_start(
+            let is_ok = ffi::hinoko_fw_iso_ir_multiple_start(
                 self.as_ref().to_glib_none().0,
                 ptr,
                 sync,
@@ -120,7 +119,7 @@ impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExtManual for O {
                 chunks_per_irq,
                 &mut error,
             );
-
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {

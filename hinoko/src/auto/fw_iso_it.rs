@@ -3,12 +3,9 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::FwIsoCtx;
-use crate::FwScode;
-use glib::object::IsA;
-use glib::translate::*;
-use std::fmt;
-use std::ptr;
+use crate::{FwIsoCtx, FwScode};
+use glib::{prelude::*, translate::*};
+use std::{fmt, ptr};
 
 glib::wrapper! {
     /// An object to transmit isochronous packet for single channel.
@@ -16,6 +13,29 @@ glib::wrapper! {
     /// [`FwIsoIt`][crate::FwIsoIt] transmits isochronous packets for single channel by IT context in 1394 OHCI.
     /// The content of packet is split to two parts; context header and context payload in a manner of
     /// Linux FireWire subsystem.
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `interrupted`
+    ///  Emitted when Linux FireWire subsystem generates interrupt event. There are three cases
+    /// for Linux FireWire subsystem to generate the event:
+    ///
+    /// - When 1394 OHCI hardware generates hardware interrupt as a result of processing the
+    ///   isochronous packet for the buffer chunk marked to generate hardware interrupt.
+    /// - When the number of isochronous packets sent since the last interrupt event reaches
+    ///   one quarter of memory page size (usually 4,096 / 4 = 1,024 packets).
+    /// - When application calls [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] explicitly.
+    ///
+    ///
+    /// <details><summary><h4>FwIsoCtx</h4></summary>
+    ///
+    ///
+    /// #### `stopped`
+    ///  Emitted when isochronous context is stopped.
+    ///
+    /// Action
+    /// </details>
     ///
     /// # Implements
     ///
@@ -48,12 +68,17 @@ impl Default for FwIsoIt {
     }
 }
 
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsA<super::FwIsoIt>> Sealed for T {}
+}
+
 /// Trait containing the part of [`struct@FwIsoIt`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoIt`][struct@crate::FwIsoIt]
-pub trait FwIsoItExt: 'static {
+pub trait FwIsoItExt: IsA<FwIsoIt> + sealed::Sealed + 'static {
     /// Allocate an IT context to 1394 OHCI hardware. A local node of the node corresponding to the
     /// given path is used as the hardware, thus any path is accepted as long as process has enough
     /// permission for the path.
@@ -76,7 +101,25 @@ pub trait FwIsoItExt: 'static {
         scode: FwScode,
         channel: u32,
         header_size: u32,
-    ) -> Result<(), glib::Error>;
+    ) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = ptr::null_mut();
+            let is_ok = ffi::hinoko_fw_iso_it_allocate(
+                self.as_ref().to_glib_none().0,
+                path.to_glib_none().0,
+                scode.into_glib(),
+                channel,
+                header_size,
+                &mut error,
+            );
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
 
     /// Map intermediate buffer to share payload of IT context with 1394 OHCI hardware.
     /// ## `maximum_bytes_per_payload`
@@ -92,40 +135,6 @@ pub trait FwIsoItExt: 'static {
         &self,
         maximum_bytes_per_payload: u32,
         payloads_per_buffer: u32,
-    ) -> Result<(), glib::Error>;
-}
-
-impl<O: IsA<FwIsoIt>> FwIsoItExt for O {
-    fn allocate(
-        &self,
-        path: &str,
-        scode: FwScode,
-        channel: u32,
-        header_size: u32,
-    ) -> Result<(), glib::Error> {
-        unsafe {
-            let mut error = ptr::null_mut();
-            let is_ok = ffi::hinoko_fw_iso_it_allocate(
-                self.as_ref().to_glib_none().0,
-                path.to_glib_none().0,
-                scode.into_glib(),
-                channel,
-                header_size,
-                &mut error,
-            );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
-    fn map_buffer(
-        &self,
-        maximum_bytes_per_payload: u32,
-        payloads_per_buffer: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
             let mut error = ptr::null_mut();
@@ -135,7 +144,7 @@ impl<O: IsA<FwIsoIt>> FwIsoItExt for O {
                 payloads_per_buffer,
                 &mut error,
             );
-            assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())
             } else {
@@ -144,6 +153,8 @@ impl<O: IsA<FwIsoIt>> FwIsoItExt for O {
         }
     }
 }
+
+impl<O: IsA<FwIsoIt>> FwIsoItExt for O {}
 
 impl fmt::Display for FwIsoIt {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

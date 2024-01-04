@@ -4,13 +4,23 @@ use super::*;
 
 /// Trait which should be implemented by subclass of [`FwIsoIrSingle`][crate::FwIsoIrSingle].
 pub trait FwIsoIrSingleImpl: FwIsoCtxImpl {
+    /// Class closure for the [`interrupted`][struct@crate::FwIsoIrSingle#interrupted] signal.
+    /// ## `sec`
+    /// The sec part of isochronous cycle when interrupt occurs, up to 7.
+    /// ## `cycle`
+    /// The cycle part of of isochronous cycle when interrupt occurs, up to 7999.
+    /// ## `header`
+    /// The headers of IR context
+    ///     for packets handled in the event of interrupt. The content is different
+    ///     depending on header_size parameter of [`FwIsoIrSingleExt::allocate()`][crate::prelude::FwIsoIrSingleExt::allocate()].
+    /// ## `count`
+    /// the number of packets to handle.
     fn interrupted(&self, ctx: &Self::Type, sec: u32, cycle: u32, header: &[u8], count: u32) {
         self.parent_interrupted(ctx, sec, cycle, header, count)
     }
 }
 
-/// Trait which is automatically implemented to implementator of
-/// [`FwIsoIrSingleImpl`][self::FwIsoIrSingleImpl].
+/// Trait which is automatically implemented to implementator of [`FwIsoIrSingleImpl`][self::FwIsoIrSingleImpl].
 pub trait FwIsoIrSingleImplExt: ObjectSubclass {
     fn parent_interrupted(&self, ctx: &Self::Type, sec: u32, cycle: u32, header: &[u8], count: u32);
 }

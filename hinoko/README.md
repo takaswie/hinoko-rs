@@ -30,13 +30,6 @@ The hinoko crate is released under [MIT license](https://spdx.org/licenses/MIT.h
 The hinoko crate depends on API crates provided by [gtk-rs project](https://gtk-rs.org/) for
 type/object system, event loop, and dispacher.
 
-## Features
-
-* dox
-
-   * Suppress detection of installed hinoko library. It's automatically enabled when generating
-     documentation in docs.rs.
-
 ## Repository
 
 The hinoko crate is maintained by Takashi Sakamoto for upstream of Linux FireWire subsystem.
