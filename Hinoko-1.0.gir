@@ -88,7 +88,7 @@ process the content of isochronous packet without waiting for actual hardware in
       </virtual-method>
       <virtual-method name="read_cycle_time"
                       invoker="read_cycle_time"
-                      version="1.0."
+                      version="1.0"
                       throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
@@ -263,7 +263,7 @@ process the content of isochronous packet without waiting for actual hardware in
       </method>
       <method name="read_cycle_time"
               c:identifier="hinoko_fw_iso_ctx_read_cycle_time"
-              version="1.0."
+              version="1.0"
               throws="1">
         <doc xml:space="preserve"
              filename="src/fw_iso_ctx.c"
@@ -2718,7 +2718,9 @@ resource allocation/deallocation by file descriptor owned internally. The alloca
 is left even if this object is destroyed, thus application is responsible for deallocation.</doc>
       <source-position filename="src/fw_iso_resource_once.h" line="16"/>
       <implements name="FwIsoResource"/>
-      <constructor name="new" c:identifier="hinoko_fw_iso_resource_once_new">
+      <constructor name="new"
+                   c:identifier="hinoko_fw_iso_resource_once_new"
+                   version="0.7">
         <doc xml:space="preserve"
              filename="src/fw_iso_resource_once.c"
              line="191">Allocate and return an instance of [class@FwIsoResourceOnce].</doc>
@@ -2726,9 +2728,7 @@ is left even if this object is destroyed, thus application is responsible for de
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="src/fw_iso_resource_once.c"
-               line="196">A [class@FwIsoResourceOnce].
-
-Sine: 0.7.</doc>
+               line="196">A [class@FwIsoResourceOnce].</doc>
           <type name="FwIsoResourceOnce" c:type="HinokoFwIsoResourceOnce*"/>
         </return-value>
       </constructor>
