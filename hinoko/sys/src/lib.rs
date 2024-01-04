@@ -11,7 +11,7 @@
     clippy::unreadable_literal,
     clippy::upper_case_acronyms
 )]
-#![cfg_attr(feature = "dox", feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[allow(unused_imports)]
 use libc::{
@@ -94,7 +94,7 @@ pub struct HinokoFwIsoCtxInterface {
 
 impl ::std::fmt::Debug for HinokoFwIsoCtxInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoCtxInterface @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoCtxInterface @ {self:p}"))
             .field("parent_iface", &self.parent_iface)
             .field("stop", &self.stop)
             .field("unmap_buffer", &self.unmap_buffer)
@@ -116,7 +116,7 @@ pub struct HinokoFwIsoIrMultipleClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoIrMultipleClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoIrMultipleClass @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoIrMultipleClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("interrupted", &self.interrupted)
             .finish()
@@ -134,7 +134,7 @@ pub struct HinokoFwIsoIrSingleClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoIrSingleClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoIrSingleClass @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoIrSingleClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("interrupted", &self.interrupted)
             .finish()
@@ -151,7 +151,7 @@ pub struct HinokoFwIsoItClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoItClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoItClass @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoItClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("interrupted", &self.interrupted)
             .finish()
@@ -166,7 +166,7 @@ pub struct HinokoFwIsoResourceAutoClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceAutoClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceAutoClass @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoResourceAutoClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -208,7 +208,7 @@ pub struct HinokoFwIsoResourceInterface {
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceInterface {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceInterface @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoResourceInterface @ {self:p}"))
             .field("parent_iface", &self.parent_iface)
             .field("open", &self.open)
             .field("allocate", &self.allocate)
@@ -227,7 +227,7 @@ pub struct HinokoFwIsoResourceOnceClass {
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceOnceClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceOnceClass @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoResourceOnceClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .finish()
     }
@@ -242,7 +242,7 @@ pub struct HinokoFwIsoIrMultiple {
 
 impl ::std::fmt::Debug for HinokoFwIsoIrMultiple {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoIrMultiple @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoIrMultiple @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -256,7 +256,7 @@ pub struct HinokoFwIsoIrSingle {
 
 impl ::std::fmt::Debug for HinokoFwIsoIrSingle {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoIrSingle @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoIrSingle @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -270,7 +270,7 @@ pub struct HinokoFwIsoIt {
 
 impl ::std::fmt::Debug for HinokoFwIsoIt {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoIt @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoIt @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -284,7 +284,7 @@ pub struct HinokoFwIsoResourceAuto {
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceAuto {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceAuto @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoResourceAuto @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -298,7 +298,7 @@ pub struct HinokoFwIsoResourceOnce {
 
 impl ::std::fmt::Debug for HinokoFwIsoResourceOnce {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("HinokoFwIsoResourceOnce @ {:p}", self))
+        f.debug_struct(&format!("HinokoFwIsoResourceOnce @ {self:p}"))
             .field("parent_instance", &self.parent_instance)
             .finish()
     }
@@ -313,7 +313,7 @@ pub struct HinokoFwIsoCtx {
 
 impl ::std::fmt::Debug for HinokoFwIsoCtx {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "HinokoFwIsoCtx @ {:p}", self)
+        write!(f, "HinokoFwIsoCtx @ {self:p}")
     }
 }
 
@@ -325,7 +325,7 @@ pub struct HinokoFwIsoResource {
 
 impl ::std::fmt::Debug for HinokoFwIsoResource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        write!(f, "HinokoFwIsoResource @ {:p}", self)
+        write!(f, "HinokoFwIsoResource @ {self:p}")
     }
 }
 

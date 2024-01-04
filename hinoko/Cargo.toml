@@ -31,4 +31,4 @@ once_cell = "1.5"
 
 [features]
 # To suppress linking to C library to generate documentation.
-dox = ["ffi/dox", "glib/dox", "hinawa/dox"]
+dox = ["glib/dox", "hinawa/dox"]

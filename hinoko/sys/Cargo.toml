@@ -14,8 +14,12 @@ homepage = "https://alsa-project.github.io/gobject-introspection-docs/"
 keywords = ["ieee1394", "firewire", "linux", "glib", "ffi"]
 license = "MIT"
 repository = "https://git.kernel.org/pub/scm/libs/ieee1394/hinoko-rs.git/"
+
 [package.metadata.docs.rs]
-features = ["dox"]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+all-features = true
+
 [package.metadata.system-deps.hinoko]
 name = "hinoko"
 version = "1.0.0"
@@ -25,28 +29,25 @@ name = "hinoko_sys"
 
 [build-dependencies]
 pkg-config = "0.3.7"
-# To avoid MSRV in cfg-expr against rustc 1.67.
-system-deps = "=6.0.4"
+system-deps = "6"
 
 [dependencies]
 libc = "0.2"
 
 [dependencies.glib]
 package = "glib-sys"
-version = "0.15"
+version = "0.18"
 
 [dependencies.gobject]
 package = "gobject-sys"
-version = "0.15"
+version = "0.18"
 
 [dependencies.hinawa]
 package = "hinawa-sys"
-version = "0.9"
+version = "0.10"
 
 [dev-dependencies]
 shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-# To suppress linking to C library to generate documentation.
-dox = ["hinawa/dox"]
