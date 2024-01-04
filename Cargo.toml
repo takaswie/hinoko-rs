@@ -12,6 +12,10 @@ default-members = [
     "hinoko",
 ]
 
+# For development purpose.
+[patch.crates-io]
+hinoko-sys = { path = "hinoko/sys" }
+
 # For my convenience to generate README.md for each crates by my tool.
 [workspace.metadata.library.hinoko]
 repository = "https://git.kernel.org/pub/scm/libs/ieee1394/libhinoko.git/"
