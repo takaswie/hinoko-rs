@@ -3,7 +3,6 @@ build = "build.rs"
 edition = "2021"
 links = "hinoko"
 name = "hinoko-sys"
-# For publishing.
 version = "0.5.0"
 authors = ["Takashi Sakamoto"]
 categories = ["external-ffi-bindings", "hardware-support", "os::linux-apis"]
@@ -22,7 +21,7 @@ all-features = true
 
 [package.metadata.system-deps.hinoko]
 name = "hinoko"
-version = "1.0.0"
+version = "1.0"
 
 [lib]
 name = "hinoko_sys"
@@ -33,18 +32,9 @@ system-deps = "6"
 
 [dependencies]
 libc = "0.2"
-
-[dependencies.glib]
-package = "glib-sys"
-version = "0.18"
-
-[dependencies.gobject]
-package = "gobject-sys"
-version = "0.18"
-
-[dependencies.hinawa]
-package = "hinawa-sys"
-version = "0.10"
+glib-sys = "0.19"
+gobject-sys = "0.19"
+hinawa-sys = "0.11"
 
 [dev-dependencies]
 shell-words = "1.0.0"
