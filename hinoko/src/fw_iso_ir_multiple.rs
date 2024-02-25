@@ -27,7 +27,7 @@ pub trait FwIsoIrMultipleExtManual {
     /// ## `chunks_per_irq`
     /// The number of chunks per interval of interrupt. When 0 is given, application
     ///         should call [`FwIsoCtxExt::flush_completions()`][crate::prelude::FwIsoCtxExt::flush_completions()] voluntarily to generate
-    ///         `signal::FwIsoIrMultiple::interrupted` event.
+    ///         [`interrupted`][struct@crate::FwIsoIrMultiple#interrupted] event.
     #[doc(alias = "hinoko_fw_iso_ir_multiple_start")]
     fn start(
         &self,

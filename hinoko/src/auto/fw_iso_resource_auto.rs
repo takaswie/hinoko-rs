@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     /// An object to maintain allocated isochronous resource.
@@ -95,7 +95,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
     #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate")]
     fn deallocate(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_auto_deallocate(
                 self.as_ref().to_glib_none().0,
                 &mut error,
@@ -120,7 +120,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
     #[doc(alias = "hinoko_fw_iso_resource_auto_deallocate_wait")]
     fn deallocate_wait(&self, timeout_ms: u32) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_auto_deallocate_wait(
                 self.as_ref().to_glib_none().0,
                 timeout_ms,
@@ -169,7 +169,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bandwidth\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_bandwidth_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -195,7 +195,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::channel\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_channel_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -221,7 +221,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-allocated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_is_allocated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -231,9 +231,3 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
 }
 
 impl<O: IsA<FwIsoResourceAuto>> FwIsoResourceAutoExt for O {}
-
-impl fmt::Display for FwIsoResourceAuto {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoResourceAuto")
-    }
-}

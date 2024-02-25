@@ -300,7 +300,7 @@ unsafe extern "C" fn fw_iso_resource_deallocated<T: FwIsoResourceImpl>(
 #[cfg(test)]
 mod test {
     use crate::{prelude::*, subclass::prelude::*, *};
-    use glib::{subclass::prelude::*, Error, ObjectExt, Properties, Source};
+    use glib::{subclass::prelude::*, Error, Properties, Source};
 
     const GENERATION: u32 = 1111;
 

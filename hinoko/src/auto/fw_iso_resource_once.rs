@@ -5,7 +5,6 @@
 
 use crate::FwIsoResource;
 use glib::{prelude::*, translate::*};
-use std::{fmt, ptr};
 
 glib::wrapper! {
     /// An object to initiate requests and listen events of isochronous resource allocation/deallocation
@@ -71,7 +70,7 @@ pub trait FwIsoResourceOnceExt: IsA<FwIsoResourceOnce> + sealed::Sealed + 'stati
     #[doc(alias = "hinoko_fw_iso_resource_once_deallocate")]
     fn deallocate(&self, channel: u32, bandwidth: u32) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate(
                 self.as_ref().to_glib_none().0,
                 channel,
@@ -107,7 +106,7 @@ pub trait FwIsoResourceOnceExt: IsA<FwIsoResourceOnce> + sealed::Sealed + 'stati
         timeout_ms: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_once_deallocate_wait(
                 self.as_ref().to_glib_none().0,
                 channel,
@@ -126,9 +125,3 @@ pub trait FwIsoResourceOnceExt: IsA<FwIsoResourceOnce> + sealed::Sealed + 'stati
 }
 
 impl<O: IsA<FwIsoResourceOnce>> FwIsoResourceOnceExt for O {}
-
-impl fmt::Display for FwIsoResourceOnce {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoResourceOnce")
-    }
-}

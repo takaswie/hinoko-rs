@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{bitflags::bitflags, prelude::*, translate::*};
-use std::fmt;
 
 bitflags! {
     /// A set of tag field of isochronous packet on IEEE 1394 bus.
@@ -23,12 +22,6 @@ bitflags! {
         /// The value of tag3 in 1394 OHCI.
         #[doc(alias = "HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3")]
         const TAG3 = ffi::HINOKO_FW_ISO_CTX_MATCH_FLAG_TAG3 as _;
-    }
-}
-
-impl fmt::Display for FwIsoCtxMatchFlag {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        <Self as fmt::Debug>::fmt(self, f)
     }
 }
 

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     /// A set of basic interfaces to listen to events about isochronous resource.
@@ -96,7 +96,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
     fn allocate(&self, channel_candidates: &[u8], bandwidth: u32) -> Result<(), glib::Error> {
         let channel_candidates_count = channel_candidates.len() as _;
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_allocate(
                 self.as_ref().to_glib_none().0,
                 channel_candidates.to_glib_none().0,
@@ -135,7 +135,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
     ) -> Result<(), glib::Error> {
         let channel_candidates_count = channel_candidates.len() as _;
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_allocate_wait(
                 self.as_ref().to_glib_none().0,
                 channel_candidates.to_glib_none().0,
@@ -165,8 +165,8 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_resource_create_source")]
     fn create_source(&self) -> Result<glib::Source, glib::Error> {
         unsafe {
-            let mut source = ptr::null_mut();
-            let mut error = ptr::null_mut();
+            let mut source = std::ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_create_source(
                 self.as_ref().to_glib_none().0,
                 &mut source,
@@ -195,7 +195,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_resource_open")]
     fn open(&self, path: &str, open_flag: i32) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_resource_open(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
@@ -253,7 +253,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"allocated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     allocated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -303,7 +303,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"deallocated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     deallocated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -333,7 +333,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::generation\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_generation_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -343,9 +343,3 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
 }
 
 impl<O: IsA<FwIsoResource>> FwIsoResourceExt for O {}
-
-impl fmt::Display for FwIsoResource {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoResource")
-    }
-}

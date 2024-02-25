@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 /// A set of error code for operations in [`FwIsoCtx`][crate::FwIsoCtx].
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
@@ -34,25 +33,6 @@ pub enum FwIsoCtxError {
     NoIsocChannel,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for FwIsoCtxError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FwIsoCtxError::{}",
-            match *self {
-                Self::Failed => "Failed",
-                Self::Allocated => "Allocated",
-                Self::NotAllocated => "NotAllocated",
-                Self::Mapped => "Mapped",
-                Self::NotMapped => "NotMapped",
-                Self::ChunkUnregistered => "ChunkUnregistered",
-                Self::NoIsocChannel => "NoIsocChannel",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -184,21 +164,6 @@ pub enum FwIsoCtxMode {
     __Unknown(i32),
 }
 
-impl fmt::Display for FwIsoCtxMode {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FwIsoCtxMode::{}",
-            match *self {
-                Self::It => "It",
-                Self::IrSingle => "IrSingle",
-                Self::IrMultiple => "IrMultiple",
-                _ => "Unknown",
-            }
-        )
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for FwIsoCtxMode {
     type GlibType = ffi::HinokoFwIsoCtxMode;
@@ -297,21 +262,6 @@ pub enum FwIsoResourceAutoError {
     NotAllocated,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for FwIsoResourceAutoError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FwIsoResourceAutoError::{}",
-            match *self {
-                Self::Failed => "Failed",
-                Self::Allocated => "Allocated",
-                Self::NotAllocated => "NotAllocated",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -439,23 +389,6 @@ pub enum FwIsoResourceError {
     Event,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for FwIsoResourceError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FwIsoResourceError::{}",
-            match *self {
-                Self::Failed => "Failed",
-                Self::Opened => "Opened",
-                Self::NotOpened => "NotOpened",
-                Self::Timeout => "Timeout",
-                Self::Event => "Event",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]
@@ -590,24 +523,6 @@ pub enum FwScode {
     S3200,
     #[doc(hidden)]
     __Unknown(i32),
-}
-
-impl fmt::Display for FwScode {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "FwScode::{}",
-            match *self {
-                Self::S100 => "S100",
-                Self::S200 => "S200",
-                Self::S400 => "S400",
-                Self::S800 => "S800",
-                Self::S1600 => "S1600",
-                Self::S3200 => "S3200",
-                _ => "Unknown",
-            }
-        )
-    }
 }
 
 #[doc(hidden)]

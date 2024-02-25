@@ -49,8 +49,8 @@ Dependencies
 
   * ``libc`` >= 0.2
   * ``bitflags`` >= 1.0
-  * ``glib`` >= 0.l8
-  * ``hinawa`` >= 0.10
+  * ``glib`` >= 0.l9
+  * ``hinawa`` >= 0.11
   * FFI crate (``hinoko-sys``)
 
 Examples

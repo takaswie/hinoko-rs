@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     /// An object to receive isochronous packet for several channels.
@@ -117,7 +117,7 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
     fn allocate(&self, path: &str, channels: &[u8]) -> Result<(), glib::Error> {
         let channels_length = channels.len() as _;
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ir_multiple_allocate(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
@@ -143,7 +143,7 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_ir_multiple_map_buffer")]
     fn map_buffer(&self, bytes_per_chunk: u32, chunks_per_buffer: u32) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ir_multiple_map_buffer(
                 self.as_ref().to_glib_none().0,
                 bytes_per_chunk,
@@ -191,7 +191,7 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"interrupted\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     interrupted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -201,9 +201,3 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
 }
 
 impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExt for O {}
-
-impl fmt::Display for FwIsoIrMultiple {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoIrMultiple")
-    }
-}

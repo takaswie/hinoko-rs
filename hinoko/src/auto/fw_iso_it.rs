@@ -5,7 +5,6 @@
 
 use crate::{FwIsoCtx, FwScode};
 use glib::{prelude::*, translate::*};
-use std::{fmt, ptr};
 
 glib::wrapper! {
     /// An object to transmit isochronous packet for single channel.
@@ -103,7 +102,7 @@ pub trait FwIsoItExt: IsA<FwIsoIt> + sealed::Sealed + 'static {
         header_size: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_it_allocate(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
@@ -137,7 +136,7 @@ pub trait FwIsoItExt: IsA<FwIsoIt> + sealed::Sealed + 'static {
         payloads_per_buffer: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_it_map_buffer(
                 self.as_ref().to_glib_none().0,
                 maximum_bytes_per_payload,
@@ -155,9 +154,3 @@ pub trait FwIsoItExt: IsA<FwIsoIt> + sealed::Sealed + 'static {
 }
 
 impl<O: IsA<FwIsoIt>> FwIsoItExt for O {}
-
-impl fmt::Display for FwIsoIt {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoIt")
-    }
-}

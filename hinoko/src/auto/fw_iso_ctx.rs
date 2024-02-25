@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, fmt, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     /// A set of basic interfaces to operate isochronous context on 1394 OHCI hardware.
@@ -76,8 +76,8 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_ctx_create_source")]
     fn create_source(&self) -> Result<glib::Source, glib::Error> {
         unsafe {
-            let mut source = ptr::null_mut();
-            let mut error = ptr::null_mut();
+            let mut source = std::ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ctx_create_source(
                 self.as_ref().to_glib_none().0,
                 &mut source,
@@ -102,7 +102,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_ctx_flush_completions")]
     fn flush_completions(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ctx_flush_completions(
                 self.as_ref().to_glib_none().0,
                 &mut error,
@@ -181,7 +181,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stopped\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     stopped_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -211,7 +211,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bytes-per-chunk\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_bytes_per_chunk_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -237,7 +237,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::chunks-per-buffer\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_chunks_per_buffer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -247,9 +247,3 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
 }
 
 impl<O: IsA<FwIsoCtx>> FwIsoCtxExt for O {}
-
-impl fmt::Display for FwIsoCtx {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoCtx")
-    }
-}

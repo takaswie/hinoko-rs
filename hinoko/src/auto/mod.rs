@@ -34,8 +34,7 @@ pub use self::enums::FwScode;
 mod flags;
 pub use self::flags::FwIsoCtxMatchFlag;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::fw_iso_ctx::FwIsoCtxExt;
     pub use super::fw_iso_ir_multiple::FwIsoIrMultipleExt;
     pub use super::fw_iso_ir_single::FwIsoIrSingleExt;

@@ -283,7 +283,7 @@ unsafe extern "C" fn fw_iso_ctx_stopped<T: FwIsoCtxImpl>(
 #[cfg(test)]
 mod test {
     use crate::{prelude::*, subclass::prelude::*, *};
-    use glib::{subclass::prelude::*, Error, ObjectExt, Properties, Source};
+    use glib::{subclass::prelude::*, Error, Properties, Source};
 
     const BYTES_PER_CHUNK: u32 = 512;
     const CHUNKS_PER_BUFFER: u32 = 16;

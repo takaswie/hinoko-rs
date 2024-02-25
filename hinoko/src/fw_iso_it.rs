@@ -10,7 +10,7 @@ pub trait FwIsoItExtManual {
     /// Register packet data with header and payload for IT context. The content of given header and
     /// payload is appended into data field of isochronous packet to be sent. The caller can schedule
     /// hardware interrupt to generate interrupt event. In detail, please refer to documentation about
-    /// `signal::FwIsoIt::interrupted`.
+    /// [`interrupted`][struct@crate::FwIsoIt#interrupted].
     /// ## `tags`
     /// The value of tag field for isochronous packet to register.
     /// ## `sync_code`

@@ -5,7 +5,6 @@
 
 use crate::FwIsoCtx;
 use glib::{prelude::*, translate::*};
-use std::{fmt, ptr};
 
 glib::wrapper! {
     /// An object to receive isochronous packet for single channel.
@@ -104,7 +103,7 @@ pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_ir_single_allocate")]
     fn allocate(&self, path: &str, channel: u32, header_size: u32) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ir_single_allocate(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,
@@ -137,7 +136,7 @@ pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + sealed::Sealed + 'static {
         payloads_per_buffer: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ir_single_map_buffer(
                 self.as_ref().to_glib_none().0,
                 maximum_bytes_per_payload,
@@ -165,7 +164,7 @@ pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + sealed::Sealed + 'static {
     #[doc(alias = "hinoko_fw_iso_ir_single_register_packet")]
     fn register_packet(&self, schedule_interrupt: bool) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::hinoko_fw_iso_ir_single_register_packet(
                 self.as_ref().to_glib_none().0,
                 schedule_interrupt.into_glib(),
@@ -182,9 +181,3 @@ pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + sealed::Sealed + 'static {
 }
 
 impl<O: IsA<FwIsoIrSingle>> FwIsoIrSingleExt for O {}
-
-impl fmt::Display for FwIsoIrSingle {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("FwIsoIrSingle")
-    }
-}
