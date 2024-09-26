@@ -41,9 +41,9 @@ Dependencies
 * FFI crate (``hinoko-sys``)
 
   * ``libc`` >= 0.2
-  * ``glib-sys`` >= 0.19
-  * ``gobject-sys`` >= 0.19
-  * ``hinawa-sys`` >= 0.11
+  * ``glib-sys`` >= 0.20
+  * ``gobject-sys`` >= 0.20
+  * ``hinawa-sys`` >= 0.12
 
 * API crate (``hinoko``)
 
