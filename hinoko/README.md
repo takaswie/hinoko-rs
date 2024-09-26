@@ -46,6 +46,9 @@ Some programs are available under `examples` directory.
 * `fw-iso-resource`
     * demonstration to allocate and deallocate isochronous resources
 
+* `fw-iso-resource-async`
+    * demonstration of the above example with async runtime
+
 * `fw-iso-rx-single`
     * demonstration to receive isochronous packets at single channel
 
