@@ -3,6 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -181,7 +182,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"stopped\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     stopped_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -211,7 +212,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bytes-per-chunk\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bytes_per_chunk_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -237,7 +238,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::chunks-per-buffer\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_chunks_per_buffer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

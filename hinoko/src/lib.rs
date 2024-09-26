@@ -24,7 +24,7 @@ pub use ffi;
 
 pub(crate) use glib;
 
-use glib::{object::*, signal::*, translate::*, Error, Value, types::StaticType};
+use glib::{object::*, signal::*, translate::*, types::StaticType, Error, Value};
 
 use libc::c_uint;
 
