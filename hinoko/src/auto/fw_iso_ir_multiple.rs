@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::FwIsoCtx;
+use crate::{ffi, FwIsoCtx};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -191,7 +191,7 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"interrupted\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     interrupted_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

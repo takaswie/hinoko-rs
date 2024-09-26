@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::FwIsoResource;
+use crate::{ffi, FwIsoResource};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -169,7 +169,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bandwidth\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bandwidth_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -195,7 +195,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::channel\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_channel_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -221,7 +221,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-allocated\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_allocated_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

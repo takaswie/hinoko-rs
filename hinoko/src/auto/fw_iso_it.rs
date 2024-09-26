@@ -3,7 +3,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // DO NOT EDIT
 
-use crate::{FwIsoCtx, FwScode};
+use crate::{ffi, FwIsoCtx, FwScode};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
