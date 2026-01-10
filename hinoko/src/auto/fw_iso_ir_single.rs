@@ -70,17 +70,12 @@ impl Default for FwIsoIrSingle {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoIrSingle>> Sealed for T {}
-}
-
 /// Trait containing the part of [`struct@FwIsoIrSingle`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle]
-pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + sealed::Sealed + 'static {
+pub trait FwIsoIrSingleExt: IsA<FwIsoIrSingle> + 'static {
     /// Allocate an IR context to 1394 OHCI hardware for packet-per-buffer mode. A local node of the
     /// node corresponding to the given path is used as the hardware, thus any path is accepted as
     /// long as process has enough permission for the path.

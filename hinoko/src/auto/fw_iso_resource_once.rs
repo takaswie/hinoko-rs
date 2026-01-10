@@ -45,17 +45,12 @@ impl Default for FwIsoResourceOnce {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoResourceOnce>> Sealed for T {}
-}
-
 /// Trait containing all [`struct@FwIsoResourceOnce`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoResourceOnce`][struct@crate::FwIsoResourceOnce]
-pub trait FwIsoResourceOnceExt: IsA<FwIsoResourceOnce> + sealed::Sealed + 'static {
+pub trait FwIsoResourceOnceExt: IsA<FwIsoResourceOnce> + 'static {
     /// Initiate deallocation of isochronous resource without any wait. When the
     /// deallocation finishes, [`deallocated`][struct@crate::FwIsoResource#deallocated] signal is emit to notify the result,
     /// channel, and bandwidth.

@@ -139,11 +139,11 @@ impl<O: IsA<FwIsoIt>> FwIsoItExtManual for O {
     {
         unsafe extern "C" fn interrupted_trampoline<P, F>(
             this: *mut ffi::HinokoFwIsoIt,
-            sec: c_uint,
-            cycle: c_uint,
+            sec: std::ffi::c_uint,
+            cycle: std::ffi::c_uint,
             header: *const u8,
-            header_length: c_uint,
-            count: c_uint,
+            header_length: std::ffi::c_uint,
+            count: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) where
             P: IsA<FwIsoIt>,
@@ -162,7 +162,7 @@ impl<O: IsA<FwIsoIt>> FwIsoItExtManual for O {
             let f: std::boxed::Box<F> = std::boxed::Box::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"interrupted\0".as_ptr() as *const _,
+                c"interrupted".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     interrupted_trampoline::<Self, F> as *const (),
                 )),

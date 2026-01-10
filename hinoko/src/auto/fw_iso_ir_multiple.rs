@@ -94,17 +94,12 @@ impl Default for FwIsoIrMultiple {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoIrMultiple>> Sealed for T {}
-}
-
 /// Trait containing the part of [`struct@FwIsoIrMultiple`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple]
-pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
+pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + 'static {
     /// Allocate an IR context to 1394 OHCI hardware for buffer-fill mode. A local node of the node
     /// corresponding to the given path is used as the hardware, thus any path is accepted as long as
     /// process has enough permission for the path.
@@ -177,7 +172,7 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
             F: Fn(&P, u32) + 'static,
         >(
             this: *mut ffi::HinokoFwIsoIrMultiple,
-            count: libc::c_uint,
+            count: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -190,7 +185,7 @@ pub trait FwIsoIrMultipleExt: IsA<FwIsoIrMultiple> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"interrupted\0".as_ptr() as *const _,
+                c"interrupted".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     interrupted_trampoline::<Self, F> as *const (),
                 )),

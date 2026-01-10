@@ -75,17 +75,12 @@ impl Default for FwIsoResourceAuto {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoResourceAuto>> Sealed for T {}
-}
-
 /// Trait containing all [`struct@FwIsoResourceAuto`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoResourceAuto`][struct@crate::FwIsoResourceAuto]
-pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'static {
+pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + 'static {
     /// Initiate deallocation of isochronous resource. When the deallocation is done,
     /// [`deallocated`][struct@crate::FwIsoResource#deallocated] signal is emit to notify the result, channel, and bandwidth.
     ///
@@ -168,7 +163,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::bandwidth\0".as_ptr() as *const _,
+                c"notify::bandwidth".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bandwidth_trampoline::<Self, F> as *const (),
                 )),
@@ -194,7 +189,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::channel\0".as_ptr() as *const _,
+                c"notify::channel".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_channel_trampoline::<Self, F> as *const (),
                 )),
@@ -220,7 +215,7 @@ pub trait FwIsoResourceAutoExt: IsA<FwIsoResourceAuto> + sealed::Sealed + 'stati
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-allocated\0".as_ptr() as *const _,
+                c"notify::is-allocated".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_allocated_trampoline::<Self, F> as *const (),
                 )),

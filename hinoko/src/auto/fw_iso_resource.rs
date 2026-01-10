@@ -69,17 +69,12 @@ impl FwIsoResource {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoResource>> Sealed for T {}
-}
-
 /// Trait containing all [`struct@FwIsoResource`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoResourceAuto`][struct@crate::FwIsoResourceAuto], [`FwIsoResourceOnce`][struct@crate::FwIsoResourceOnce], [`FwIsoResource`][struct@crate::FwIsoResource]
-pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
+pub trait FwIsoResourceExt: IsA<FwIsoResource> + 'static {
     /// Initiate allocation of isochronous resource without any wait. One of the candidates is actually
     /// allocated for channel. When the allocation finishes, [`allocated`][struct@crate::FwIsoResource#allocated] signal is
     /// emitted to notify the result, channel, and bandwidth.
@@ -153,8 +148,8 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
         }
     }
 
-    /// Create [`glib::Source`][crate::glib::Source] for `GLib::MainContext` to dispatch events for isochronous
-    /// resource.
+    /// Create [`glib::Source`][crate::glib::Source] for [`gLib::MainContext`][crate::glib::MainContext]
+    /// to dispatch events for isochronous resource.
     ///
     /// # Returns
     ///
@@ -233,8 +228,8 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             F: Fn(&P, u32, u32, Option<&glib::Error>) + 'static,
         >(
             this: *mut ffi::HinokoFwIsoResource,
-            channel: libc::c_uint,
-            bandwidth: libc::c_uint,
+            channel: std::ffi::c_uint,
+            bandwidth: std::ffi::c_uint,
             error: *mut glib::ffi::GError,
             f: glib::ffi::gpointer,
         ) {
@@ -252,7 +247,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"allocated\0".as_ptr() as *const _,
+                c"allocated".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     allocated_trampoline::<Self, F> as *const (),
                 )),
@@ -283,8 +278,8 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             F: Fn(&P, u32, u32, Option<&glib::Error>) + 'static,
         >(
             this: *mut ffi::HinokoFwIsoResource,
-            channel: libc::c_uint,
-            bandwidth: libc::c_uint,
+            channel: std::ffi::c_uint,
+            bandwidth: std::ffi::c_uint,
             error: *mut glib::ffi::GError,
             f: glib::ffi::gpointer,
         ) {
@@ -302,7 +297,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"deallocated\0".as_ptr() as *const _,
+                c"deallocated".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     deallocated_trampoline::<Self, F> as *const (),
                 )),
@@ -332,7 +327,7 @@ pub trait FwIsoResourceExt: IsA<FwIsoResource> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::generation\0".as_ptr() as *const _,
+                c"notify::generation".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_generation_trampoline::<Self, F> as *const (),
                 )),

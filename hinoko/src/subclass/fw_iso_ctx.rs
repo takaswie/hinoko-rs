@@ -10,7 +10,7 @@ pub trait FwIsoCtxImpl: ObjectImpl {
         &self,
         ctx: &Self::Type,
         clock_id: i32,
-        cycle_time: &mut CycleTime,
+        cycle_time: &mut hinawa::CycleTime,
     ) -> Result<(), Error>;
     fn release(&self, ctx: &Self::Type);
     fn stop(&self, ctx: &Self::Type);
@@ -26,7 +26,7 @@ pub trait FwIsoCtxImplExt: ObjectSubclass {
         &self,
         ctx: &Self::Type,
         clock_id: i32,
-        cycle_time: &mut CycleTime,
+        cycle_time: &mut hinawa::CycleTime,
     ) -> Result<(), Error>;
     fn parent_release(&self, ctx: &Self::Type);
     fn parent_stop(&self, ctx: &Self::Type);
@@ -85,7 +85,7 @@ impl<T: FwIsoCtxImpl> FwIsoCtxImplExt for T {
         &self,
         ctx: &Self::Type,
         clock_id: i32,
-        cycle_time: &mut CycleTime,
+        cycle_time: &mut hinawa::CycleTime,
     ) -> Result<(), Error> {
         unsafe {
             let data = T::type_data();
@@ -219,7 +219,7 @@ unsafe extern "C" fn fw_iso_ctx_flush_completions<T: FwIsoCtxImpl>(
 
 unsafe extern "C" fn fw_iso_ctx_read_cycle_time<T: FwIsoCtxImpl>(
     ctx: *mut ffi::HinokoFwIsoCtx,
-    clock_id: c_int,
+    clock_id: std::ffi::c_int,
     cycle_time: *mut *mut hinawa::ffi::HinawaCycleTime,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
@@ -331,7 +331,7 @@ mod test {
                 &self,
                 _ctx: &Self::Type,
                 _clock_id: i32,
-                _cycle_time: &mut CycleTime,
+                _cycle_time: &mut hinawa::CycleTime,
             ) -> Result<(), Error> {
                 Ok(())
             }
@@ -364,7 +364,7 @@ mod test {
         assert_eq!(ctx.stop(), (()));
         assert_eq!(ctx.unmap_buffer(), (()));
 
-        let mut cycle_time = CycleTime::new();
+        let mut cycle_time = hinawa::CycleTime::new();
         assert_eq!(ctx.read_cycle_time(0, &mut cycle_time), Ok(()));
 
         assert_eq!(ctx.bytes_per_chunk(), BYTES_PER_CHUNK);

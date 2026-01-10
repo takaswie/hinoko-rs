@@ -58,7 +58,7 @@ impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExtManual for O {
             let mut value = Value::from_type(<glib::ByteArray as StaticType>::static_type());
             glib::gobject_ffi::g_object_get_property(
                 self.to_glib_none().0 as *mut glib::gobject_ffi::GObject,
-                b"channels\0".as_ptr() as *const _,
+                c"channels".as_ptr() as *const _,
                 value.to_glib_none_mut().0,
             );
 
@@ -88,7 +88,7 @@ impl<O: IsA<FwIsoIrMultiple>> FwIsoIrMultipleExtManual for O {
             let f: std::boxed::Box<F> = std::boxed::Box::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::channels\0".as_ptr() as *const _,
+                c"notify::channels".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_channels_trampoline::<Self, F> as *const (),
                 )),

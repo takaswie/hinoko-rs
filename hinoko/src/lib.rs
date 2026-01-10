@@ -20,12 +20,11 @@ pub mod prelude {
 /// For subclass implementations derived from provided class.
 pub mod subclass;
 
+// For applications to handle stuffs in the sys crate.
 pub use ffi;
 
-pub(crate) use glib;
+// For documentation links to external crates in docs.rs.
+pub(crate) use {glib, hinawa};
 
+// For local conveniences.
 use glib::{object::*, signal::*, translate::*, types::StaticType, Error, Value};
-
-use libc::c_uint;
-
-use hinawa::CycleTime;

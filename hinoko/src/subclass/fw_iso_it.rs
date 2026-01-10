@@ -63,11 +63,11 @@ unsafe impl<T: FwIsoItImpl> IsSubclassable<T> for FwIsoIt {
 
 unsafe extern "C" fn fw_iso_it_interrupted<T: FwIsoItImpl>(
     ctx: *mut ffi::HinokoFwIsoIt,
-    sec: c_uint,
-    cycle: c_uint,
+    sec: std::ffi::c_uint,
+    cycle: std::ffi::c_uint,
     header: *const u8,
-    header_length: c_uint,
-    count: c_uint,
+    header_length: std::ffi::c_uint,
+    count: std::ffi::c_uint,
 ) {
     let instance = &*(ctx as *mut T::Instance);
     let imp = instance.imp();

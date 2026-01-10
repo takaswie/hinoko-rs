@@ -45,7 +45,7 @@ unsafe impl<T: FwIsoIrMultipleImpl> IsSubclassable<T> for FwIsoIrMultiple {
 
 unsafe extern "C" fn fw_iso_ir_multiple_interrupted<T: FwIsoIrMultipleImpl>(
     ctx: *mut ffi::HinokoFwIsoIrMultiple,
-    count: c_uint,
+    count: std::ffi::c_uint,
 ) {
     let instance = &*(ctx as *mut T::Instance);
     let imp = instance.imp();

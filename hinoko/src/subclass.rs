@@ -20,6 +20,5 @@ pub mod prelude {
 use {
     super::*,
     glib::{subclass::prelude::*, translate::*, Class, Error, Interface, Source},
-    libc::*,
     prelude::*,
 };

@@ -67,17 +67,12 @@ impl Default for FwIsoIt {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoIt>> Sealed for T {}
-}
-
 /// Trait containing the part of [`struct@FwIsoIt`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoIt`][struct@crate::FwIsoIt]
-pub trait FwIsoItExt: IsA<FwIsoIt> + sealed::Sealed + 'static {
+pub trait FwIsoItExt: IsA<FwIsoIt> + 'static {
     /// Allocate an IT context to 1394 OHCI hardware. A local node of the node corresponding to the
     /// given path is used as the hardware, thus any path is accepted as long as process has enough
     /// permission for the path.

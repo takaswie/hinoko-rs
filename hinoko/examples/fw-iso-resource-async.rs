@@ -2,6 +2,7 @@
 use glib::{prelude::*, *};
 use hinoko::{prelude::*, *};
 
+use std::rc::Rc;
 use std::{
     cell::RefCell,
     future::Future,
@@ -10,7 +11,6 @@ use std::{
     task::{Context, Poll, Waker},
     time::Duration,
 };
-use std::rc::Rc;
 
 const PATH: &str = "/dev/fw1";
 const CHANNEL: u8 = 32;

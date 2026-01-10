@@ -189,8 +189,8 @@ unsafe impl<T: FwIsoResourceImpl> IsImplementable<T> for FwIsoResource {
 
 unsafe extern "C" fn fw_iso_resource_open<T: FwIsoResourceImpl>(
     resource: *mut ffi::HinokoFwIsoResource,
-    path: *const c_char,
-    open_flag: c_int,
+    path: *const std::ffi::c_char,
+    open_flag: std::ffi::c_int,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
     let instance = &*(resource as *mut T::Instance);
@@ -238,8 +238,8 @@ unsafe extern "C" fn fw_iso_resource_create_source<T: FwIsoResourceImpl>(
 unsafe extern "C" fn fw_iso_resource_allocate<T: FwIsoResourceImpl>(
     resource: *mut ffi::HinokoFwIsoResource,
     channel_candidates: *const u8,
-    channel_candidates_count: size_t,
-    bandwidth: c_uint,
+    channel_candidates_count: libc::size_t,
+    bandwidth: std::ffi::c_uint,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
     let instance = &*(resource as *mut T::Instance);
@@ -263,8 +263,8 @@ unsafe extern "C" fn fw_iso_resource_allocate<T: FwIsoResourceImpl>(
 
 unsafe extern "C" fn fw_iso_resource_allocated<T: FwIsoResourceImpl>(
     resource: *mut ffi::HinokoFwIsoResource,
-    channel: c_uint,
-    bandwidth: c_uint,
+    channel: std::ffi::c_uint,
+    bandwidth: std::ffi::c_uint,
     error: *const glib::ffi::GError,
 ) {
     let instance = &*(resource as *mut T::Instance);
@@ -281,8 +281,8 @@ unsafe extern "C" fn fw_iso_resource_allocated<T: FwIsoResourceImpl>(
 
 unsafe extern "C" fn fw_iso_resource_deallocated<T: FwIsoResourceImpl>(
     resource: *mut ffi::HinokoFwIsoResource,
-    channel: c_uint,
-    bandwidth: c_uint,
+    channel: std::ffi::c_uint,
+    bandwidth: std::ffi::c_uint,
     error: *const glib::ffi::GError,
 ) {
     let instance = &*(resource as *mut T::Instance);

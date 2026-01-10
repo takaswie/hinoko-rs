@@ -54,19 +54,14 @@ impl FwIsoCtx {
     pub const NONE: Option<&'static FwIsoCtx> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::FwIsoCtx>> Sealed for T {}
-}
-
 /// Trait containing the part of [`struct@FwIsoCtx`] methods.
 ///
 /// # Implementors
 ///
 /// [`FwIsoCtx`][struct@crate::FwIsoCtx], [`FwIsoIrMultiple`][struct@crate::FwIsoIrMultiple], [`FwIsoIrSingle`][struct@crate::FwIsoIrSingle], [`FwIsoIt`][struct@crate::FwIsoIt]
-pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
-    /// Create [`glib::Source`][crate::glib::Source] for `GLib::MainContext` to dispatch events for isochronous
-    /// context.
+pub trait FwIsoCtxExt: IsA<FwIsoCtx> + 'static {
+    /// Create [`glib::Source`][crate::glib::Source] for [`gLib::MainContext`][crate::glib::MainContext]
+    /// to dispatch events for isochronous context.
     ///
     /// # Returns
     ///
@@ -181,7 +176,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"stopped\0".as_ptr() as *const _,
+                c"stopped".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     stopped_trampoline::<Self, F> as *const (),
                 )),
@@ -211,7 +206,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::bytes-per-chunk\0".as_ptr() as *const _,
+                c"notify::bytes-per-chunk".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bytes_per_chunk_trampoline::<Self, F> as *const (),
                 )),
@@ -237,7 +232,7 @@ pub trait FwIsoCtxExt: IsA<FwIsoCtx> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::chunks-per-buffer\0".as_ptr() as *const _,
+                c"notify::chunks-per-buffer".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_chunks_per_buffer_trampoline::<Self, F> as *const (),
                 )),

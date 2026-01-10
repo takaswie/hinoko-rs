@@ -19,11 +19,11 @@ pub trait FwIsoCtxExtManual {
     ///
     /// TRUE if the overall operation finishes successfully, otherwise FALSE.
     #[doc(alias = "hinoko_fw_iso_ctx_read_cycle_time")]
-    fn read_cycle_time(&self, clock_id: i32, cycle_time: &mut CycleTime) -> Result<(), Error>;
+    fn read_cycle_time(&self, clock_id: i32, cycle_time: &mut hinawa::CycleTime) -> Result<(), Error>;
 }
 
 impl<O: IsA<FwIsoCtx>> FwIsoCtxExtManual for O {
-    fn read_cycle_time(&self, clock_id: i32, cycle_time: &mut CycleTime) -> Result<(), Error> {
+    fn read_cycle_time(&self, clock_id: i32, cycle_time: &mut hinawa::CycleTime) -> Result<(), Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
 
