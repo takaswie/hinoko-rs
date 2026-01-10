@@ -3,7 +3,7 @@ build = "build.rs"
 edition = "2021"
 links = "hinoko"
 name = "hinoko-sys"
-version = "0.7.0"
+version = "0.8.0"
 authors = ["Takashi Sakamoto"]
 categories = ["external-ffi-bindings", "hardware-support", "os::linux-apis"]
 description = "FFI bindings for hinoko library"
@@ -31,9 +31,9 @@ system-deps = "7.0"
 
 [dependencies]
 libc = "0.2"
-glib-sys = "0.20"
-gobject-sys = "0.20"
-hinawa-sys = "0.12"
+glib-sys = "0.21"
+gobject-sys = "0.21"
+hinawa-sys = "0.13"
 
 [dev-dependencies]
 shell-words = "1.1"

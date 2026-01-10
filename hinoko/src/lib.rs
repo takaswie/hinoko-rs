@@ -26,5 +26,5 @@ pub use ffi;
 // For documentation links to external crates in docs.rs.
 pub(crate) use {glib, hinawa};
 
-// For local conveniences.
+// Just for local conveniences.
 use glib::{object::*, signal::*, translate::*, types::StaticType, Error, Value};
